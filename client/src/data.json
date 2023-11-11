@@ -1,0 +1,20 @@
+{"citiesData":[
+
+        {
+            "id": 1,
+            "title": "Paris",
+            "author": "France",
+            "description": "City of lights and romance",
+            "image": "https://media.cnn.com/api/v1/images/stellar/prod/230324090551-01-visiting-france-during-protests-what-to-know-top.jpg?c=16x9&q=h_720,w_1280,c_fill"
+          },
+ 
+
+        {
+          "id": 2,
+          "title": "Paris",
+          "author": "France",
+          "description": "City of lights and romance",
+          "image": "https://media.cnn.com/api/v1/images/stellar/prod/230324090551-01-visiting-france-during-protests-what-to-know-top.jpg?c=16x9&q=h_720,w_1280,c_fill"
+        }
+]}
+
