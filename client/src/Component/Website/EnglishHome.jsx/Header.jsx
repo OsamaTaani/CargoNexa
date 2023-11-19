@@ -7,12 +7,14 @@ const Header = () => {
   const toggleMenu = () => {
     setIsDropDowOpen(!isDropDownOpen);
   }
+
+
   return (
 
 
 
 <nav className="relative flex items-center justify-between sm:h-10 md:justify-center py-10 px-4 lg:mx-4 mt-2 border-b border-gray-300">
-  <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
+  <div className="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0 ">
     <div className="flex items-center justify-between w-full md:w-auto">
       <a href="" aria-label="Home">
         <img
@@ -49,7 +51,7 @@ const Header = () => {
   <div className="hidden md:flex md:space-x-10">
     <Link 
     to={'/'}
-      className=" group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-2xl"
+      className=" group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
       Home
       <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
@@ -57,61 +59,97 @@ const Header = () => {
     </Link>
     <Link 
     to={'/services'}
-      className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-2xl"
+      className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
       Services 
       <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
 
 
     </Link>
-    <Link 
-    to={'/solutions'}
-      className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-2xl"
-    >
-      Solutions  
-      <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
-
-
-    </Link>
+   
     <Link 
     to={'/about'}
-      className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-2xl"
+      className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
       About Us
       <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
 
     </Link>
+ 
     <Link 
-    to={'/contact'}
-      target="_blank"
-      className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-2xl"
+    to={'/orders'}
+    
+      className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
-      Contact US
+      My Orders
       <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
 
     </Link>
   </div> 
-  <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 text-2xl">
-    <span className="inline-flex">
-      <Link 
-    to={'/login'}
-        className=" inline-flex items-center px-4 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
-      >
+
+  
+  <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 text-sm md:text-xl">
+
+  <div className="mx-auto flex h-screen w-full items-center justify-center  py-20">
+  <div className="group relative cursor-pointer py-2">
+    <div className="flex items-center justify-between space-x-2 bg-white md:px-4">
+    
+        
+
+    <span  className=" menu-hover inline-flex lg:mx-4 items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"  >
         Login
-      </Link>
     </span>
+  
+      <span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="h-6 w-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+          />
+        </svg>
+      </span>
+    </div>
+    <div className="invisible absolute z-50 flex text-center w-full flex-col bg-my-green rounded-xl py-1 px-4 text-white shadow-xl group-hover:visible">
+      < Link to={'/login'} className=" my-2 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
+     
+       <p>Shipper</p> 
+      </Link>
+      <Link to={'/driverLogin'} className="my-2 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
+       <p>Driver</p> 
+      </Link>
+      <Link to={'/AdminLogin'}  className="my-2 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
+        <p>Admin</p>
+      </Link>
+  
+    </div>
+  </div>
+</div>
+
+
+
+
+
+   
     <span className="inline-flex">
       <Link 
     to={'/start'}
-        className="  inline-flex items-center px-4 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
+        className="  inline-flex items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
       >
         SignUp
       </Link>
     </span>
-    <span className="inline-flex rounded-md shadow ml-2 ">
+    <span className="inline-flex rounded-md ">
       <Link 
     to={'/order'}
-        className="text-2xl inline-flex items-center px-5 py-3 border border-transparent  leading-6 font-medium rounded-3xl text-white bg-[#219C90] hover:bg-[#54beb3] focus:outline-none focus:border-blue-700 transition duration-150 ease-in-out"
+        className="text-sm lg:text-xl  px-2 w-28 lg:w-40 text-center py-2  border border-transparent  leading-6 font-medium rounded-3xl text-white bg-[#219C90] hover:bg-[#54beb3] focus:outline-none  transition duration-150 ease-in-out"
       >
         Quote Now
       </Link>

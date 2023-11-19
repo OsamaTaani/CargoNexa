@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import heroImage from '../../Images/heroImage.jpg';
 import manHoldBox from '../../Images/manHoldBox.webp';
 import truck from '../../Images/truck.jpeg';

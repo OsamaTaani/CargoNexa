@@ -1,8 +1,20 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import manWriteOnBox from '../Images/manWriteOnBox.webp'
 import { Link } from 'react-router-dom'
 
 const StartPage = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
+  const [selectedRole, setSelectedRole] = useState('shipper');
+
+  const handleRoleChange = (role) => {
+    setSelectedRole(role);
+  };
+
   return (
     <div className="flex w-screen flex-wrap text-slate-800 mb-20">
 
@@ -38,8 +50,11 @@ const StartPage = () => {
               className="peer hidden"
               id="radio_1"
               type="radio"
-              name="radio"
+              name="role"
               defaultChecked=""
+              onChange={() => handleRoleChange('shipper')}
+              checked
+              
             />
             <span className="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900" />
             <label
@@ -58,8 +73,8 @@ const StartPage = () => {
               className="peer hidden"
               id="radio_2"
               type="radio"
-              name="radio"
-
+              name="role"
+              onChange={() => handleRoleChange('driver')}
             />
             <span className="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900" />
             <label
@@ -73,6 +88,8 @@ const StartPage = () => {
               </p>
             </label>
           </div>
+
+{/* 
           <div className="my-4 space-y-3">
             <label htmlFor="terms" className="flex space-x-4">
               <input
@@ -81,6 +98,7 @@ const StartPage = () => {
                 type="checkbox"
                 className="h-6 w-6 shrink-0 accent-gray-900"
                 defaultChecked=""
+                required
               />
               <span id="terms-description" className="text-sm text-gray-600">
                 I agree to the{" "}
@@ -91,8 +109,10 @@ const StartPage = () => {
                 data safe and secure.
               </span>
             </label>
-          </div>
-          <Link to={'/registration'}><button className="my-2 flex items-center justify-center rounded-md bg-[#219C90] py-3 w-32 font-medium text-white">
+          </div> */}
+
+          <Link to={selectedRole === 'shipper' ? '/registration' : '/driverRegistration'}>
+          <button className="my-2 flex items-center justify-center rounded-md bg-[#219C90] py-3 w-32 font-medium text-white">
             Continue
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -112,6 +132,7 @@ const StartPage = () => {
         </div>
       </div>
     </div>
+    
   </div>
 </div>
 

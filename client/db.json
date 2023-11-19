@@ -1,11 +1,362 @@
 {
-    "register": [
-      {
-        "user_id": 1,
-        "user_username": "malath",
-        "user_email": "m@gmail.com",
-        "user_password": "mmm"
-      }
-    ]
-  }
-  
+  "register": [
+    {
+      "id": 1,
+      "user_username": "malath",
+      "user_email": "m@gmail.com",
+      "user_password": "mmm"
+    },
+    {
+      "user_username": "malajjhggjth",
+      "user_email": "m@.jhjhghjcom",
+      "user_password": "mgfgjkgkjgmm",
+      "id": 2
+    },
+    {
+      "user_username": "malajjhggjth",
+      "user_email": "m@.jhjhgighghjhjcom",
+      "user_password": "mgfgjkgkjgmm",
+      "user_id": 3,
+      "id": 3
+    },
+    {
+      "user_username": "malajjhggjth",
+      "user_email": "m@.jhjhgighghjhjcom",
+      "user_password": "mgfgjkgkjgmm",
+      "id": 4
+    },
+    {
+      "user_username": "",
+      "user_email": "",
+      "user_password": "",
+      "id": 5
+    },
+    {
+      "user_username": "malath",
+      "user_email": "zz@gmail.com",
+      "user_password": "123",
+      "id": 6
+    },
+    {
+      "user_username": "malath",
+      "user_email": "zz@gmail.com",
+      "user_password": "MAlath123$",
+      "user_confirmpassword": "Malath123$",
+      "id": 7
+    },
+    {
+      "user_username": "malath",
+      "user_email": "zz@gmail.com",
+      "user_password": "Malath123$",
+      "user_confirmpassword": "Malath123$",
+      "id": 8
+    },
+    {
+      "user_username": "malath",
+      "user_email": "zz@gmail.com",
+      "user_password": "Malath123$",
+      "user_confirmpassword": "Malath123$",
+      "id": 9
+    },
+    {
+      "user_username": "malath",
+      "user_email": "zz@gmail.com",
+      "user_password": "",
+      "user_confirmpassword": "Malath123$",
+      "id": 10
+    },
+    {
+      "user_username": "mm",
+      "user_email": "zz@gmail.com",
+      "user_password": "nm",
+      "id": 11
+    },
+    {
+      "user_username": "",
+      "user_email": "",
+      "user_password": "",
+      "id": 12
+    }
+  ],
+  "driver": [
+    {
+      "id": 1,
+      "driver_username": "malath",
+      "driver_email": "zz@gmail.com",
+      "user_password": "mmm",
+      "user_license": "mmm",
+      "user_type": "mmm",
+      "production_year": 20,
+      "plate_number": 20,
+      "truck_image": 20,
+      "driver_size_type": 20
+    }
+  ],
+  "order": [
+    {
+      "fullName": "Ahmad",
+      "receiverName": "salam",
+      "phoneNumber": "123422",
+      "receiverPhoneNumber": "25225",
+      "shippingLocation": "Ma'an",
+      "receivingLocation": "Madaba",
+      "shippingDate": "2023-12-02",
+      "truckSize": "Medium",
+      "shippingTime": "12:40",
+      "receiverTime": "15:40",
+      "message": "come early ",
+      "containsDangerousMaterials": true,
+      "id": 1
+    },
+    {
+      "fullName": "Ahmad",
+      "receiverName": "salam",
+      "phoneNumber": "123422",
+      "receiverPhoneNumber": "25225",
+      "shippingLocation": "Ma'an",
+      "receivingLocation": "Madaba",
+      "shippingDate": "2023-12-02",
+      "truckSize": "Medium",
+      "shippingTime": "12:40",
+      "receiverTime": "15:40",
+      "message": "come early ",
+      "containsDangerousMaterials": true,
+      "id": 2
+    },
+    {
+      "fullName": "Ahmad",
+      "receiverName": "salam",
+      "phoneNumber": "123422",
+      "receiverPhoneNumber": "25225",
+      "shippingLocation": "Ma'an",
+      "receivingLocation": "Madaba",
+      "shippingDate": "2023-12-02",
+      "truckSize": "Medium",
+      "shippingTime": "12:40",
+      "receiverTime": "15:40",
+      "message": "come early ",
+      "containsDangerousMaterials": true,
+      "id": 3
+    },
+    {
+      "fullName": "Ahmad",
+      "receiverName": "salam",
+      "phoneNumber": "123422",
+      "receiverPhoneNumber": "25225",
+      "shippingLocation": "Ma'an",
+      "receivingLocation": "Madaba",
+      "shippingDate": "2023-12-02",
+      "truckSize": "Medium",
+      "shippingTime": "12:40",
+      "receiverTime": "15:40",
+      "message": "come early ",
+      "containsDangerousMaterials": true,
+      "id": 4
+    },
+    {
+      "fullName": "Ahmad",
+      "receiverName": "salam",
+      "phoneNumber": "123422",
+      "receiverPhoneNumber": "25225",
+      "shippingLocation": "Ma'an",
+      "receivingLocation": "Madaba",
+      "shippingDate": "2023-12-02",
+      "truckSize": "Medium",
+      "shippingTime": "12:40",
+      "receiverTime": "15:40",
+      "message": "come early ",
+      "containsDangerousMaterials": true,
+      "id": 5
+    },
+    {
+      "fullName": "ccc",
+      "receiverName": "vvv",
+      "phoneNumber": "ss",
+      "receiverPhoneNumber": "25252",
+      "shippingLocation": "Tafilah",
+      "receivingLocation": "Ma'an",
+      "shippingDate": "2023-11-16",
+      "truckSize": "Medium",
+      "shippingTime": "18:24",
+      "receiverTime": "20:19",
+      "message": "mmmmm",
+      "containsDangerousMaterials": true,
+      "id": 6
+    },
+    {
+      "fullName": "ccc",
+      "receiverName": "vvv",
+      "phoneNumber": "ss",
+      "receiverPhoneNumber": "25252",
+      "shippingLocation": "Tafilah",
+      "receivingLocation": "Ma'an",
+      "shippingDate": "2023-11-16",
+      "truckSize": "Medium",
+      "shippingTime": "18:24",
+      "receiverTime": "20:19",
+      "message": "mmmmm",
+      "containsDangerousMaterials": true,
+      "id": 7
+    },
+    {
+      "fullName": "ccc",
+      "receiverName": "vvv",
+      "phoneNumber": "55555555",
+      "receiverPhoneNumber": "25252",
+      "shippingLocation": "Ajloun",
+      "receivingLocation": "Ajloun",
+      "shippingDate": "2023-11-08",
+      "truckSize": "Small",
+      "shippingTime": "18:25",
+      "receiverTime": "18:26",
+      "message": "fedgv",
+      "containsDangerousMaterials": true,
+      "id": 8
+    },
+    {
+      "fullName": "ccvv",
+      "receiverName": "cc",
+      "phoneNumber": "566",
+      "receiverPhoneNumber": "56",
+      "shippingLocation": "Jerash",
+      "receivingLocation": "Ajloun",
+      "shippingDate": "2023-11-02",
+      "truckSize": "Small",
+      "shippingTime": "20:22",
+      "receiverTime": "21:22",
+      "message": "",
+      "containsDangerousMaterials": true,
+      "id": 9
+    },
+    {
+      "fullName": "deyaaa",
+      "receiverName": "malath",
+      "phoneNumber": "636",
+      "receiverPhoneNumber": "66353",
+      "shippingLocation": "Zarqa",
+      "receivingLocation": "Amman",
+      "shippingDate": "2023-11-08",
+      "truckSize": "Medium",
+      "shippingTime": "20:23",
+      "receiverTime": "01:20",
+      "message": "",
+      "containsDangerousMaterials": true,
+      "id": 10
+    },
+    {
+      "fullName": "muhaned",
+      "receiverName": "malath",
+      "phoneNumber": "16",
+      "receiverPhoneNumber": "546",
+      "shippingLocation": "Zarqa",
+      "receivingLocation": "Amman",
+      "shippingDate": "2023-11-08",
+      "truckSize": "Small",
+      "shippingTime": "23:54",
+      "receiverTime": "23:54",
+      "message": "",
+      "containsDangerousMaterials": true,
+      "id": 11
+    },
+    {
+      "fullName": "muhammad",
+      "receiverName": "malath",
+      "phoneNumber": "522",
+      "receiverPhoneNumber": "255",
+      "shippingLocation": "Balqa",
+      "receivingLocation": "Mafraq",
+      "shippingDate": "2023-11-16",
+      "truckSize": "Medium",
+      "shippingTime": "13:58",
+      "receiverTime": "01:59",
+      "message": "",
+      "containsDangerousMaterials": true,
+      "id": 12
+    },
+    {
+      "fullName": "osama",
+      "receiverName": "osama",
+      "phoneNumber": "5454",
+      "receiverPhoneNumber": "55475",
+      "shippingLocation": "Zarqa",
+      "receivingLocation": "Amman",
+      "shippingDate": "2023-11-10",
+      "truckSize": "Small",
+      "shippingTime": "23:47",
+      "receiverTime": "23:46",
+      "message": "",
+      "containsDangerousMaterials": true,
+      "id": 13
+    }
+  ],
+  "services": [
+    {
+      "id": 1,
+      "services_title": "malath",
+      "services_description": "dncjbsdncjdajcndjnjdnc",
+      "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "id": 2,
+      "services_title": "malath1111",
+      "services_description": "dncjbsdncjdajcndjnjdnc11111111",
+      "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "id": 3,
+      "services_title": "malath222222222",
+      "services_description": "dncjbsdncjdajcndjnjdnc22222222222",
+      "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "id": 4,
+      "services_title": "malath33333333",
+      "services_description": "dncjbsdncjdajcndjnjdnc3333333",
+      "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "id": 5,
+      "services_title": "malat44444444h",
+      "services_description": "dncjbsdncjdajcndjnjdnc4444444444",
+      "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    }
+  ],
+  "solutions": [
+    {
+      "id": 1,
+      "solutions_title": "malath",
+      "solutions_description": "dncjbsdncjdajcndjnjdnc",
+      "solutions_image": "mmm"
+    },
+    {
+      "id": 2,
+      "solutions_title": "malath",
+      "solutions_description": "dncjbsdncjdajcndjnjdnc",
+      "solutions_image": "mmm"
+    },
+    {
+      "id": 3,
+      "solutions_title": "malath",
+      "solutions_description": "dncjbsdncjdajcndjnjdnc",
+      "solutions_image": "mmm"
+    },
+    {
+      "id": 4,
+      "solutions_title": "malath",
+      "solutions_description": "dncjbsdncjdajcndjnjdnc",
+      "solutions_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "id": 5,
+      "solutions_title": "malath",
+      "solutions_description": "dncjbsdncjdajcndjnjdnc",
+      "solutions_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "id": 6,
+      "solutions_title": "malath",
+      "solutions_description": "dncjbsdncjdajcndjnjdnc",
+      "solutions_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    }
+  ]
+}

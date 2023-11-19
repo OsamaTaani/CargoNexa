@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../CSS/about.css'
 import Malath from '../Images/Malath.jpeg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,6 +6,12 @@ import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 
 
 const About = () => {
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+    
+
     return (
         <>
 
@@ -33,9 +39,9 @@ const About = () => {
 
 
             {/* ABOUT US CARD SECTION  */}
-            <div className="relative flex flex-col items-center mx-auto lg:flex-row-reverse lg:max-w-5xl lg:mt-12 xl:max-w-6xl mb-52">
+            <div className="relative flex flex-col items-center mx-auto lg:flex-row-reverse lg:max-w-5xl lg:mt-12 xl:max-w-6xl mb-52 ">
 
-                <div className="w-full h-64 lg:w-1/2 lg:h-auto ">
+                <div className="w-full h-96 lg:w-1/2 lg:h-auto ">
                     <img
                         className=" h-[35rem] w-full object-cover"
                         src="https://images.pexels.com/photos/8994766/pexels-photo-8994766.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"

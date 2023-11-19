@@ -1,23 +1,2 @@
-/* Add this CSS to your stylesheet or style tag */
-.hero-container {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  
-  #hero-image {
-    animation: pulse 3s ease-in-out infinite;
-  }
-  
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
+
   

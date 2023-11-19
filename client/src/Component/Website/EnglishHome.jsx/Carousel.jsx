@@ -33,7 +33,7 @@ const Carousel = () => {
 
                         <img
                             src={i === 0 ? img1 : i === 1 ? img2 : i === 2 ? img3 : img4}
-                            className="w-full h-[15rem]  md:h-[35rem]  "
+                            className="w-full h-[15rem] object-cover md:h-[35rem]  "
                         />
 
 

@@ -1,6 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 const FAQ = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
   const [questions, setQuestions] = useState([
     { id: 1, question: 'How can I get started?', answer: 'Getting started is easy! Sign up for an account, and you\'ll have access to our platform\'s features. No credit card required for the initial signup.' },
     { id: 2, question: 'What is the pricing structure?', answer: 'Our pricing structure is flexible. We offer both free and paid plans. You can choose the one that suits your needs and budget.' },

@@ -1,11 +1,15 @@
 // Solutions.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import img1 from '../Images/box1.jpeg';
 import manHoldBox from '../Images/manHoldBox.webp';
 import truck from '../Images/truck.jpeg';
 import map from '../Images/map.jpg';
 
 const SolutionsPage = () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+      }, []);
+    
   return (
 <>
      {/* HERO SECTION  */}

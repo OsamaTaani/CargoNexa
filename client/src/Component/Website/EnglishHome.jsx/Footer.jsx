@@ -12,6 +12,15 @@ const Footer = () => {
    <Link to={'/faq'}> 
    <span class="text-xl text-white sm:text-center dark:text-white"> FAQ </span>
    </Link>
+   <Link 
+    to={'/contact'}
+
+      className="group font-medium text-white  transition duration-150 ease-in-out text-sm md:text-xl"
+    >
+      Contact US
+
+
+    </Link>
     <ul className='flex '>
         <li>  <FontAwesomeIcon
         icon={faFacebook}
