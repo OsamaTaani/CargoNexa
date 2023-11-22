@@ -13,16 +13,15 @@
       "id": 2
     },
     {
-      "user_username": "malajjhggjth",
-      "user_email": "m@.jhjhgighghjhjcom",
-      "user_password": "mgfgjkgkjgmm",
-      "user_id": 3,
+      "user_username": "",
+      "user_email": "",
+      "user_password": "",
       "id": 3
     },
     {
-      "user_username": "malajjhggjth",
-      "user_email": "m@.jhjhgighghjhjcom",
-      "user_password": "mgfgjkgkjgmm",
+      "user_username": "",
+      "user_email": "",
+      "user_password": "",
       "id": 4
     },
     {
@@ -32,50 +31,87 @@
       "id": 5
     },
     {
-      "user_username": "malath",
-      "user_email": "zz@gmail.com",
-      "user_password": "123",
-      "id": 6
-    },
-    {
-      "user_username": "malath",
-      "user_email": "zz@gmail.com",
-      "user_password": "MAlath123$",
-      "user_confirmpassword": "Malath123$",
-      "id": 7
-    },
-    {
-      "user_username": "malath",
-      "user_email": "zz@gmail.com",
-      "user_password": "Malath123$",
-      "user_confirmpassword": "Malath123$",
-      "id": 8
-    },
-    {
-      "user_username": "malath",
-      "user_email": "zz@gmail.com",
-      "user_password": "Malath123$",
-      "user_confirmpassword": "Malath123$",
-      "id": 9
-    },
-    {
-      "user_username": "malath",
-      "user_email": "zz@gmail.com",
+      "user_username": "",
+      "user_email": "",
       "user_password": "",
-      "user_confirmpassword": "Malath123$",
-      "id": 10
-    },
-    {
-      "user_username": "mm",
-      "user_email": "zz@gmail.com",
-      "user_password": "nm",
-      "id": 11
+      "id": 6
     },
     {
       "user_username": "",
       "user_email": "",
       "user_password": "",
+      "id": 7
+    },
+    {
+      "user_username": "",
+      "user_email": "",
+      "user_password": "",
+      "id": 8
+    },
+    {
+      "user_username": "",
+      "user_email": "",
+      "user_password": "",
+      "id": 9
+    },
+    {
+      "user_username": "",
+      "user_email": "",
+      "user_password": "",
+      "id": 10
+    }
+  ],
+  "login": [
+    {
+      "id": 1,
+      "driver_email": "malath",
+      "driver_password": "m@gmail.com"
+    },
+    {
+      "driver_email": "cc@gmail.com",
+      "driver_password": "mmm",
+      "id": 2
+    },
+    {
+      "driver_email": "cc@gmail.com",
+      "driver_password": "nn",
+      "id": 3
+    },
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    {
+      "email": "",
+      "password": "",
+      "id": 9
+    },
+    {
+      "email": "",
+      "password": "",
+      "id": 10
+    },
+    {
+      "email": "",
+      "password": "",
+      "id": 11
+    },
+    {
+      "email": "",
+      "password": "",
       "id": 12
+    },
+    {
+      "email": "",
+      "password": "",
+      "id": 13
+    },
+    {
+      "email": "",
+      "password": "",
+      "id": 14
     }
   ],
   "driver": [
@@ -83,241 +119,112 @@
       "id": 1,
       "driver_username": "malath",
       "driver_email": "zz@gmail.com",
-      "user_password": "mmm",
-      "user_license": "mmm",
-      "user_type": "mmm",
+      "driver_password": "mmm",
+      "driver_license": "mmm",
+      "truck_type": "mmm",
       "production_year": 20,
       "plate_number": 20,
-      "truck_image": 20,
-      "driver_size_type": 20
+      "truck_size": "jj",
+      "status": "available"
+    },
+    {
+      "driver_username": "  fvfv",
+      "driver_email": "fvvf@gmail.com",
+      "driver_license": "cd",
+      "truck_size": "Small",
+      "plate_number": "cdcd",
+      "production_year": "cded",
+      "truck_type": "edded",
+      "driver_password": "dede",
+      "status": "available",
+      "id": 2
     }
   ],
   "order": [
     {
-      "fullName": "Ahmad",
-      "receiverName": "salam",
-      "phoneNumber": "123422",
-      "receiverPhoneNumber": "25225",
-      "shippingLocation": "Ma'an",
-      "receivingLocation": "Madaba",
-      "shippingDate": "2023-12-02",
-      "truckSize": "Medium",
-      "shippingTime": "12:40",
-      "receiverTime": "15:40",
-      "message": "come early ",
-      "containsDangerousMaterials": true,
+      "order_title": "equipment",
+      "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
+      "full_name": "kkkbbbbbbbbbbb",
+      "receiver_name": "bbbbbbbbb",
+      "phone_number": "444",
+      "receiver_phone_number": "4444",
+      "shipping_location": "Karak",
+      "receiving_location": "Ma'an",
+      "shipping_date": "2023-11-23",
+      "truck_size": "Small",
+      "shipping_time": "22:32",
+      "receiver_time": "22:33",
+      "message": "",
+      "status": "pending",
+      "contains_dangerous_materials": true,
       "id": 1
     },
     {
-      "fullName": "Ahmad",
-      "receiverName": "salam",
-      "phoneNumber": "123422",
-      "receiverPhoneNumber": "25225",
-      "shippingLocation": "Ma'an",
-      "receivingLocation": "Madaba",
-      "shippingDate": "2023-12-02",
-      "truckSize": "Medium",
-      "shippingTime": "12:40",
-      "receiverTime": "15:40",
-      "message": "come early ",
-      "containsDangerousMaterials": true,
+      "order_title": "equipment",
+      "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
+      "full_name": "vav",
+      "receiver_name": "sdwds",
+      "phone_number": "7",
+      "receiver_phone_number": "44",
+      "shipping_location": "Mafraq",
+      "receiving_location": "Jerash",
+      "shipping_date": "2023-11-17",
+      "truck_size": "Medium",
+      "shipping_time": "12:32",
+      "receiver_time": "12:33",
+      "message": "",
+      "status": "pending",
+      "contains_dangerous_materials": true,
       "id": 2
     },
     {
-      "fullName": "Ahmad",
-      "receiverName": "salam",
-      "phoneNumber": "123422",
-      "receiverPhoneNumber": "25225",
-      "shippingLocation": "Ma'an",
-      "receivingLocation": "Madaba",
-      "shippingDate": "2023-12-02",
-      "truckSize": "Medium",
-      "shippingTime": "12:40",
-      "receiverTime": "15:40",
-      "message": "come early ",
-      "containsDangerousMaterials": true,
+      "order_title": "equipment",
+      "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
+      "full_name": "kkk",
+      "receiver_name": "tttt",
+      "phone_number": "t75336",
+      "receiver_phone_number": "3636",
+      "shipping_location": "Jerash",
+      "receiving_location": "Jerash",
+      "shipping_date": "2023-11-01",
+      "truck_size": "Large",
+      "shipping_time": "20:32",
+      "receiver_time": "12:28",
+      "message": "",
+      "status": "shipped",
+      "contains_dangerous_materials": true,
       "id": 3
-    },
-    {
-      "fullName": "Ahmad",
-      "receiverName": "salam",
-      "phoneNumber": "123422",
-      "receiverPhoneNumber": "25225",
-      "shippingLocation": "Ma'an",
-      "receivingLocation": "Madaba",
-      "shippingDate": "2023-12-02",
-      "truckSize": "Medium",
-      "shippingTime": "12:40",
-      "receiverTime": "15:40",
-      "message": "come early ",
-      "containsDangerousMaterials": true,
-      "id": 4
-    },
-    {
-      "fullName": "Ahmad",
-      "receiverName": "salam",
-      "phoneNumber": "123422",
-      "receiverPhoneNumber": "25225",
-      "shippingLocation": "Ma'an",
-      "receivingLocation": "Madaba",
-      "shippingDate": "2023-12-02",
-      "truckSize": "Medium",
-      "shippingTime": "12:40",
-      "receiverTime": "15:40",
-      "message": "come early ",
-      "containsDangerousMaterials": true,
-      "id": 5
-    },
-    {
-      "fullName": "ccc",
-      "receiverName": "vvv",
-      "phoneNumber": "ss",
-      "receiverPhoneNumber": "25252",
-      "shippingLocation": "Tafilah",
-      "receivingLocation": "Ma'an",
-      "shippingDate": "2023-11-16",
-      "truckSize": "Medium",
-      "shippingTime": "18:24",
-      "receiverTime": "20:19",
-      "message": "mmmmm",
-      "containsDangerousMaterials": true,
-      "id": 6
-    },
-    {
-      "fullName": "ccc",
-      "receiverName": "vvv",
-      "phoneNumber": "ss",
-      "receiverPhoneNumber": "25252",
-      "shippingLocation": "Tafilah",
-      "receivingLocation": "Ma'an",
-      "shippingDate": "2023-11-16",
-      "truckSize": "Medium",
-      "shippingTime": "18:24",
-      "receiverTime": "20:19",
-      "message": "mmmmm",
-      "containsDangerousMaterials": true,
-      "id": 7
-    },
-    {
-      "fullName": "ccc",
-      "receiverName": "vvv",
-      "phoneNumber": "55555555",
-      "receiverPhoneNumber": "25252",
-      "shippingLocation": "Ajloun",
-      "receivingLocation": "Ajloun",
-      "shippingDate": "2023-11-08",
-      "truckSize": "Small",
-      "shippingTime": "18:25",
-      "receiverTime": "18:26",
-      "message": "fedgv",
-      "containsDangerousMaterials": true,
-      "id": 8
-    },
-    {
-      "fullName": "ccvv",
-      "receiverName": "cc",
-      "phoneNumber": "566",
-      "receiverPhoneNumber": "56",
-      "shippingLocation": "Jerash",
-      "receivingLocation": "Ajloun",
-      "shippingDate": "2023-11-02",
-      "truckSize": "Small",
-      "shippingTime": "20:22",
-      "receiverTime": "21:22",
-      "message": "",
-      "containsDangerousMaterials": true,
-      "id": 9
-    },
-    {
-      "fullName": "deyaaa",
-      "receiverName": "malath",
-      "phoneNumber": "636",
-      "receiverPhoneNumber": "66353",
-      "shippingLocation": "Zarqa",
-      "receivingLocation": "Amman",
-      "shippingDate": "2023-11-08",
-      "truckSize": "Medium",
-      "shippingTime": "20:23",
-      "receiverTime": "01:20",
-      "message": "",
-      "containsDangerousMaterials": true,
-      "id": 10
-    },
-    {
-      "fullName": "muhaned",
-      "receiverName": "malath",
-      "phoneNumber": "16",
-      "receiverPhoneNumber": "546",
-      "shippingLocation": "Zarqa",
-      "receivingLocation": "Amman",
-      "shippingDate": "2023-11-08",
-      "truckSize": "Small",
-      "shippingTime": "23:54",
-      "receiverTime": "23:54",
-      "message": "",
-      "containsDangerousMaterials": true,
-      "id": 11
-    },
-    {
-      "fullName": "muhammad",
-      "receiverName": "malath",
-      "phoneNumber": "522",
-      "receiverPhoneNumber": "255",
-      "shippingLocation": "Balqa",
-      "receivingLocation": "Mafraq",
-      "shippingDate": "2023-11-16",
-      "truckSize": "Medium",
-      "shippingTime": "13:58",
-      "receiverTime": "01:59",
-      "message": "",
-      "containsDangerousMaterials": true,
-      "id": 12
-    },
-    {
-      "fullName": "osama",
-      "receiverName": "osama",
-      "phoneNumber": "5454",
-      "receiverPhoneNumber": "55475",
-      "shippingLocation": "Zarqa",
-      "receivingLocation": "Amman",
-      "shippingDate": "2023-11-10",
-      "truckSize": "Small",
-      "shippingTime": "23:47",
-      "receiverTime": "23:46",
-      "message": "",
-      "containsDangerousMaterials": true,
-      "id": 13
     }
   ],
   "services": [
     {
       "id": 1,
-      "services_title": "malath",
-      "services_description": "dncjbsdncjdajcndjnjdnc",
+      "services_title": "Agricultural ",
+      "services_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
       "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
     },
     {
       "id": 2,
-      "services_title": "malath1111",
-      "services_description": "dncjbsdncjdajcndjnjdnc11111111",
+      "services_title": "equipment",
+      "services_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
       "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
     },
     {
       "id": 3,
-      "services_title": "malath222222222",
-      "services_description": "dncjbsdncjdajcndjnjdnc22222222222",
+      "services_title": "Home furnishings ",
+      "services_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
       "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
     },
     {
       "id": 4,
-      "services_title": "malath33333333",
-      "services_description": "dncjbsdncjdajcndjnjdnc3333333",
+      "services_title": "car parts",
+      "services_description": "Regardless of your industry, commodity, or main market industry, commodity, or main markets",
       "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
     },
     {
       "id": 5,
-      "services_title": "malat44444444h",
-      "services_description": "dncjbsdncjdajcndjnjdnc4444444444",
+      "services_title": "cleaning martials",
+      "services_description": "Regardless of your industry, commodity, or main market industry, commodity, or main markets",
       "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
     }
   ],

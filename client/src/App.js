@@ -24,6 +24,13 @@ import NewOrders from './Component/Driver/driverWebsite/NewOrders';
 import OrderDetailsPage from './Component/Website/OrderDetailsPage';
 import CreateOrder from './Component/Website/CreateOrder';
 import Orders from './Component/Website/Orders';
+import OrderDetails from './Component/Driver/driverWebsite/OrderDetailsDriver';
+import OrderDetailsDriver from './Component/Driver/driverWebsite/OrderDetailsDriver';
+import ConfirmedOrder from './Component/Driver/driverWebsite/ConfirmedOrder';
+import ProfilePage from './Component/Website/UserProfile';
+import UserProfile from './Component/Website/UserProfile';
+import Dashboard from './Component/Admin/Dashboard';
+import Dashboard2 from './Component/Admin/Dashboard2';
 
 
 function App() {
@@ -34,6 +41,7 @@ function App() {
       <Header/>
      
       <Routes>
+
         <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/registration' element={<Registration/>}/>
@@ -46,21 +54,32 @@ function App() {
         <Route path='/createOrder' element={<CreateOrder/>}/>
         <Route path='/orders' element={<Orders/>}/>
         <Route path='/orderDetails' element={<OrderDetailsPage/>}/>
+        <Route path="/orderDetails/:orderId" element={<OrderDetailsPage/>} />
         <Route path='/payment' element={<Payment/>}/>
+        <Route path='/userProfile' element={<UserProfile/>}/>
       
 
       {/* Driver routs  */}
       <Route path='/driverRegistration' element={<DriverRegistration/>}/>
       <Route path='/driverLogin' element={<DriverLogin/>}/>
       <Route path='/NewOrders' element={<NewOrders/>}/>
+      <Route path='/orderDetailsDriver' element={<OrderDetailsDriver/>}/>
+      <Route path='/orderDetailsDriver/:orderId' element={<OrderDetailsDriver/>}/>
+      <Route path='/confirmedOrder' element={<ConfirmedOrder/>}/>
+      <Route path='/confirmedOrder/:orderId' element={<ConfirmedOrder/>}/>
 
 
-      {/* Admin routs  */}
-      <Route path='/adminRegistration' element={<DriverRegistration/>}/>
-      <Route path='/adminLogin' element={<DriverLogin/>}/>
+     
       </Routes>
 
       <Footer/>
+       {/* Admin routs  */}
+       <Routes>
+       <Route path='/adminRegistration' element={<DriverRegistration/>}/>
+      <Route path='/adminLogin' element={<DriverLogin/>}/>
+      <Route path='/dashboard' element={<Dashboard/>}/>
+      <Route path='/dashboard2' element={<Dashboard2/>}/>
+      </Routes>
       </div>
       </Router>
   );

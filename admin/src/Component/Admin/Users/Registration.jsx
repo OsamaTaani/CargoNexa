@@ -3,15 +3,17 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
 import RegValidate from './RegValidate';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Registration = () => {
+ const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
 const [values,setValues]=useState({ user_username:'' , user_email:'', user_password:''});
-const [error,setError]=useState({});
+
 
 // Handle the change in inputs
 const handleInputs=(e)=>{
@@ -22,8 +24,7 @@ const handleInputs=(e)=>{
 // Handle submit for the form 
 const handleSubmit = async (e) => {
     e.preventDefault();
-    const errors = RegValidate(values);
-    setError(errors);
+   
 
     // Check if there are any validation errors before sending the data
 
@@ -33,7 +34,7 @@ const handleSubmit = async (e) => {
       const response = await axios.post('http://localhost:3001/register', values)
         // Registration was successful
         console.log('Registration successful:', response.data);
-   
+        navigate('/adminLogin')
     } catch (error) {
       // Handle network or other errors
       console.error('Registration error:', error);
@@ -42,7 +43,9 @@ const handleSubmit = async (e) => {
 }
 
   return (
-   
+    
+
+
     <>
     
     <div className=" mx-auto flex justify-center h-[45rem] max-w-lg flex-col md:max-w-none md:flex-row  md:pr-10 md:my-10 lg:my-10 my-96 ">
@@ -89,7 +92,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {error.user_email && <p style={{color:"red"}}>{error.user_email}</p>}
+   
 
     <p className="mb-1 font-medium text-gray-500">Password</p>
     <div className="mb-4 flex flex-col">
@@ -103,7 +106,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {error.user_password && <p style={{color:"red"}} >{error.user_password}</p>}
+  
 
     <p className="mb-1 font-medium text-gray-500">Confirm Password</p>
     <div className="mb-4 flex flex-col">
@@ -117,7 +120,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {error.user_confirmpassword && <p style={{color:"red"}}>{error.user_confirmpassword}</p>}
+   
     
     <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">
       Sign Up

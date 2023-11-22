@@ -4,28 +4,39 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
-const CreateOrder = ({title}) => {
-console.log({title});
+const CreateOrder = () => {
+
+  const navigate = useNavigate();
+  const location = useLocation(); // Get the location object
+
+  // Check if location.state exists before accessing its properties
+  const { state } = location || {};
+  const { title, description } = state || {};
+
+  console.log(title);
+
+console.log(title);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []); 
 
 
-  const navigate =useNavigate();
 // State to hold form data
 const [formData, setFormData] = useState({
-  fullName: '',
-  receiverName: '',
-  phoneNumber: '',
-  receiverPhoneNumber: '',
-  shippingLocation: '',
-  receivingLocation: '',
-  shippingDate: '',
-  truckSize: '',
-  shippingTime: '',
-  receiverTime: '',
+  order_title: state ? state.title : '', // Set the initial value from props
+  order_description: state ? state.description : '', // Set the initial value from props
+  full_name: '',
+  receiver_name: '',
+  phone_number: '',
+  receiver_phone_number: '',
+  shipping_location: '',
+  receiving_location: '',
+  shipping_date: '',
+  truck_size: '',
+  shipping_time: '',
+  receiver_time: '',
   message: '',
- 
+ status:'pending'
  
 });
 
@@ -44,7 +55,7 @@ const handleInputChange = (e) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   // Check if the containsDangerousMaterials checkbox is checked
-  if (!formData.containsDangerousMaterials) {
+  if (!formData.contains_dangerous_materials) {
     // Display an error message using SweetAlert
     Swal.fire({
       icon: 'error',
@@ -66,6 +77,8 @@ const handleInputChange = (e) => {
         icon: 'success',
         title: 'Order Successful!',
         text: 'Thank you for your order.',
+        timer: 2000,
+
       });
       setTimeout(() => {
         navigate('/');
@@ -80,18 +93,20 @@ const handleInputChange = (e) => {
   // Function to reset form data
   const resetForm = () => {
     setFormData({
-      fullName: '',
-      receiverName: '',
-      phoneNumber: '',
-      receiverPhoneNumber: '',
-      shippingLocation: '',
-      receivingLocation: '',
-      shippingDate: '',
-      truckSize: '',
-      shippingTime: '',
-      receiverTime: '',
+      order_title:'',
+      order_description:'',
+      full_name: '',
+      receiver_name: '',
+      phone_number: '',
+      receiver_phone_number: '',
+      shipping_location: '',
+      receiving_location: '',
+      shipping_date: '',
+      truck_size: '',
+      shipping_time: '',
+      receiver_time: '',
       message: '',
-      containsDangerousMaterials: false,
+      contains_dangerous_materials: false,
     });
   }
   return (
@@ -139,10 +154,9 @@ const handleInputChange = (e) => {
       
       <div className="flex w-full flex-col">
       <form onSubmit={handleSubmit}>
-        <h1 className="text-2xl font-semibold">Title Shipment</h1>
+        <h1 className="text-2xl font-semibold">{formData.order_title}</h1>
         <p className="mt-2 text-gray-500">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laboriosam,
-          iure? Nobis rerum autem illum. Et?
+        {formData.order_description}
         </p>
        
         <div className="mt-4 grid items-center gap-3 gap-y-5 sm:grid-cols-2">
@@ -152,11 +166,11 @@ const handleInputChange = (e) => {
             </label>
                       <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="fullName"
+            name="full_name"
             id="fullName"
             type='text'
             placeholder='Ahmad'
-            value={formData.fullName}
+            value={formData.full_name}
             onChange={handleInputChange}
             required
           />
@@ -167,11 +181,11 @@ const handleInputChange = (e) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="receiverName"
+          name="receiver_name"
           id="receiverName"
           type='text'
           placeholder='Sara'
-          value={formData.receiverName}
+          value={formData.receiver_name}
           onChange={handleInputChange}
            required
         />
@@ -183,11 +197,11 @@ const handleInputChange = (e) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="phoneNumber"
+          name="phone_number"
           id="phoneNumber"
           type='text'
           placeholder='+962'
-          value={formData.phoneNumber}
+          value={formData.phone_number}
           onChange={handleInputChange}
            required
         />
@@ -199,11 +213,11 @@ const handleInputChange = (e) => {
             </label>
                       <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="receiverPhoneNumber"
+            name="receiver_phone_number"
             id="receiverPhoneNumber"
             type='text'
             placeholder='+962'
-            value={formData.receiverPhoneNumber}
+            value={formData.receiver_phone_number}
             onChange={handleInputChange}
              required
           />
@@ -216,9 +230,9 @@ const handleInputChange = (e) => {
     </label>
           <select
         className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-        name="shippingLocation"
+        name="shipping_location"
         id="shippingLocation"
-        value={formData.shippingLocation}
+        value={formData.shipping_location}
         onChange={handleInputChange}
          required
       >
@@ -244,9 +258,9 @@ const handleInputChange = (e) => {
             </label>
             <select
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="receivingLocation"
+            name="receiving_location"
             id="receivingLocation"
-            value={formData.receivingLocation}
+            value={formData.receiving_location}
             onChange={handleInputChange}
              required
           >
@@ -271,10 +285,10 @@ const handleInputChange = (e) => {
             </label>
             <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="shippingDate"
+            name="shipping_date"
             id="shippingDate"
             type='date'
-            value={formData.shippingDate}
+            value={formData.shipping_date}
             onChange={handleInputChange}
              required
           />
@@ -285,9 +299,9 @@ const handleInputChange = (e) => {
             </label>
             <select
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="truckSize"
+            name="truck_size"
             id="truckSize"
-            value={formData.truckSize}
+            value={formData.truck_size}
             onChange={handleInputChange}
              required
           >
@@ -303,10 +317,10 @@ const handleInputChange = (e) => {
             Shipping Time            </label>
             <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="shippingTime"
+            name="shipping_time"
             id="shippingTime"
             type='time'
-            value={formData.shippingTime}
+            value={formData.shipping_time}
             onChange={handleInputChange}
              required
           />
@@ -320,10 +334,10 @@ const handleInputChange = (e) => {
             </label>
             <input
                 className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-                name="receiverTime"
+                name="receiver_time"
                 id="receiverTime"
                 type='time'
-                value={formData.receiverTime}
+                value={formData.receiver_time}
                 onChange={handleInputChange}
                  required
               />
@@ -351,9 +365,9 @@ const handleInputChange = (e) => {
         <input
           className="accent-blue-700 mr-3 h-5 w-5"
           type="checkbox"
-          name="containsDangerousMaterials"
+          name="contains_dangerous_materials"
           id="containsDangerousMaterials"
-          checked={formData.containsDangerousMaterials}
+          checked={formData.contains_dangerous_materials}
           onChange={handleInputChange}
           
       />
@@ -382,7 +396,6 @@ const handleInputChange = (e) => {
           {/* </Link> */}
           <button className="group order-1 my-2 flex w-full items-center justify-center rounded-lg bg-gray-200 py-2 text-center font-bold text-gray-600 outline-none transition sm:w-40 focus:ring hover:bg-gray-300" 
            onClick={() => resetForm()}>
-           
             Cancel
           </button>
         </div>

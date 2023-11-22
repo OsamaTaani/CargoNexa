@@ -2,11 +2,23 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import logo3 from '../../Images/logo3.png';
 import logo4 from '../../Images/logo4-transformed.png'
+import ProfileSideBar from './ProfileSideBar';
 const Header = () => {
   const [isDropDownOpen, setIsDropDowOpen] = useState(false);
   const toggleMenu = () => {
     setIsDropDowOpen(!isDropDownOpen);
   }
+
+  // ProfileSideBar
+  const [isProfileSideBarOpen, setIsProfileSideBarOpen] = useState(false);
+
+  const openProfileSideBar = () => {
+    setIsProfileSideBarOpen(true);
+  };
+
+  const closeProfileSideBar = () => {
+    setIsProfileSideBarOpen(false);
+  };
 
 
   return (
@@ -125,9 +137,7 @@ const Header = () => {
       <Link to={'/driverLogin'} className="my-2 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
        <p>Driver</p> 
       </Link>
-      <Link to={'/AdminLogin'}  className="my-2 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
-        <p>Admin</p>
-      </Link>
+      
   
     </div>
   </div>
@@ -148,14 +158,16 @@ const Header = () => {
     </span>
     <span className="inline-flex rounded-md ">
       <Link 
-    to={'/order'}
-        className="text-sm lg:text-xl  px-2 w-28 lg:w-40 text-center py-2  border border-transparent  leading-6 font-medium rounded-3xl text-white bg-[#219C90] hover:bg-[#54beb3] focus:outline-none  transition duration-150 ease-in-out"
+    to={'/services'}
+        className="text-sm lg:text-xl  px-2 w-28 lg:w-32 text-center py-2  border border-transparent  leading-6 font-medium rounded-xl text-white bg-[#219C90] hover:bg-[#54beb3] focus:outline-none  transition duration-150 ease-in-out"
       >
         Quote Now
       </Link>
     </span>
   </div>
   
+
+
 </nav>
 
 

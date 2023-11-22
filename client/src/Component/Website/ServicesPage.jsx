@@ -49,7 +49,11 @@ const ServicesPage = () => {
        
 
  
-<Link to={'/CreateOrder'}>
+        <Link
+      to="/CreateOrder"
+      state={{ title: service.services_title, description: service.services_description }}
+    
+    >
 {/* <CreateOrder service={service.services_title}/> */}
           <img
             src={service.services_image}

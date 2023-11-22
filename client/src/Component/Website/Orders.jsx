@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+
 const Orders = () => {
+  
 
   // State to store the fetched data
   const [orders, setOrders] = useState([]);
@@ -34,10 +36,10 @@ const Orders = () => {
   };
 
   const filteredOrders = orders.filter(order =>
-    (order.title && order.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (order.shippingLocation && order.shippingLocation.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (order.receivingLocation && order.receivingLocation.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (order.shippingDate && order.shippingDate.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (order.order_title && order.order_title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (order. shipping_location && order. shipping_location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (order.receiving_location && order.receiving_location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (order.shipping_date && order.shipping_date.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (order.status && order.status.toLowerCase().includes(searchTerm.toLowerCase()))
   );
   
@@ -53,8 +55,8 @@ const Orders = () => {
   <div className="bg-white p-8 rounded-md w-full">
     <div className=" flex items-center justify-between pb-6">
       <div>
-        <h2 className="text-gray-600 font-semibold">Products Oder</h2>
-        <span className="text-xs">All products item</span>
+        <h2 className="text-gray-600 font-semibold">Orders</h2>
+        {/* <span className="text-xs">All products item</span> */}
       </div>
       <div className="flex items-center justify-between">
         <div className="flex  border  bg-gray-50 items-center p-2 rounded-md">
@@ -81,11 +83,11 @@ const Orders = () => {
           />
         </div>
         <div className="lg:ml-40 ml-10 space-x-8">
-          
-          <Link to={'/createOrder'}><button className="bg-gray-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+{/*           
+          <Link to={'/services'}><button className="bg-gray-500 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
             Create
           </button>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>
@@ -117,34 +119,40 @@ const Orders = () => {
               <tr key={order.id}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex items-center">
+                  <Link to={`/orderDetails/${order.id}`}>
                     <div className="ml-3">
                       <p className="text-gray-900 whitespace-no-wrap">
-                       order title
+                       {order.order_title}
                       </p>
                     </div>
+                     </Link> 
                   </div>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">  {order.shippingLocation}</p>
+                  <p className="text-gray-900 whitespace-no-wrap">  {order. shipping_location}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
                 
-                  {order.receivingLocation}
+                  {order.receiving_location}
                   </p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">{order.shippingDate}</p>
+                  <p className="text-gray-900 whitespace-no-wrap">{order.shipping_date}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-                    <span
-                      aria-hidden=""
-                      className="absolute inset-0 bg-green-200 opacity-50 rounded-full"
-                    />
-                    <span className="relative">order status</span>
-                  </span>
-                </td>
+                <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
+    ${order.status === 'pending' ? 'bg-gray-500' : ''}
+    ${order.status === 'shipped' ? 'bg-blue-500' : ''}
+    ${order.status === 'on the way' ? 'bg-orange-500' : ''}
+    ${order.status === 'delivered' ? 'bg-green-500' : ''}
+  rounded-full
+  `}>
+   
+    <span className="relative">{order.status}</span>
+  </span>
+</td>
+
               </tr>
                ))}
         

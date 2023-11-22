@@ -1,0 +1,35 @@
+
+import './App.css';
+
+import AdminRegistration from './Component/Admin/Users/Registration';
+import AdminLogin from './Component/Admin/Users/Login';
+
+
+import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
+
+
+
+import Dashboard from './Component/Admin/website/Dashboard';
+import Dashboard2 from './Component/Admin/website/Dashboard2';
+
+
+function App() {
+  return (
+    <Router>
+    <div className="App">
+       {/* Admin routs  */}
+
+       <Routes>
+        
+       <Route path='/' element={<AdminRegistration/>}/>
+      <Route path='/adminLogin' element={<AdminLogin/>}/>
+      <Route path='/dashboard' element={<Dashboard/>}/>
+      <Route path='/dashboard2' element={<Dashboard2/>}/>
+      </Routes>
+
+      </div>
+      </Router>
+  );
+}
+
+export default App;

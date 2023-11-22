@@ -50,7 +50,7 @@ const Carousel = () => {
                                 <div className='text-white  sm:text-1xl  md:text-2xl  lg:text-4xl  text-center font-bold  mt-10 mb-2' >We make shipping big stuff cheap and easy by helping customers directly connect with providers  who have extra truck space.</div>
 
                                 <div>
-                                 <Link to={'/order'}>  <button type="button" class="ml-2 text-[#191D88] bg-[#FFC436] hover:bg-[#f1c357]  font-bold rounded-lg md:text-xl md:px-5 md:py-3 px-2 py-1  text-center mr-3 md:mr-0 ">Quote Now </button></Link> 
+                                 <Link to={'/services '}>  <button type="button" class="ml-2 text-white bg-my-green hover:bg-[#54beb3] font-bold rounded-lg md:text-xl md:px-5 md:py-3 px-2 py-1  text-center mr-3 md:mr-0 ">Quote Now </button></Link> 
                                 </div>
                             </div>
                             <a
