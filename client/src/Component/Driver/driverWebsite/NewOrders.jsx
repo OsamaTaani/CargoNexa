@@ -32,6 +32,7 @@ const NewOrders = () => {
     // Filter orders based on the search query
     const filtered = orders.filter((order) => {
       const searchTerm = searchQuery.toLowerCase();
+      console.log(order)
       return (
         order.order_title.toLowerCase().includes(searchTerm) ||
         order.order_description.toLowerCase().includes(searchTerm) ||

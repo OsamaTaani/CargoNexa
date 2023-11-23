@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
-import LogValidate from './LogValidate';
+// import LogValidate from './LogValidate';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
 const Login = () => {
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const navigate=useNavigate();
-    const [values,setValues]=useState([]);
-   
-    
+  const [cookies, setCookie] = useCookies(['token']);
+
+    const [values,setValues]=useState({ driver_email:'', driver_password:''});
+    // const [error,setError]=useState({});
+
     // Handle the change in inputs
     const handleInputs=(e)=>{
         setValues({...values, [e.target.name]: e.target.value}) ;       
@@ -16,31 +24,33 @@ const Login = () => {
    // Handle submit for the form
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+    // const errors = LogValidate(values);
+    // setError(errors);
 
-
-    // Check if there are any validation errors before sending the data
-   
+ 
       try {
         // Make a POST request to your API endpoint
-        const response = await axios.post('http://localhost:3001/login', values);
+        const response = await axios.post('http://localhost:3001/drivers/login ', values);
 
-          // Login was successful
-          console.log('Login successful:', response.data);
-
-          navigate("/NewOrders");
+        // Check the response status code and handle it accordingly
         
+          console.log('Login successful:', response.data);
+          // Assuming the API returns a token
+      const token = response.data.token;
+
+      // Set the token in a cookie
+      setCookie('token', token, { path: '/' });
+          navigate("/NewOrders");
+          
       } catch (error) {
         // Handle network or other errors
         console.error('Login error:', error);
+      }
     
-
-    }
   };
 
 
   return (
-
 
 
 <>
@@ -76,7 +86,7 @@ const Login = () => {
     />
   </div>
 </div>
-
+{/* {error.user_email && <p style={{color:"red"}}>{error.user_email}</p>} */}
 
 <p className="mb-1 font-medium text-gray-500">Password</p>
 <div className="mb-4 flex flex-col">
@@ -90,7 +100,7 @@ const Login = () => {
     />
   </div>
 </div>
-
+{/* {error.user_password && <p style={{color:"red"}} >{error.user_password}</p>} */}
 
 
 <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">

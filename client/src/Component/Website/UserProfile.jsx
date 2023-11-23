@@ -1,7 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import bg from '../Images/bg.png'
+import axios from 'axios';
 
 const UserProfile = () => {
+  const [userData, setUserData] = useState([]);
+
+  const handleMyInfoClick = async () => {
+    try {
+      console.log("jjj")
+      // Replace 'your-api-endpoint' with the actual API endpoint to fetch user data
+      const response = await axios.get('http://localhost:3001/register/1');
+  
+      // Assuming the response.data contains the user data
+      setUserData(response.data);
+ 
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  
   return (
    <>
   
@@ -44,14 +62,25 @@ const UserProfile = () => {
         
           <div className="text-center mt-28">
           <div class="flex  p-2 w-full justify-center">
-      <button class="min-w-auto w-32 h-10 bg-my-green p-2 rounded-l-xl  transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold">
-        My Info
-      </button>
+          <button
+  onClick={handleMyInfoClick}
+  className="min-w-auto w-32 h-10 bg-my-green p-2 rounded-l-xl transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
+>
+  My Info
+</button>
       
       <button class="min-w-auto w-32 h-10 bg-my-green p-2 rounded-r-xl  transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold">
       My Orders
       </button>
   </div>
+
+  <div>
+    <p>User Name: {userData.user_username}</p>
+    <p>Email: {userData.user_email}</p>
+    {/* Add more fields as needed */}
+  </div>
+
+
             <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
               Jenna Stones
             </h3>

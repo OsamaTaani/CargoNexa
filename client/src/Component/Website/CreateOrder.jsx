@@ -25,18 +25,19 @@ console.log(title);
 const [formData, setFormData] = useState({
   order_title: state ? state.title : '', // Set the initial value from props
   order_description: state ? state.description : '', // Set the initial value from props
-  full_name: '',
+  name: '',
   receiver_name: '',
-  phone_number: '',
+  order_phone_number: '',
   receiver_phone_number: '',
   shipping_location: '',
   receiving_location: '',
   shipping_date: '',
-  truck_size: '',
-  shipping_time: '',
-  receiver_time: '',
+  order_truck_size: '',
+  reciving_timestamp: '',
+  shipping_timestamp:'',
   message: '',
  status:'pending'
+
  
 });
 
@@ -68,7 +69,7 @@ const handleInputChange = (e) => {
 
     try {
       // Make a POST request using Axios
-      const response = await axios.post(' http://localhost:3001/order', formData);
+      const response = await axios.post('http://localhost:3001/create', formData);
 
       // Handle the response as needed (e.g., show success message)
       console.log('Response:', response.data);
@@ -95,18 +96,19 @@ const handleInputChange = (e) => {
     setFormData({
       order_title:'',
       order_description:'',
-      full_name: '',
+      name: '',
       receiver_name: '',
-      phone_number: '',
+      order_phone_number: '',
       receiver_phone_number: '',
       shipping_location: '',
-      receiving_location: '',
+      receiver_location: '',
       shipping_date: '',
-      truck_size: '',
-      shipping_time: '',
-      receiver_time: '',
+      order_truck_size: '',
+      shipping_timestamp: '',
+      receiving_timestamp: '',
       message: '',
       contains_dangerous_materials: false,
+
     });
   }
   return (
@@ -197,11 +199,11 @@ const handleInputChange = (e) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="phone_number"
+          name="order_phone_number"
           id="phoneNumber"
           type='text'
           placeholder='+962'
-          value={formData.phone_number}
+          value={formData.order_phone_number}
           onChange={handleInputChange}
            required
         />
@@ -299,9 +301,9 @@ const handleInputChange = (e) => {
             </label>
             <select
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="truck_size"
+            name="order_truck_size"
             id="truckSize"
-            value={formData.truck_size}
+            value={formData.order_truck_size}
             onChange={handleInputChange}
              required
           >
@@ -317,10 +319,10 @@ const handleInputChange = (e) => {
             Shipping Time            </label>
             <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="shipping_time"
+            name="shipping_timestamp"
             id="shippingTime"
             type='time'
-            value={formData.shipping_time}
+            value={formData.shipping_timestamp}
             onChange={handleInputChange}
              required
           />
@@ -334,10 +336,10 @@ const handleInputChange = (e) => {
             </label>
             <input
                 className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-                name="receiver_time"
-                id="receiverTime"
+                name="receiving_timestamp"
+                id="receiving_timestamp"
                 type='time'
-                value={formData.receiver_time}
+                value={formData.receiving_timestamp}
                 onChange={handleInputChange}
                  required
               />

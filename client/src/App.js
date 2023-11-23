@@ -1,7 +1,7 @@
 
 import './App.css';
-import Login from './Component/Users/Login';
-import Registration from './Component/Users/Registration';
+import Login from './Component/Website/Users/Login';
+import Registration from './Component/Website/Users/Registration';
 import DriverRegistration from './Component/Driver/Users/Registration';
 import DriverLogin from './Component/Driver/Users/Login';
 
@@ -74,12 +74,12 @@ function App() {
 
       <Footer/>
        {/* Admin routs  */}
-       <Routes>
+       {/* <Routes>
        <Route path='/adminRegistration' element={<DriverRegistration/>}/>
       <Route path='/adminLogin' element={<DriverLogin/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/dashboard2' element={<Dashboard2/>}/>
-      </Routes>
+      </Routes> */}
       </div>
       </Router>
   );

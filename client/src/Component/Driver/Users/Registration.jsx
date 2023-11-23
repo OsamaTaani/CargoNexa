@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
 import RegValidate from './RegValidate';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const Registration = () => {
 
 const [values,setValues]=useState([]);
+const [cookies, setCookie] = useCookies(['token']);
 const navigate=useNavigate();
 
 
@@ -27,7 +29,7 @@ const handleSubmit = async (e) => {
     try {
       console.log("first")
       // Make a POST request to your API endpoint
-      const response = await axios.post('http://localhost:3001/driver', values)
+      const response = await axios.post('http://localhost:3001/drivers/register', values)
         // Registration was successful
         console.log('Registration successful:', response.data);
         setValues({
@@ -37,9 +39,13 @@ const handleSubmit = async (e) => {
           truck_type: '',
           production_year: '',
           plate_number: '',
-          truck_size: '',
+          driver_size_type: '',
           driver_password: '',
         });
+        const token = response.data.token;
+
+        // Set the token in a cookie
+        setCookie('token', token, { path: '/' });
         navigate('/NewOrders')
     } catch (error) {
       // Handle network or other errors
@@ -154,7 +160,7 @@ const handleSubmit = async (e) => {
           <select
             className="w-full border-gray-300 bg-white px-4 py-1 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
             placeholder="Choose a password (minimum 8 characters)"
-            name='truck_size'
+            name='driver_size_type'
             id="truckSize"
             onChange={handleInputs}
              required

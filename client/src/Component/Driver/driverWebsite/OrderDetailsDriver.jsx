@@ -10,7 +10,10 @@ const OrderDetailsDriver = () => {
 
   const { orderId } = useParams();
   const [orderDetails, setOrderDetails] = useState([]);
-  
+  const [orderStatus, setOrderStatus] = useState('Pending');
+  const [driverStatus, setDriverStatus] = useState('Available');
+  const [showShippedButton, setShowShippedButton] = useState(false);
+
   useEffect(() => {
     // Fetch order details using Axios based on the order ID
     axios.get(`http://localhost:3001/order/${orderId}`)
@@ -23,6 +26,34 @@ const OrderDetailsDriver = () => {
         console.error('Error fetching order details:', error);
       });
   }, [orderId]);
+
+  const handleConfirmClick = () => {
+    axios.put(`http://localhost:3001/order/${orderId}`, {
+        status: 'shipped'
+    })
+    .then(response => {
+        const data = response.data;
+      
+            setOrderStatus('Shipped');
+            setShowShippedButton(true);
+      
+    })
+    .catch(error => {
+        console.error('Error updating order status:', error);
+    });
+
+    axios.put(`http://localhost:3001/driver/1`, {
+        status: 'shipped'
+    })
+    .then(response => {
+        const data = response.data;
+            setDriverStatus('busy');
+    })
+    .catch(error => {
+        console.error('Error updating driver status:', error);
+    });
+};
+
 
   return (
    
@@ -139,12 +170,19 @@ const OrderDetailsDriver = () => {
     Cancel
   </button>
   </Link>
-  <Link to={`/confirmedOrder/${orderDetails.id}`}>
-  <button className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">
+  {/* <Link to={`/confirmedOrder/${orderDetails.id}`}> */}
+  <button className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600" onClick={handleConfirmClick}>
     Confirm
   </button>
-  </Link>
+  {/* </Link> */}
+  <div>
+            <p>Order Status: {orderDetails.status}
+            </p>
+            {showShippedButton && <button id="shippedBtn">Shipped</button>}
+            <p>Driver Status: {driverStatus}</p>
+        </div>
 </div>
+
 
 
 
