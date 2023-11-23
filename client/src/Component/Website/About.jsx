@@ -29,7 +29,7 @@ const About = () => {
                 <div className="absolute inset-0 bg-black opacity-60"></div>
                 <div className="absolute inset-0 flex items-center justify-center text-white z-10">
                     <div className="text-center">
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4">About US Page</h1>
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4">Our Mission Page</h1>
                         <p className="text-lg sm:text-xl md:text-2xl">Discover our innovative solutions to your problems.</p>
                     </div>
                 </div>

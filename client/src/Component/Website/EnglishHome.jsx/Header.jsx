@@ -66,7 +66,7 @@ const Header = () => {
       className=" group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
       Home
-      <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
+      <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
 
     </Link>
     <Link 
@@ -74,7 +74,7 @@ const Header = () => {
       className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
       Services 
-      <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
+      <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
 
 
     </Link>
@@ -83,8 +83,8 @@ const Header = () => {
     to={'/about'}
       className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
-      About Us
-      <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
+     Our Mission
+      <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
 
     </Link>
  
@@ -94,7 +94,7 @@ const Header = () => {
       className="group font-medium text-gray-500 hover:text-gray-900 transition duration-150 ease-in-out text-sm md:text-xl"
     >
       My Orders
-      <div className="w-0 group-hover:w-full h-1 bg-[#219C90] ease-out-in duration-500  "></div>
+      <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
 
     </Link>
   </div> 
@@ -108,7 +108,7 @@ const Header = () => {
     
         
 
-    <span  className=" menu-hover inline-flex lg:mx-4 items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"  >
+    <span  className=" menu-hover inline-flex lg:mx-1 items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"  >
         Login
     </span>
   
@@ -159,7 +159,7 @@ const Header = () => {
     <span className="inline-flex rounded-md ">
       <Link 
     to={'/services'}
-        className="text-sm lg:text-xl  px-2 w-28 lg:w-32 text-center py-2  border border-transparent  leading-6 font-medium rounded-xl text-white bg-[#219C90] hover:bg-[#54beb3] focus:outline-none  transition duration-150 ease-in-out"
+        className="text-md lg:text-xl  px-2 w-28 lg:w-32 text-center py-2 ml-14  border border-transparent  leading-6 font-medium rounded-xl text-my-green focus:outline-none  transition duration-150 ease-in-out"
       >
         Quote Now
       </Link>
