@@ -1,25 +1,59 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import bg from '../Images/bg.png'
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const UserProfile = () => {
-  const [userData, setUserData] = useState([]);
-
-  const handleMyInfoClick = async () => {
-    try {
-      console.log("jjj")
-      // Replace 'your-api-endpoint' with the actual API endpoint to fetch user data
-      const response = await axios.get('http://localhost:3001/register/1');
-  
-      // Assuming the response.data contains the user data
-      setUserData(response.data);
  
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
+  const [userData, setUserData] = useState({});
+  const [showOrdersTable, setShowOrdersTable] = useState(false); // Add state for showing the orders table
+  const [orders, setOrders] = useState([]); // Add state for storing orders data
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3; // Adjust as needed
+  
+  const handlePrevClick = () => {
+    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
   };
 
-  
+  const handleNextClick = () => {
+    setCurrentPage(prevPage => prevPage + 1);
+  };
+
+  useEffect(() => {
+    // Fetch user data
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/register/1');
+        setUserData(response.data);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+
+    // Fetch orders data
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('  http://localhost:3001/order'); // Replace with your orders API endpoint
+        setOrders(response.data);
+      } catch (error) {
+        console.error('Error fetching orders data:', error);
+      }
+    };
+
+    fetchUserData();
+    fetchOrders();
+  }, []);
+ 
+
+  const handleMyInfoClick = () => {
+    setShowOrdersTable(false);
+  };
+
+  const handleMyOrdersClick = () => {
+    setShowOrdersTable(true);
+  }; 
+
+
   return (
    <>
   
@@ -32,13 +66,7 @@ const UserProfile = () => {
   <div className="relative block h-500-px ">
     <div
       className="absolute  w-full h-96 bg-my-green"
-      // style={{
-      //   backgroundColor:
-        // backgroundImage:
-
-          // 'url("https://png.pngtree.com/background/20230525/original/pngtree-raleigh-port-trucks-for-moving-cargoes-at-night-picture-image_2728460.jpg")'
-        // backgroundImage: `url(${bg})`,
-      // }}
+    
     >
      
     </div>
@@ -69,81 +97,133 @@ const UserProfile = () => {
   My Info
 </button>
       
-      <button class="min-w-auto w-32 h-10 bg-my-green p-2 rounded-r-xl  transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold">
+      <button
+       class="min-w-auto w-32 h-10 bg-my-green p-2 rounded-r-xl  transition-colors duration-50 hover:animate-pulse ease-out text-white font-semibold"
+       onClick={handleMyOrdersClick}>
       My Orders
       </button>
   </div>
 
-  <div>
-    <p>User Name: {userData.user_username}</p>
-    <p>Email: {userData.user_email}</p>
-    {/* Add more fields as needed */}
-  </div>
+ 
 
-
-            <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
-              Jenna Stones
-            </h3>
-            <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-              <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400" />
-              Los Angeles, California
-            </div>
-            <div className="mb-2 text-blueGray-600 mt-10">
-              <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400" />
-              Solution Manager - Creative Tim Officer
-            </div>
-            <div className="mb-2 text-blueGray-600">
-              <i className="fas fa-university mr-2 text-lg text-blueGray-400" />
-              University of Computer Science
-            </div>
-          </div>
-          <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
-            <div className="flex flex-wrap justify-center">
-              <div className="w-full lg:w-9/12 px-4">
-                <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                  An artist of considerable range, Jenna the name taken by
-                  Melbourne-raised, Brooklyn-based Nick Murphy writes, performs
-                  and records all of his own music, giving it a warm, intimate
-                  feel with a solid groove structure. An artist of considerable
-                  range.
-                </p>
-                <a href="#pablo" className="font-normal text-pink-500">
-                  Show more
-                </a>
-              </div>
-            </div>
-          </div>
+       
         </div>
       </div>
+      {showOrdersTable ?(
+       <div>
+       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+           <table className="min-w-full leading-normal">
+             <thead>
+               <tr>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                   Order Name
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 shipping Location
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 receiving Location
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 shipping Date
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 Status
+                 </th>
+               </tr>
+             </thead>
+             <tbody>
+             {orders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(order => (
+               <tr key={order.id}>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <div className="flex items-center">
+                   <Link to={`/orderDetails/${order.id}`}>
+                     <div className="ml-3">
+                       <p className="text-gray-900 whitespace-no-wrap">
+                        {order.order_title}
+                       </p>
+                     </div>
+                      </Link> 
+                   </div>
+                 </td>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <p className="text-gray-900 whitespace-no-wrap">  {order. shipping_location}</p>
+                 </td>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <p className="text-gray-900 whitespace-no-wrap">
+                 
+                   {order.receiving_location}
+                   </p>
+                 </td>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <p className="text-gray-900 whitespace-no-wrap">{order.shipping_date}</p>
+                 </td>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
+                 ${order.status === 'pending' ? 'bg-gray-500' : ''}
+                 ${order.status === 'shipped' ? 'bg-blue-500' : ''}
+                 ${order.status === 'on the way' ? 'bg-orange-500' : ''}
+                 ${order.status === 'delivered' ? 'bg-green-500' : ''}
+               rounded-full
+               `}>
+               
+                 <span className="relative">{order.status}</span>
+               </span>
+             </td>
+ 
+               </tr>
+                ))}
+         
+             </tbody>
+           </table>
+            </div>
+           <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+             <div className="inline-flex mt-2 xs:mt-0">
+               <button  onClick={handlePrevClick}
+             disabled={currentPage === 1}
+             className={`text-sm text-white transition duration-150 ${
+               currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+             } font-semibold py-2 px-4 rounded-l`}>
+                 Prev
+               </button>
+               &nbsp; &nbsp;
+               <button
+             onClick={handleNextClick}
+             disabled={orders.length < itemsPerPage}
+             className={`text-sm text-white transition duration-150 ${
+               orders.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+             } font-semibold py-2 px-4 rounded-r`}
+           >
+                 Next
+               </button>
+             </div>
+           </div>
+        
+       </div>
+     </div>
+        ):
+        <div>
+        <h3 className="text-4xl text-center font-semibold leading-normal text-blueGray-700 mb-2">
+        {userData.user_username}
+        </h3>
+        <div className="flex items-center justify-center text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
+          <svg className="text-orange-600 w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+          </svg>
+          {userData.user_email}
+        </div>
+        <div className="flex items-center justify-center text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
+        <svg class="text-orange-600 w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" fill="currentColor"> <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+
+          {userData.user_phone_number}
+        </div>
+        </div>}
     </div>
-    <footer className="relative bg-blueGray-200 pt-8 pb-6 mt-8">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap items-center md:justify-between justify-center">
-          <div className="w-full md:w-6/12 px-4 mx-auto text-center">
-            <div className="text-sm text-blueGray-500 font-semibold py-1">
-              Made with{" "}
-              <a
-                href="https://www.creative-tim.com/product/notus-js"
-                className="text-blueGray-500 hover:text-gray-800"
-                target="_blank"
-              >
-                Notus JS
-              </a>{" "}
-              by{" "}
-              <a
-                href="https://www.creative-tim.com"
-                className="text-blueGray-500 hover:text-blueGray-800"
-                target="_blank"
-              >
-                {" "}
-                Creative Tim
-              </a>
-              .
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    </div>
+    
+   
   </div>
 </>
 
