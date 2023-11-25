@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import EditDriverForm from './EditDriverForm';
 
 const NewOrders = () => {
 
@@ -13,6 +14,9 @@ const NewOrders = () => {
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [driverInfo, setDriverInfo] = useState([]);
 
+  
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [editDriverInfo, setEditDriverInfo] = useState({});
   
 
 
@@ -48,20 +52,44 @@ const NewOrders = () => {
     setFilteredOrders(filtered);
   }, [searchQuery, orders]);
 
-  useEffect(() => {
-    const fetchDriverInfo = async () => {
-      try {
-        const response = await axios.get('http://localhost:3001/driver');
-        setDriverInfo(response.data);
-      } catch (error) {
-        console.error('Error fetching driver info:', error);
-      }
-    };
+  const fetchDriverInfo = async () => {
+    try {
+      // const response = await axios.get(`http://localhost:3001/driver/${driverId}`);
+      const response = await axios.get('http://localhost:3001/driver/1');
+      setDriverInfo(response.data);
+    } catch (error) {
+      console.error('Error fetching driver info:', error);
+    }
+  };
   
+  useEffect(() => {
     // Call the function to fetch driver info
     fetchDriverInfo();
   }, []);
   
+  
+
+
+  // Function to open the edit form
+  const openEditForm = (driverData) => {
+    setEditDriverInfo(driverData);
+    setIsEditFormOpen(true);
+  };
+
+  const handleEditFormSubmit = async (updatedDriverInfo) => {
+    try {
+      // Make an Axios request to update driver information
+      await axios.put(`http://localhost:3001/driver/1`, updatedDriverInfo);
+  
+      // Close the edit form and fetch updated driver information
+      setIsEditFormOpen(false);
+      fetchDriverInfo(); // This will fetch the updated driver information
+    } catch (error) {
+      console.error('Error updating driver info:', error);
+    }
+  };
+  
+
 
   return (  
     <>
@@ -90,19 +118,7 @@ const NewOrders = () => {
           />
           <button className="inline-flex items-center gap-2 bg-my-green text-white text-lg font-semibold py-3 px-6 rounded-r-md">
             <span>Find</span>
-            <svg
-              className="text-gray-200 h-5 w-5 p-0 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlnsXlink="http://www.w3.org/1999/xlink"
-              version="1.1"
-              x="0px"
-              y="0px"
-              viewBox="0 0 56.966 56.966"
-              style={{ enableBackground: "new 0 0 56.966 56.966" }}
-              xmlSpace="preserve"
-            >
-              <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
-            </svg>
+           
           </button>
         </div>
       </div>
@@ -111,40 +127,142 @@ const NewOrders = () => {
 </div>
 
 
-<div className="grid grid-cols-4  " >
+<div className="grid grid-cols-1 md:grid-cols-4" >
       {/* Driver Info Column */}
 
-      <div className="col-span-1 mt-24 " >
-      <div>Driver Information</div>
+      <div className="md:col-span-2 mt-24 md:ml-32" >
+      <div className='text-center text-3xl font-bold mb-10'>Driver Information</div>
 
         {/* Display driver information here */}
-        {driverInfo.map((driver) => (
-          <div key={driver.id}>
-             <div>
-        <h3 className="text-xl text-center font-semibold leading-normal text-blueGray-700 mb-2">
-        {driver.driver_username}
-        </h3>
-        <div className="flex items-center justify-center text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-          <svg className="text-orange-600 w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
-              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
-          </svg>
-          {driver.driver_email}
-        </div>
-        <div className="flex items-center justify-center text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-        <svg class="text-orange-600 w-6 h-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 20 20" fill="currentColor"> <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+        
+        <>
+        {/* component */}
+  <div className="flex flex-col md:order-1 sm:order-2">
+    <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+        <div className="overflow-hidden">
+          <table className="min-w-full text-center">
+            <thead className=" text-right ">
+              <tr>
+                <th
+                  scope="col"
+                  className="text-sm font-medium text-gray-900 px-6 py-4"
+                >
+                  <button onClick={openEditForm}>
+          <svg class="text-teal-600 w-7 h-7 "
+        xmlns="http://www.w3.org/2000/svg" width="30"  height="30"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+            {/* ... SVG path for edit */}
+            </button>
+                </th>
+             
+              </tr>
+            </thead>
+            <thead className="border-b ">
+              <tr>
+                <th
+                  scope="col"
+                  className="text-sm font-medium text-gray-900 px-6 py-4"
+                >
+                   {driverInfo.driver_username}
+                </th>
+             
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                {driverInfo.driver_password}
 
-          {driver.driver_phone_number}
+                </td>
+              </tr>
+            
+            </tbody>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                {driverInfo.driver_email}
+              
+                </td>
+              </tr>
+            
+            </tbody>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                {driverInfo.driver_license}
+
+                </td>
+              </tr>
+            
+            </tbody>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                {driverInfo.truck_type}
+
+                </td>
+              </tr>
+            
+            </tbody>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                {driverInfo.production_year}
+
+                </td>
+              </tr>
+            
+            </tbody>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                {driverInfo.plate_number}
+
+                </td>
+              </tr>
+            
+            </tbody>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                {driverInfo.truck_size}
+
+                </td>
+              </tr>
+            
+            </tbody>
+            <tbody>
+              <tr className="border-b">
+                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
+                  Default
+                </td>
+              </tr>
+            
+            </tbody>
+          </table>
         </div>
-        </div>
-          </div>
-        ))}
       </div>
-    {/* new order cards  */}
-      <div className="col-span-3 max-w-[70rem] md:mx-auto sm:mx-10  mt-24 space-y-10   ">
-      <div className='text-center text-4xl font-bold '>New Orders</div>
+    </div>
+  </div>
 
-        <div className="max-w-screen-md md:w-3/4 mx-auto  ">
+
+        </>
+        
+      </div>
+        {/* Edit Form Popup */}
+        {isEditFormOpen && (
+        <EditDriverForm
+          driverInfo={editDriverInfo}
+          onClose={() => setIsEditFormOpen(false)}
+          onSubmit={handleEditFormSubmit}
+        />
+      )}
+
+    {/* new order cards  */}
+      <div className="md:col-span-2 max-w-[70rem] md:mx-auto sm:mx-10  mt-24 space-y-10   ">
+      <div className='text-center text-3xl font-bold '>New Orders</div>
+
+        <div className="max-w-screen-md md:w-3/4 mx-auto md:order-2 sm:order-1  ">
          
           {filteredOrders.map((order) => (
             <div key={order.id} className="inline-flex flex-col space-y-2 items-center justify-end flex-1 h-full p-4 mb-10 bg-white border border-gray-300 shadow-lg shadow-gary-500 rounded-xl">
@@ -171,6 +289,11 @@ const NewOrders = () => {
         </div>
       </div>
       </div>
+
+
+
+      
+  
     </>
   );
 };

@@ -93,17 +93,15 @@
   ],
   "driver": [
     {
-      "id": 1,
-      "driver_username": "malath",
-      "driver_email": "zz@gmail.com",
-      "driver_password": "mmm",
-      "driver_license": "mmm",
-      "truck_type": "vngvhvh",
-      "production_year": "2022",
-      "plate_number": 20,
-      "truck_size": "jjmmm",
-      "status": "available",
-      "isDeleted": "false"
+      "driver_username": "aaaa",
+      "driver_email": "",
+      "driver_license": "",
+      "truck_size": "",
+      "plate_number": "",
+      "production_year": "",
+      "truck_type": "njn",
+      "driver_password": "",
+      "id": 1
     },
     {
       "driver_username": "  fvfv",
