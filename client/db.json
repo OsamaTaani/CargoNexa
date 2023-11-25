@@ -2,64 +2,25 @@
   "register": [
     {
       "id": 1,
-      "user_username": "malath",
+      "user_username": "malath muhaned",
       "user_email": "m@gmail.com",
-      "user_phone_number" : "01475247",
-      "user_password": "mmm"
+      "user_phone_number": "01475247111",
+      "user_password": "mmmxxxsxs"
     },
     {
-      "user_username": "malajjhggjth",
+      "user_username": "nana",
       "user_email": "m@.jhjhghjcom",
       "user_password": "mgfgjkgkjgmm",
-      "id": 2
+      "id": 2,
+      "user_phone_number": "122",
+      "isDeleted": "true"
     },
     {
       "user_username": "",
       "user_email": "",
       "user_password": "",
-      "id": 3
-    },
-    {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 4
-    },
-    {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 5
-    },
-    {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 6
-    },
-    {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 7
-    },
-    {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 8
-    },
-    {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 9
-    },
-    {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 10
+      "id": 3,
+      "isDeleted": "true"
     }
   ],
   "login": [
@@ -113,6 +74,21 @@
       "email": "",
       "password": "",
       "id": 14
+    },
+    {
+      "email": "",
+      "password": "",
+      "id": 15
+    },
+    {
+      "email": "",
+      "password": "",
+      "id": 16
+    },
+    {
+      "email": "",
+      "password": "",
+      "id": 17
     }
   ],
   "driver": [
@@ -122,28 +98,30 @@
       "driver_email": "zz@gmail.com",
       "driver_password": "mmm",
       "driver_license": "mmm",
-      "truck_type": "mmm",
-      "production_year": 20,
+      "truck_type": "vngvhvh",
+      "production_year": "2022",
       "plate_number": 20,
-      "truck_size": "jj",
-      "status": "available"
+      "truck_size": "jjmmm",
+      "status": "available",
+      "isDeleted": "false"
     },
     {
       "driver_username": "  fvfv",
       "driver_email": "fvvf@gmail.com",
       "driver_license": "cd",
-      "truck_size": "Small",
+      "truck_size": "large",
       "plate_number": "cdcd",
       "production_year": "cded",
       "truck_type": "edded",
       "driver_password": "dede",
       "status": "available",
+      "isDeleted": "false",
       "id": 2
     }
   ],
   "order": [
     {
-      "order_title": "equipment",
+      "order_title": "equipmentnnnjj",
       "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
       "full_name": "kkkbbbbbbbbbbb",
       "receiver_name": "bbbbbbbbb",
@@ -161,7 +139,7 @@
       "id": 1
     },
     {
-      "order_title": "equipment",
+      "order_title": "equipmentt",
       "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
       "full_name": "vav",
       "receiver_name": "sdwds",

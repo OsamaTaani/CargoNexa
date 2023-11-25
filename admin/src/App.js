@@ -11,6 +11,7 @@ import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
 
 import Dashboard from './Component/Admin/website/Dashboard';
 import Dashboard2 from './Component/Admin/website/Dashboard2';
+import OrderDetailsPage from './Component/Admin/website/OrderDetailsPage';
 
 
 function App() {
@@ -25,6 +26,8 @@ function App() {
       <Route path='/adminLogin' element={<AdminLogin/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/dashboard2' element={<Dashboard2/>}/>
+      <Route path='/OrderDetails' element={<OrderDetailsPage/>}/>
+      <Route path='/OrderDetails/:orderId' element={<OrderDetailsPage/>}/>
       </Routes>
 
       </div>

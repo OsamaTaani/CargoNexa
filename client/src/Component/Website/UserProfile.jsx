@@ -162,7 +162,7 @@ const UserProfile = () => {
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                  <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
                  ${order.status === 'pending' ? 'bg-gray-500' : ''}
-                 ${order.status === 'shipped' ? 'bg-blue-500' : ''}
+                 ${order.status === 'shipped' ? 'bg-yellow-500' : ''}
                  ${order.status === 'on the way' ? 'bg-orange-500' : ''}
                  ${order.status === 'delivered' ? 'bg-green-500' : ''}
                rounded-full

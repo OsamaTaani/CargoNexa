@@ -1,21 +1,184 @@
-import React, { useEffect } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import logo4 from '../../Image/logo4-transformed.png'
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import EditPopupUserData from './EditPopupUserData';
+import EditPopupDriverData from './EditPopupDriverData';
 const Dashboard = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
 
+      const [data, setData] = useState([]);
+      const [selectedTab, setSelectedTab] = useState('dashboard');
+      // add useState clicked to change the bg to white when the btn clicked 
+      const [clicked, setClicked] = useState(false);
+
+      const [editUser, setEditUser] = useState(null);
+      const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+
+      const [editDriver, setEditDriver] = useState(null);
+      const [isEditDriverPopupOpen, setIsEditDriverPopupOpen] = useState(false);
+
+    
+      useEffect(() => {
+        // Fetch initial data when the component mounts
+        fetchData();
+      }, [selectedTab]);
+    
+      const fetchData = async () => {
+        try {
+          let response;
+          // Make the appropriate API call based on the selected tab
+          switch (selectedTab) {
+            case 'dashboard':
+              response = await axios.get('http://localhost:3001/order');
+              break;
+            case 'profile':
+              response = await axios.get('http://localhost:3001/register');
+              break;
+            case 'users':
+              response = await axios.get('http://localhost:3001/register');
+              break;
+            case 'drivers':
+              response = await axios.get('http://localhost:3001/driver');
+              break;
+            default:
+              break;
+          }
+    
+          setData(response.data);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+    
+      const handleTabClick = (tab) => {
+        setSelectedTab(tab);
+        setClicked(true);
+
+      };
+    
+      const handleSignOut = () => {
+        // Implement sign-out logic, e.g., delete token
+        console.log('Signing out...');
+      };
+
+  // State to store the fetched data
+  const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3; // Adjust as needed
+  
+
+  // Effect to fetch data using Axios when the component mounts
+  useEffect(() => {
+  
+    // Fetch data using Axios
+    axios.get('http://localhost:3001/order')
+      .then(response => {
+        // Set the fetched data to the state
+        setOrders(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+      });
+  }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+
+
+ const handlePrevClick = () => {
+    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextClick = () => {
+    setCurrentPage(prevPage => prevPage + 1);
+  };
+
+
+  //edit handle for users data**********************************************************************************************
+  const handleEditClick = async (userId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/register/${userId}`); // Replace with your API endpoint
+      setEditUser(response.data);
+      setIsEditPopupOpen(true);
+    } catch (error) {
+      console.error('Error fetching order data:', error);
+    }
+  };
+
+  const handleEditSubmit = async (editedUserData) => {
+    try {
+      // Make a PUT request to update the order data
+      await axios.put(`http://localhost:3001/register/${editUser.id}`, editedUserData); // Replace with your API endpoint
+      // Close the edit popup and fetch the updated data
+      setIsEditPopupOpen(false);
+      fetchData(); // Implement a function to fetch data from your API
+    } catch (error) {
+      console.error('Error updating order data:', error);
+    }
+  };
+
+  //edit handle for driver data **********************************************************************************************
+  const handleDriverEditClick = async (driverId) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/driver/${driverId}`); // Replace with your API endpoint
+      setEditDriver(response.data);
+      setIsEditDriverPopupOpen(true);
+    } catch (error) {
+      console.error('Error fetching driver data:', error);
+    }
+  };
+
+  const handleDriverEditSubmit = async (editedDriverData) => {
+    try {
+      // Make a PUT request to update the driver data
+      await axios.put(`http://localhost:3001/driver/${editDriver.id}`, editedDriverData); // Replace with your API endpoint
+      // Close the edit popup and fetch the updated data
+      setIsEditDriverPopupOpen(false);
+      fetchData(); // Implement a function to fetch data from your API
+    } catch (error) {
+      console.error('Error updating driver data:', error);
+    }
+  };
+  
+  //handle soft delete **********************************************************************************************
+  const handleSoftDeleteUser = async (userId) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.patch(`http://localhost:3001/register/${userId}`, { isDeleted: 'true' });
+  
+      // Refresh the data or handle the removal of the soft-deleted user from your local state
+      fetchData();
+      setIsEditPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error('Error soft deleting user:', error);
+    }
+  };
+  
+  // Soft delete function for driver data
+  const handleSoftDeleteDriver = async (driverId) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.patch(`http://localhost:3001/driver/${driverId}`, { isDeleted: 'true' });
+  
+      // Refresh the data or handle the removal of the soft-deleted driver from your local state
+      fetchData();
+      setIsEditDriverPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error('Error soft deleting driver:', error);
+    }
+  };
+  
   return (
     <>
     {/* component */}
     <div className="min-h-screen bg-gray-50/50">
-      <aside className="bg-gradient-to-br from-gray-800 to-gray-900 -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0">
+    <aside className="bg-gradient-to-br bg-my-green -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0">
         <div className="relative border-b border-white/20">
           <a className="flex items-center gap-4 py-6 px-8" href="#/">
-            <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-white">
-              Material Tailwind Dashboard
-            </h6>
+            <h3 className="block antialiased tracking-normal font-sans text-3xl text-center font-semibold leading-relaxed text-white">
+             CargoNexa
+            </h3>
           </a>
           <button
             className="middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-white hover:bg-white/10 active:bg-white/30 absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
@@ -42,11 +205,14 @@ const Dashboard = () => {
         </div>
         <div className="m-4">
           <ul className="mb-4 flex flex-col gap-1">
-            <li>
+          <li>
               <a aria-current="page" className="active" href="#">
                 <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/40 active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize"
+                  className={`middle none font-sans font-bold center transition-all disabled:opacity-50  hover:bg-white disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                    selectedTab === 'dashboard' ? 'bg-white' : ''
+                    }  ${selectedTab !== 'dashboard'  ? 'bg-my-green' : ''}`}
                   type="button"
+                  onClick={() => handleTabClick('dashboard')}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -64,12 +230,16 @@ const Dashboard = () => {
                 </button>
               </a>
             </li>
+
             <li>
               <a className="" href="#">
-                <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
-                  type="button"
-                >
+              <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === 'profile' ? 'bg-white' : ''
+                    }  ${selectedTab !== 'profile'  ? 'bg-my-green' : ''}`}
+                    type="button"
+                    onClick={() => handleTabClick('profile')}
+                  >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -91,50 +261,37 @@ const Dashboard = () => {
             </li>
             <li>
               <a className="" href="#">
-                <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
+              <button
+                  className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                    selectedTab === 'users' ? 'bg-white' : ''
+                  }  ${selectedTab !== 'users'  ? 'bg-my-green' : ''}`}
                   type="button"
+                  onClick={() => handleTabClick('users')}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="w-5 h-5 text-inherit"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M1.5 5.625c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v12.75c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 18.375V5.625zM21 9.375A.375.375 0 0020.625 9h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zm0 3.75a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5a.375.375 0 00.375-.375v-1.5zM10.875 18.75a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375h7.5zM3.375 15h7.5a.375.375 0 00.375-.375v-1.5a.375.375 0 00-.375-.375h-7.5a.375.375 0 00-.375.375v1.5c0 .207.168.375.375.375zm0-3.75h7.5a.375.375 0 00.375-.375v-1.5A.375.375 0 0010.875 9h-7.5A.375.375 0 003 9.375v1.5c0 .207.168.375.375.375z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <svg class="w-5 h-5"
+xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+</svg>
+
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    tables
+                    Users
                   </p>
                 </button>
               </a>
             </li>
             <li>
               <a className="" href="#">
-                <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
-                  type="button"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="w-5 h-5 text-inherit"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+              <button
+                className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md  active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                  selectedTab === 'drivers' ? 'bg-white' : ''
+                    }  ${selectedTab !== 'drivers'  ? 'bg-my-green' : ''}`}
+                type="button"
+                onClick={() => handleTabClick('drivers')}
+              >
+                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z"/> <circle cx="7" cy="17" r="2" /> <circle cx="17" cy="17" r="2" /> <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" /></svg>
+
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    notifactions
+                    Drivers
                   </p>
                 </button>
               </a>
@@ -143,13 +300,13 @@ const Dashboard = () => {
           <ul className="mb-4 flex flex-col gap-1">
             <li className="mx-3.5 mt-4 mb-2">
               <p className="block antialiased font-sans text-sm leading-normal text-white font-black uppercase opacity-75">
-                auth pages
+                {/* auth pages */}
               </p>
             </li>
             <li>
-              <a className="" href="#">
+             
                 <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
+                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-black hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                   type="button"
                 >
                   <svg
@@ -165,29 +322,20 @@ const Dashboard = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    sign in
+                  <p onClick={handleSignOut}  className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                    sign out
                   </p>
                 </button>
-              </a>
+            
             </li>
             <li>
               <a className="" href="#">
                 <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-white hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
+                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-black hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                   type="button"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="w-5 h-5 text-inherit"
-                  >
-                    <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
-                  </svg>
+                 
                   <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    sign up
                   </p>
                 </button>
               </a>
@@ -201,157 +349,37 @@ const Dashboard = () => {
             <div className="capitalize">
               <nav aria-label="breadcrumb" className="w-max">
                 <ol className="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
-                  <li className="flex items-center text-blue-gray-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
-                    <a href="#">
-                      <p className="block antialiased font-sans text-sm leading-normal text-blue-900 font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100">
+                  <li className="flex items-center text-black antialiased font-sans text-lg font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
+                   
+                      <p className="block antialiased font-sans text-2xl leading-normal text-black font-bold  transition-all hover:text-blue-500 hover:opacity-100">
                         dashboard
                       </p>
-                    </a>
-                    <span className="text-gray-500 text-sm antialiased font-sans font-normal leading-normal mx-2 pointer-events-none select-none">
-                      /
-                    </span>
                   </li>
-                  <li className="flex items-center text-blue-900 antialiased font-sans text-sm font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-blue-500">
-                    <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">
-                      home
-                    </p>
-                  </li>
+
                 </ol>
               </nav>
-              <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-gray-900">
-                home
-              </h6>
+             
             </div>
             <div className="flex items-center">
               <div className="mr-auto md:mr-4 md:w-56">
                 <div className="relative w-full min-w-[200px] h-10">
-                  <input
-                    className="peer w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
-                    placeholder=" "
-                  />
-                  <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
-                    Type here
-                  </label>
+                 
                 </div>
               </div>
-              <button
-                className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden"
-                type="button"
-              >
-                <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    strokeWidth={3}
-                    className="h-6 w-6 text-blue-gray-500"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </button>
-              <a href="#">
-                <button
-                  className="middle none font-sans font-bold center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 hidden items-center gap-1 px-4 xl:flex"
-                  type="button"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="h-5 w-5 text-blue-gray-500"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Sign In{" "}
-                </button>
-                <button
-                  className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30 grid xl:hidden"
-                  type="button"
-                >
-                  <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      className="h-5 w-5 text-blue-gray-500"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </a>
-              <button
-                className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                type="button"
-              >
-                <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="h-5 w-5 text-blue-gray-500"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </button>
-              <button
-                aria-expanded="false"
-                aria-haspopup="menu"
-                id=":r2:"
-                className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-10 max-w-[40px] h-10 max-h-[40px] rounded-lg text-xs text-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                type="button"
-              >
-                <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="h-5 w-5 text-blue-gray-500"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </button>
+      
             </div>
           </div>
         </nav>
         <div className="mt-12">
           <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-blue-600 to-blue-400 text-white shadow-blue-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   aria-hidden="true"
-                  className="w-6 h-6 text-white"
+                  className="w-6 h-6 text-black"
                 >
                   <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
                   <path
@@ -370,21 +398,17 @@ const Dashboard = () => {
                   $53k
                 </h4>
               </div>
-              <div className="border-t border-blue-gray-50 p-4">
-                <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                  <strong className="text-green-500">+55%</strong>&nbsp;than last
-                  week
-                </p>
-              </div>
+            
             </div>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-pink-600 to-pink-400 text-white shadow-pink-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   aria-hidden="true"
-                  className="w-6 h-6 text-white"
+                  className="w-6 h-6 text-black"
                 >
                   <path
                     fillRule="evenodd"
@@ -401,281 +425,547 @@ const Dashboard = () => {
                   2,300
                 </h4>
               </div>
-              <div className="border-t border-blue-gray-50 p-4">
-                <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                  <strong className="text-green-500">+3%</strong>&nbsp;than last
-                  month
-                </p>
-              </div>
+             
             </div>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-green-600 to-green-400 text-white shadow-green-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   aria-hidden="true"
-                  className="w-6 h-6 text-white"
+                  className="w-6 h-6 text-black"
                 >
                   <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
                 </svg>
               </div>
               <div className="p-4 text-right">
                 <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                  New Clients
+                Today's Drivers
                 </p>
                 <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                  3,462
+20
                 </h4>
               </div>
-              <div className="border-t border-blue-gray-50 p-4">
-                <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                  <strong className="text-red-500">-2%</strong>&nbsp;than
-                  yesterday
-                </p>
-              </div>
+           
             </div>
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-orange-600 to-orange-400 text-white shadow-orange-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
+            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                   aria-hidden="true"
-                  className="w-6 h-6 text-white"
+                  className="w-6 h-6 text-black"
                 >
                   <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z" />
                 </svg>
               </div>
               <div className="p-4 text-right">
                 <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                  Sales
+                  Orders
                 </p>
                 <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
                   $103,430
                 </h4>
               </div>
-              <div className="border-t border-blue-gray-50 p-4">
-                <p className="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                  <strong className="text-green-500">+5%</strong>&nbsp;than
-                  yesterday
-                </p>
-              </div>
+             
             </div>
           </div>
-          <div className="mb-4 grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md overflow-hidden xl:col-span-2">
-              <div className="relative bg-clip-border rounded-xl overflow-hidden bg-transparent text-gray-700 shadow-none m-0 flex items-center justify-between p-6">
-                <div>
-                  <h6 className="block antialiased tracking-normal font-sans text-base font-semibold leading-relaxed text-blue-gray-900 mb-1">
-                    Projects
-                  </h6>
-                  <p className="antialiased font-sans text-sm leading-normal flex items-center gap-1 font-normal text-blue-gray-600">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={3}
-                      stroke="currentColor"
-                      aria-hidden="true"
-                      className="h-4 w-4 text-blue-500"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M4.5 12.75l6 6 9-13.5"
-                      />
-                    </svg>
-                    <strong>30 done</strong> this month
+          <div className="mb-4 grid grid-cols-1 gap-6 ">
+          
+            <div className="bg-white p-8 rounded-md w-full">
+    <div className=" flex  items-center justify-between pb-6">
+    <div className="flex">
+  <div>
+    <h2 className="text-gray-600 font-bold mr-10 md:mr-40">Orders</h2>
+  </div>
+  
+</div>
+
+      
+    
+    </div>
+    <div>
+     
+
+      {/* Conditional rendering based on selected tab */}
+      {selectedTab === 'dashboard' && (
+        <div>
+          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+          <table className="min-w-full leading-normal">
+            <thead>
+              <tr>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Order Name
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                shipping Location
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                receiving Location
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                shipping Date
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Status
+                </th>
+               
+              </tr>
+            </thead>
+            <tbody>
+            {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(order => (
+              <tr key={order.id}>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <div className="flex items-center">
+                  <Link to={`/OrderDetails/${order.id}`}>
+                    <div className="ml-3">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                       {order.order_title}
+                      </p>
+                    </div>
+                     </Link> 
+                  </div>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">  {order. shipping_location}</p>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">
+                
+                  {order.receiving_location}
                   </p>
-                </div>
-                <button
-                  aria-expanded="false"
-                  aria-haspopup="menu"
-                  id=":r5:"
-                  className="relative middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-blue-gray-500 hover:bg-blue-gray-500/10 active:bg-blue-gray-500/30"
-                  type="button"
-                >
-                  <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currenColor"
-                      viewBox="0 0 24 24"
-                      strokeWidth={3}
-                      stroke="currentColor"
-                      aria-hidden="true"
-                      className="h-6 w-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                      />
-                    </svg>
-                  </span>
-                </button>
-              </div>
-              <div className="p-6 overflow-x-scroll px-0 pt-0 pb-2">
-                <table className="w-full min-w-[640px] table-auto">
-                  <thead>
-                    <tr>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
-                          companies
-                        </p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
-                          budget
-                        </p>
-                      </th>
-                      <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
-                        <p className="block antialiased font-sans text-[11px] font-medium uppercase text-blue-gray-400">
-                          completion
-                        </p>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="flex items-center gap-4">
-                          <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
-                            Material XD Version
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">
-                          $14,000
-                        </p>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="w-10/12">
-                          <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">
-                            60%
-                          </p>
-                          <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
-                            <div
-                              className="flex justify-center items-center h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white"
-                              style={{ width: "60%" }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="flex items-center gap-4">
-                          <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
-                            Add Progress Track
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">
-                          $3,000
-                        </p>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="w-10/12">
-                          <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">
-                            10%
-                          </p>
-                          <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
-                            <div
-                              className="flex justify-center items-center h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white"
-                              style={{ width: "10%" }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="flex items-center gap-4">
-                          <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
-                            Fix Platform Errors
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">
-                          Not set
-                        </p>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="w-10/12">
-                          <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">
-                            100%
-                          </p>
-                          <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
-                            <div
-                              className="flex justify-center items-center h-full bg-gradient-to-tr from-green-600 to-green-400 text-white"
-                              style={{ width: "100%" }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="flex items-center gap-4">
-                          <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
-                            Launch our Mobile App
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">
-                          $20,500
-                        </p>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="w-10/12">
-                          <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">
-                            100%
-                          </p>
-                          <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
-                            <div
-                              className="flex justify-center items-center h-full bg-gradient-to-tr from-green-600 to-green-400 text-white"
-                              style={{ width: "100%" }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="flex items-center gap-4">
-                          <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-bold">
-                            Add the New Pricing Page
-                          </p>
-                        </div>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <p className="block antialiased font-sans text-xs font-medium text-blue-gray-600">
-                          $500
-                        </p>
-                      </td>
-                      <td className="py-3 px-5 border-b border-blue-gray-50">
-                        <div className="w-10/12">
-                          <p className="antialiased font-sans mb-1 block text-xs font-medium text-blue-gray-600">
-                            25%
-                          </p>
-                          <div className="flex flex-start bg-blue-gray-50 overflow-hidden w-full rounded-sm font-sans text-xs font-medium h-1">
-                            <div
-                              className="flex justify-center items-center h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white"
-                              style={{ width: "25%" }}
-                            />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">{order.shipping_date}</p>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
+                ${order.status === 'pending' ? 'bg-gray-500' : ''}
+                ${order.status === 'shipped' ? 'bg-yellow-500' : ''}
+                ${order.status === 'on the way' ? 'bg-orange-500' : ''}
+                ${order.status === 'delivered' ? 'bg-green-500' : ''}
+              rounded-full
+              `}>
+              
+                <span className="relative">{order.status}</span>
+              </span>
+            </td>
+          
+              </tr>
+               ))}
+        
+            </tbody>
+          </table>
+           </div>
+          <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+            <div className="inline-flex mt-2 xs:mt-0">
+              <button  onClick={handlePrevClick}
+            disabled={currentPage === 1}
+            className={`text-sm text-white transition duration-150 ${
+              currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+            } font-semibold py-2 px-4 rounded-l`}>
+                Prev
+              </button>
+              &nbsp; &nbsp;
+              <button
+            onClick={handleNextClick}
+            disabled={orders.length < itemsPerPage}
+            className={`text-sm text-white transition duration-150 ${
+              orders.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+            } font-semibold py-2 px-4 rounded-r`}
+          >
+                Next
+              </button>
             </div>
+          </div>
+       
+      </div>
+       
+        </div>
+      )}
+    
+
+      {selectedTab === 'profile' && (
+           <div>
+           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+           <table className="min-w-full leading-normal">
+             <thead>
+               <tr>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                   User Name
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 User Phone Number
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 User Email
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 User Password
+                 </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Action
+                </th>
+               </tr>
+             </thead>
+             <tbody>
+             {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
+              userData.isDeleted !== 'true' && (
+               <tr key={userData.id}>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <div className="flex items-center">
+                   <Link to={`/OrderDetails/${userData.user_username}`}>
+  
+                     <div className="ml-3">
+                       <p className="text-gray-900 whitespace-no-wrap">
+                        {userData.user_username}
+                       </p>
+                     </div>
+                      </Link> 
+                   </div>
+                 </td>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <p className="text-gray-900 whitespace-no-wrap">  {userData.user_phone_number}</p>
+                 </td>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <p className="text-gray-900 whitespace-no-wrap">
+                 
+                   {userData.user_email}
+                   </p>
+                 </td>
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                   <p className="text-gray-900 whitespace-no-wrap">{userData.user_password}</p>
+                 </td>
+                
+                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <div className="flex space-x-2">
+        
+       <button onClick={() => handleEditClick(userData.id)}>
+          <svg class="text-teal-600 w-5 h-5 "
+        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+            {/* ... SVG path for edit */}
+            </button>
+
+            <button onClick={() => handleSoftDeleteUser(userData.id)} >
+          <svg class="text-orange-600 w-5 h-5"
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+          </button>
+
+            {/* ... SVG path for delete */}
+         
+        </div>
+      </td>
+               </tr>
+              )  ))}
+         
+             </tbody>
+           </table>
+            </div>
+           <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+             <div className="inline-flex mt-2 xs:mt-0">
+               <button  onClick={handlePrevClick}
+             disabled={currentPage === 1}
+             className={`text-sm text-white transition duration-150 ${
+               currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+             } font-semibold py-2 px-4 rounded-l`}>
+                 Prev
+               </button>
+               &nbsp; &nbsp;
+               <button
+             onClick={handleNextClick}
+             disabled={data.length < itemsPerPage}
+             className={`text-sm text-white transition duration-150 ${
+               data.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+             } font-semibold py-2 px-4 rounded-r`}
+           >
+                 Next
+               </button>
+             </div>
+           </div>
+        
+       </div>
+        
+         </div>
+            )}
+            {isEditPopupOpen && (
+  <EditPopupUserData
+    user={editUser}
+    isOpen={isEditPopupOpen}
+    onClose={() => setIsEditPopupOpen(false)}
+    onSubmit={handleEditSubmit}
+  />
+)}
+
+      {selectedTab === 'users' && (
+         <div>
+         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+       <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+         <table className="min-w-full leading-normal">
+           <thead>
+             <tr>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                 User Name
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               User Phone Number
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               User Email
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               User Password
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Action
+                </th>
+             </tr>
+           </thead>
+           <tbody>
+           {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
+            userData.isDeleted !== 'true' && (
+             <tr key={userData.id}>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <div className="flex items-center">
+                 <Link to={`/OrderDetails/${userData.user_username}`}>
+
+                   <div className="ml-3">
+                     <p className="text-gray-900 whitespace-no-wrap">
+                      {userData.user_username}
+                     </p>
+                   </div>
+                    </Link> 
+                 </div>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">  {userData.user_phone_number}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">
+               
+                 {userData.user_email}
+                 </p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">{userData.user_password}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <div className="flex space-x-2">
+        
+       <button onClick={() => handleEditClick(userData.id)}>
+          <svg class="text-teal-600 w-5 h-5 "
+        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+            {/* ... SVG path for edit */}
+            </button>
+
+            <button onClick={() => handleSoftDeleteUser(userData.id)}>
+          <svg class="text-orange-600 w-5 h-5"
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+          </button>
+
+            {/* ... SVG path for delete */}
+         
+        </div>
+      </td>
+
+             </tr>
+            )  ))}
+       
+           </tbody>
+         </table>
+          </div>
+         <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+           <div className="inline-flex mt-2 xs:mt-0">
+             <button  onClick={handlePrevClick}
+           disabled={currentPage === 1}
+           className={`text-sm text-white transition duration-150 ${
+             currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+           } font-semibold py-2 px-4 rounded-l`}>
+               Prev
+             </button>
+             &nbsp; &nbsp;
+             <button
+           onClick={handleNextClick}
+           disabled={data.length < itemsPerPage}
+           className={`text-sm text-white transition duration-150 ${
+             data.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+           } font-semibold py-2 px-4 rounded-r`}
+         >
+               Next
+             </button>
+           </div>
+         </div>
+      
+     </div>
+      
+       </div>
+      )}
+           {/* {isEditPopupOpen && (
+  <EditPopupUserData
+    user={editUser}
+    isOpen={isEditPopupOpen}
+    onClose={() => setIsEditPopupOpen(false)}
+    onSubmit={handleEditSubmit}
+  />
+)} */}
+      {selectedTab === 'drivers' && (
+         <div>
+         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+       <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+         <table className="min-w-full leading-normal">
+           <thead>
+             <tr>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               driver_username
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               driver_email
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               driver_license
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               truck_size
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               plate_number
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               production_year
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               truck_type
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               driver_password
+               </th>
+               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+               status
+               </th>
+                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  Action
+                </th>
+             </tr>
+           </thead>
+           <tbody>
+           {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(driverData => (
+            driverData.isDeleted !== 'true' && (
+             <tr key={driverData.id}>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <div className="flex items-center">
+                 <Link to={`/OrderDetails/${driverData.driver_username}`}>
+                   <div className="ml-3">
+                     <p className="text-gray-900 whitespace-no-wrap">
+                      {driverData.driver_username}
+                     </p>
+                   </div>
+                    </Link> 
+                 </div>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">  {driverData. driver_email}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">
+               
+                 {driverData.driver_license}
+                 </p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">{driverData.truck_size}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">{driverData.plate_number}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">{driverData.production_year}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">{driverData.truck_type}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">{driverData.driver_password}</p>
+               </td>
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                 <p className="text-gray-900 whitespace-no-wrap">{driverData.status}</p>
+               </td>
+             
+               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <div className="flex space-x-2">
+        
+       <button onClick={() => handleDriverEditClick(driverData.id)}>
+          <svg class="text-teal-600 w-5 h-5 "
+        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
+            {/* ... SVG path for edit */}
+            </button>
+
+            <button  onClick={() => handleSoftDeleteDriver(driverData.id)}>
+          <svg class="text-orange-600 w-5 h-5"
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+          </svg>
+          </button>
+
+            {/* ... SVG path for delete */}
+         
+        </div>
+      </td>
+             </tr>
+              )))}
+       
+           </tbody>
+         </table>
+          </div>
+         <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+           <div className="inline-flex mt-2 xs:mt-0">
+             <button  onClick={handlePrevClick}
+           disabled={currentPage === 1}
+           className={`text-sm text-white transition duration-150 ${
+             currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+           } font-semibold py-2 px-4 rounded-l`}>
+               Prev
+             </button>
+             &nbsp; &nbsp;
+             <button
+           onClick={handleNextClick}
+           disabled={orders.length < itemsPerPage}
+           className={`text-sm text-white transition duration-150 ${
+             orders.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
+           } font-semibold py-2 px-4 rounded-r`}
+         >
+               Next
+             </button>
+           </div>
+         </div>
+      
+     </div>
+      
+       </div>
+      )}
+           {isEditDriverPopupOpen && (
+  <EditPopupDriverData
+    driver={editDriver}
+    isOpen={isEditDriverPopupOpen}
+    onClose={() => setIsEditDriverPopupOpen(false)}
+    onSubmit={handleDriverEditSubmit}
+  />
+)}
+      {selectedTab === 'signout' && (
+        <div>
+          Render sign-out logic
+        </div>
+      )}
+    </div>
+  </div>
+
           </div>
         </div>
         <div className="text-blue-gray-600">
@@ -698,48 +988,11 @@ const Dashboard = () => {
                   target="_blank"
                   className="transition-colors hover:text-blue-500"
                 >
-                  Creative Tim
+                 Malath Yasin
                 </a>{" "}
-                for a better web.{" "}
+                
               </p>
-              <ul className="flex items-center gap-4">
-                <li>
-                  <a
-                    href="https://www.creative-tim.com"
-                    target="_blank"
-                    className="block antialiased font-sans text-sm leading-normal py-0.5 px-1 font-normal text-inherit transition-colors hover:text-blue-500"
-                  >
-                    Creative Tim
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.creative-tim.com/presentation"
-                    target="_blank"
-                    className="block antialiased font-sans text-sm leading-normal py-0.5 px-1 font-normal text-inherit transition-colors hover:text-blue-500"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.creative-tim.com/blog"
-                    target="_blank"
-                    className="block antialiased font-sans text-sm leading-normal py-0.5 px-1 font-normal text-inherit transition-colors hover:text-blue-500"
-                  >
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.creative-tim.com/license"
-                    target="_blank"
-                    className="block antialiased font-sans text-sm leading-normal py-0.5 px-1 font-normal text-inherit transition-colors hover:text-blue-500"
-                  >
-                    License
-                  </a>
-                </li>
-              </ul>
+             
             </div>
           </footer>
         </div>
