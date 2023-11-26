@@ -5,7 +5,6 @@ import Registration from './Component/Website/Users/Registration';
 import DriverRegistration from './Component/Driver/Users/Registration';
 import DriverLogin from './Component/Driver/Users/Login';
 
-
 import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
 
 
