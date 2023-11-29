@@ -5,7 +5,8 @@
       "user_username": "malath muhaned",
       "user_email": "m@gmail.com",
       "user_phone_number": "01475247111",
-      "user_password": "mmmxxxsxs"
+      "user_password": "mmmxxxsxs",
+      "isDeleted": "false"
     },
     {
       "user_username": "nana",
@@ -13,14 +14,35 @@
       "user_password": "mgfgjkgkjgmm",
       "id": 2,
       "user_phone_number": "122",
+      "isDeleted": "false"
+    },
+    {
+      "user_username": "cc",
+      "user_email": "",
+      "user_phone_number": "11111111",
+      "receiver_name": "ccccccc",
+      "id": 3,
       "isDeleted": "true"
     },
     {
-      "user_username": "",
-      "user_email": "",
-      "user_password": "",
-      "id": 3,
-      "isDeleted": "true"
+      "user_username": "cc",
+      "user_email": "ccccccc",
+      "user_phone_number": "111111",
+      "id": 4
+    },
+    {
+      "user_username": "mm",
+      "user_email": "ll@gmail.com",
+      "user_phone_number": "1551",
+      "user_password": "ddd",
+      "id": 5
+    },
+    {
+      "user_username": "mm",
+      "user_email": "ll@gmail.com",
+      "user_phone_number": "0791458962",
+      "user_password": "11111",
+      "id": 6
     }
   ],
   "login": [
@@ -93,20 +115,21 @@
   ],
   "driver": [
     {
-      "driver_username": "aaaa",
-      "driver_email": "",
+      "driver_username": "",
+      "driver_email": "cc@gmail.com",
       "driver_license": "",
       "truck_size": "",
       "plate_number": "",
       "production_year": "",
-      "truck_type": "njn",
+      "truck_type": "",
       "driver_password": "",
-      "id": 1
+      "id": 1,
+      "isDeleted": "true"
     },
     {
-      "driver_username": "  fvfv",
+      "driver_username": "ehab",
       "driver_email": "fvvf@gmail.com",
-      "driver_license": "cd",
+      "driver_license": "nnnnn",
       "truck_size": "large",
       "plate_number": "cdcd",
       "production_year": "cded",
@@ -115,11 +138,43 @@
       "status": "available",
       "isDeleted": "false",
       "id": 2
+    },
+    {
+      "user_username": "dd",
+      "user_email": "dddd",
+      "user_phone_number": "555555",
+      "user_password": "555555",
+      "id": 3,
+      "isDeleted": "true"
+    },
+    {
+      "driver_username": "Ahmad",
+      "driver_email": "zzmm@gmail.com",
+      "driver_license": "111111",
+      "truck_size": "1111111",
+      "plate_number": "1254",
+      "production_year": "1990",
+      "truck_type": "",
+      "driver_password": "",
+      "id": 4,
+      "isDeleted": "true"
+    },
+    {
+      "driver_username": "Malath ",
+      "driver_email": "driver@gmail.com",
+      "driver_license": "111122222",
+      "truck_size": "large",
+      "plate_number": "1254",
+      "production_year": "1990",
+      "truck_type": "ss",
+      "driver_password": "12",
+      "status": "available",
+      "id": 5
     }
   ],
   "order": [
     {
-      "order_title": "equipmentnnnjj",
+      "order_title": "eqntnnnjj",
       "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
       "full_name": "kkkbbbbbbbbbbb",
       "receiver_name": "bbbbbbbbb",
@@ -171,14 +226,112 @@
       "status": "shipped",
       "contains_dangerous_materials": true,
       "id": 3
+    },
+    {
+      "order_title": "equi",
+      "shipping_location": "",
+      "receiving_location": "",
+      "shipping_date": "",
+      "status": "pending",
+      "id": 4
+    },
+    {
+      "order_title": "eqntnnnjjmmmmmmmm",
+      "shipping_location": "",
+      "receiving_location": "",
+      "shipping_date": "",
+      "status": "pending",
+      "id": 5
+    },
+    {
+      "order_title": "MALATH ",
+      "shipping_location": "",
+      "receiving_location": "",
+      "shipping_date": "",
+      "status": "pending",
+      "id": 6
+    },
+    {
+      "order_title": "",
+      "shipping_location": "Mafraq",
+      "receiving_location": "Mafraq",
+      "shipping_date": "2023-11-29",
+      "status": "pending",
+      "full_name": "kkk",
+      "receiver_name": "kk",
+      "order_phone_number": "4554",
+      "receiver_phone_number": "48",
+      "order_truck_size": "Small",
+      "shipping_timestamp": "12:50",
+      "receiving_timestamp": "02:47",
+      "id": 7
+    },
+    {
+      "order_title": "Equipment",
+      "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
+      "name": "",
+      "receiver_name": "rawan123",
+      "order_phone_number": "+962771548723",
+      "receiver_phone_number": "+962778451632",
+      "shipping_location": "Jerash",
+      "receiver_location": "",
+      "shipping_date": "2023-11-01",
+      "order_truck_size": "Small",
+      "shipping_timestamp": "10:55",
+      "receiving_timestamp": "00:53",
+      "message": "",
+      "contains_dangerous_materials": "on",
+      "full_name": "malath123",
+      "receiving_location": "Jerash",
+      "id": 8
+    },
+    {
+      "order_title": "Equipment",
+      "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
+      "name": "",
+      "receiver_name": "rawan4444",
+      "order_phone_number": "+962771548723",
+      "receiver_phone_number": "+962778451632",
+      "shipping_location": "Mafraq",
+      "receiver_location": "",
+      "shipping_date": "2023-11-10",
+      "order_truck_size": "Small",
+      "shipping_timestamp": "12:10",
+      "receiving_timestamp": "12:12",
+      "message": "",
+      "contains_dangerous_materials": "on",
+      "full_name": "malath444",
+      "receiving_location": "Mafraq",
+      "id": 9
+    },
+    {
+      "order_title": "Equipment",
+      "order_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
+      "name": "",
+      "receiver_name": "kk",
+      "order_phone_number": "111111111",
+      "receiver_phone_number": "1111111111",
+      "shipping_location": "Ajloun",
+      "receiver_location": "",
+      "shipping_date": "2023-11-01",
+      "order_truck_size": "Large",
+      "shipping_timestamp": "12:23",
+      "receiving_timestamp": "16:20",
+      "message": "",
+      "contains_dangerous_materials": false,
+      "status": "pending",
+      "full_name": "kkk",
+      "receiving_location": "Ajloun",
+      "id": 10
     }
   ],
   "services": [
     {
       "id": 1,
-      "services_title": "Agricultural ",
-      "services_description": "Regardless of your industry, commodity, or main markets industry, commodity, or main markets",
-      "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+      "services_title": "Agricultural mm",
+      "services_description": "regardless of your industry, commodity, or main markets industry, commodity, or main markets",
+      "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      "isDeleted": "true"
     },
     {
       "id": 2,
@@ -203,37 +356,27 @@
       "services_title": "cleaning martials",
       "services_description": "Regardless of your industry, commodity, or main market industry, commodity, or main markets",
       "services_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "services_title": "equipmentt",
+      "services_description": "regardless",
+      "services_image": "111",
+      "id": 6,
+      "isDeleted": "true"
     }
   ],
   "solutions": [
     {
-      "id": 1,
-      "solutions_title": "malath",
-      "solutions_description": "dncjbsdncjdajcndjnjdnc",
-      "solutions_image": "mmm"
-    },
-    {
-      "id": 2,
-      "solutions_title": "malath",
-      "solutions_description": "dncjbsdncjdajcndjnjdnc",
-      "solutions_image": "mmm"
-    },
-    {
-      "id": 3,
-      "solutions_title": "malath",
-      "solutions_description": "dncjbsdncjdajcndjnjdnc",
-      "solutions_image": "mmm"
-    },
-    {
       "id": 4,
       "solutions_title": "malath",
-      "solutions_description": "dncjbsdncjdajcndjnjdnc",
-      "solutions_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+      "solutions_description": "solution 11",
+      "solutions_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
+      "isDeleted": "flase"
     },
     {
       "id": 5,
       "solutions_title": "malath",
-      "solutions_description": "dncjbsdncjdajcndjnjdnc",
+      "solutions_description": "solution 2",
       "solutions_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
     },
     {
@@ -241,6 +384,39 @@
       "solutions_title": "malath",
       "solutions_description": "dncjbsdncjdajcndjnjdnc",
       "solutions_image": "https://images.pexels.com/photos/19036675/pexels-photo-19036675/free-photo-of-interior-of-rijksmueum-research-library.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load"
+    },
+    {
+      "solutions_title": "Malath Sol",
+      "solutions_description": "solution 11",
+      "solutions_image": "sss",
+      "id": 7,
+      "isDeleted": "true"
+    }
+  ],
+  "faq": [
+    {
+      "id": 1,
+      "question": "whats your name ?",
+      "answer": "Malath ",
+      "isDeleted": "false"
+    },
+    {
+      "id": 2,
+      "question": "whats your name ",
+      "answer": "Malath 2 ",
+      "isDeleted": "true"
+    },
+    {
+      "id": 3,
+      "question": "whats your name ",
+      "answer": "Malath 3 ",
+      "isDeleted": "false"
+    },
+    {
+      "question": "whats your name ?",
+      "answer": "mmmmkk",
+      "id": 4,
+      "isDeleted": "true"
     }
   ]
 }

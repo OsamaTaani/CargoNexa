@@ -1,15 +1,29 @@
 // Solutions.js
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import img1 from '../Images/box1.jpeg';
 import manHoldBox from '../Images/manHoldBox.webp';
 import truck from '../Images/truck.jpeg';
 import map from '../Images/map.jpg';
+import axios from 'axios';
 
 const SolutionsPage = () => {
+
     useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
     
+      const [data, setData] = useState([]);
+
+      useEffect(() => {
+        axios.get('http://localhost:3001/solutions') // Replace with your API endpoint
+          .then(response => {
+            setData(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      }, []);
+      
   return (
 <>
      {/* HERO SECTION  */}
@@ -23,68 +37,23 @@ const SolutionsPage = () => {
       </div>
     </div>
     {/* END HERO SECTION  */}
-    
-    {/* CARDS SECTION */}
-  
-    <div class="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
-            <div class="max-w-lg">
-                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Tracking technology:</h2>
-                <p class="mt-4 text-gray-600 text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis
-                    eros at lacus feugiat hendrerit sed ut tortor. Suspendisse et magna quis elit efficitur consequat.
-                    Mauris eleifend velit a pretium iaculis. Donec sagittis velit et magna euismod, vel aliquet nulla
-                    malesuada. Nunc pharetra massa lectus, a fermentum arcu volutpat vel.</p>
-                <div class="mt-8">
-                   
-                </div>
-            </div>
-            <div class="mt-12 md:mt-0">
-                <img src={manHoldBox} alt="About Us Image" class="object-cover rounded-lg shadow-md"/>
-            </div>
+
+   {/* CARDS SECTION */}
+   <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 ">
+      {data.map((item) => (
+        <div key={item.id} className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mb-10 ">
+          <div className="max-w-lg">
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">{item.solutions_title}</h2>
+            <p className="mt-4 text-gray-600 text-lg">{item.solutions_description}</p>
+            <div className="mt-8">{/* Additional content here */}</div>
+          </div>
+          <div className="mt-12 md:mt-0">
+            <img src={item.solutions_image} alt={item.solutions_title} className="object-cover rounded-lg shadow-md" />
+          </div>
         </div>
+      ))}
     </div>
-
-
-    
-    <div class="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
-            <div class="max-w-lg">
-                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Tracking technology:</h2>
-                <p class="mt-4 text-gray-600 text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis
-                    eros at lacus feugiat hendrerit sed ut tortor. Suspendisse et magna quis elit efficitur consequat.
-                    Mauris eleifend velit a pretium iaculis. Donec sagittis velit et magna euismod, vel aliquet nulla
-                    malesuada. Nunc pharetra massa lectus, a fermentum arcu volutpat vel.</p>
-                <div class="mt-8">
-                   
-                </div>
-            </div>
-            <div class="mt-12 md:mt-0">
-                <img src={truck} alt="About Us Image" class="object-cover rounded-lg shadow-md"/>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 items-center gap-8">
-            <div class="max-w-lg">
-                <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Tracking technology:</h2>
-                <p class="mt-4 text-gray-600 text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis
-                    eros at lacus feugiat hendrerit sed ut tortor. Suspendisse et magna quis elit efficitur consequat.
-                    Mauris eleifend velit a pretium iaculis. Donec sagittis velit et magna euismod, vel aliquet nulla
-                    malesuada. Nunc pharetra massa lectus, a fermentum arcu volutpat vel.</p>
-                <div class="mt-8">
-                   
-                </div>
-            </div>
-            <div class="mt-12 md:mt-0">
-                <img src={map} alt="About Us Image" class="object-cover rounded-lg shadow-md"/>
-            </div>
-        </div>
-    </div>
-
-
-  {/* END CARDS SECTION */}
+    {/* END CARDS SECTION */}
 </>
   );
 };

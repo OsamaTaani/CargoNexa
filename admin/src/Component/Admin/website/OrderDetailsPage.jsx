@@ -71,8 +71,10 @@ console.log('Order ID:', orderId);
           }
 
 //edit handle for Order data **********************************************************************************************
-const handleOrderEditClick = async () => {
+const handleOrderEditClick = async (e) => {
+  e.preventDefault();
   try {
+
     console.log('Fetching order data...');
     const response = await axios.get(`http://localhost:3001/order/${orderId}`);
     console.log('Order data:', response.data);

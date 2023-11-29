@@ -20,6 +20,7 @@ const OrderDetailsPage = () => {
        
           .then(response => {
             // Set the fetched order details to the state
+            console.log(response.data);
             setOrderDetails(response.data);
           })
           .catch(error => {
@@ -36,7 +37,7 @@ const OrderDetailsPage = () => {
           .then(response => {
             // Set the fetched order details to the state
             setdriverData(response.data);
-            console.log("ggg",response.data)
+            // console.log("ggg",response.data)
 
           })
           .catch(error => {
@@ -47,8 +48,11 @@ const OrderDetailsPage = () => {
 
       const [showEditForm, setShowEditForm] = useState(false);
 
-  const handleEditButtonClick = () => {
+  const handleEditButtonClick = (e) => {
+    e.preventDefault(); // Prevent the default form submission behavior
+
     setShowEditForm(true);
+    console.log(orderDetails);
   };
 
   const handleCloseEditForm = () => {
@@ -57,9 +61,6 @@ const OrderDetailsPage = () => {
 
 
   return (
-   
- 
-
 
 <>
   {/* component */}
