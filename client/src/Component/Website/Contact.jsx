@@ -1,11 +1,45 @@
+import axios from 'axios';
 import React, { useEffect } from 'react'
+import { useState } from 'react';
 
 function Contact() {
+  const [formData, setFormData] = useState({
+    email: '',
+    subject: '',
+    message: '',
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+ const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('YOUR_API_ENDPOINT', formData);
+
+      // Handle the response if needed
+      console.log('Response:', response.data);
+
+      // You can also reset the form or show a success message
+      setFormData({
+        email: '',
+        subject: '',
+        message: '',
+      });
+    } catch (error) {
+      // Handle errors
+      console.error('Error:', error);
+    }
+  }
 
   return (
     <div>
@@ -27,7 +61,10 @@ function Contact() {
     </div>
   </div>
   <div className="mx-auto mb-20 flex w-full max-w-screen-lg flex-col overflow-hidden rounded-xl text-gray-900 md:flex-row md:border md:shadow-lg">
-    <form className="mx-auto w-full max-w-xl border-gray-200 px-10 py-8 md:px-8">
+    <form
+     onSubmit={handleSubmit}
+    className="mx-auto w-full max-w-xl border-gray-200 px-10 py-8 md:px-8">
+
       <div className="mb-4">
         <label className="text mb-2 block font-medium" htmlFor="email">
           Your e-mail:
@@ -37,6 +74,8 @@ function Contact() {
           id="email"
           type="email"
           required=""
+          value={formData.email}
+          onChange={handleChange}
         />
       </div>
       <div className="mb-4">
@@ -48,6 +87,8 @@ function Contact() {
           id="subject"
           type="subject"
           required=""
+          value={formData.subject}
+          onChange={handleChange}
         />
       </div>
       <div className="mb-4">
@@ -59,6 +100,8 @@ function Contact() {
           id="message"
           required=""
           defaultValue={""}
+          value={formData.message}
+          onChange={handleChange}
         />
       </div>
       <div className="flex items-center">

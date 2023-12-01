@@ -418,5 +418,24 @@
       "id": 4,
       "isDeleted": "true"
     }
+  ],
+  "create":[
+    {
+      "order_title":"kkk",
+      "order_description":"kkk description",
+      "name":"kkk",
+      "receiver_name":"kkk",
+      "order_phone_number":"553121212112",
+      "receiver_phone_number":"554544545",
+      "shipping_location":"irbid",
+      "receiving_location":"zarqa",
+      "shipping_date":"kkk",
+      "order_truck_size":"kkk",
+      "shipping_timestamp":"kkk",
+      "receiving_timestamp":"kkk",
+      "message":"kkk",
+      "contains_dangerous_materials": false
+
+    }
   ]
 }

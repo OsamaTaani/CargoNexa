@@ -27,7 +27,7 @@ const SolutionsPage = () => {
   return (
 <>
      {/* HERO SECTION  */}
-    <div className="relative bg-cover bg-center h-[50rem]" style={{ backgroundImage: 'url("https://images.pexels.com/photos/6169641/pexels-photo-6169641.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
+    <div className="relative bg-cover bg-center h-[30rem]" style={{ backgroundImage: 'url("https://images.pexels.com/photos/6169641/pexels-photo-6169641.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
       <div className="absolute inset-0 bg-black opacity-40"></div>
       <div className="absolute inset-0 flex items-center justify-center text-white z-10">
         <div className="text-center">
@@ -39,7 +39,7 @@ const SolutionsPage = () => {
     {/* END HERO SECTION  */}
 
    {/* CARDS SECTION */}
-   <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8 ">
+   <div className="container mx-auto md:mx-20 py-16 px-4 sm:px-6 lg:px-8 ">
       {data.map((item) => (
         <div key={item.id} className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mb-10 ">
           <div className="max-w-lg">
@@ -47,7 +47,7 @@ const SolutionsPage = () => {
             <p className="mt-4 text-gray-600 text-lg">{item.solutions_description}</p>
             <div className="mt-8">{/* Additional content here */}</div>
           </div>
-          <div className="mt-12 md:mt-0">
+          <div className="mt-12 md:mt-0 ">
             <img src={item.solutions_image} alt={item.solutions_title} className="object-cover rounded-lg shadow-md" />
           </div>
         </div>

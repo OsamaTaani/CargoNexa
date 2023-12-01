@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+// import { useCookies } from 'react-cookie';
+
 
 const CreateOrder = () => {
 
@@ -36,11 +38,12 @@ const [formData, setFormData] = useState({
   reciving_timestamp: '',
   shipping_timestamp:'',
   message: '',
- status:'pending'
+  status:''
 
  
 });
 
+// const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
 
 
 // Handle form input changes
@@ -50,6 +53,7 @@ const handleInputChange = (e) => {
     ...prevData,
     [name]: type === 'checkbox' ? checked : value,
   }));
+
 };
 
   // Handle form submission
@@ -69,8 +73,14 @@ const handleInputChange = (e) => {
 
     try {
       // Make a POST request using Axios
-      const response = await axios.post('http://localhost:3001/create', formData);
-
+      // const authToken = cookies['token'];
+      const response = await axios.post('http://localhost:3001/create', formData ,{
+        // headers: { 
+        //   Authorization: `${authToken}`,
+        // },
+      
+      });
+      
       // Handle the response as needed (e.g., show success message)
       console.log('Response:', response.data);
        // Display an good message using SweetAlert
@@ -101,7 +111,7 @@ const handleInputChange = (e) => {
       order_phone_number: '',
       receiver_phone_number: '',
       shipping_location: '',
-      receiver_location: '',
+      receiving_location: '',
       shipping_date: '',
       order_truck_size: '',
       shipping_timestamp: '',
@@ -111,6 +121,53 @@ const handleInputChange = (e) => {
 
     });
   }
+
+
+  // CALCULATE THE PRICE OF THE ORDER *******************************************************************
+
+   // State to hold the calculated price
+   const [shippingPrice, setShippingPrice] = useState(0);
+
+   // Function to calculate the shipping price based on selected governorates and truck size
+   const calculateShippingPrice = (shippingLocation, receivingLocation, truckSize) => {
+     // Define base prices and added prices for each truck size
+     const basePrices = {
+       Small: 5,
+       Medium: 10,
+       Large: 20
+     };
+ 
+     const addedPrices = {
+       Small: 6,
+       Medium: 8,
+       Large: 12
+     };
+ 
+     // Map governorates to their respective order
+     const governorateOrder = [
+       'Irbid', 'Ajloun', 'Jerash', 'Mafraq', 'Balqa', 'Amman',
+       'Zarqa', 'Madaba', 'Karak', 'Tafilah', 'Ma\'an', 'Aqaba'
+     ];
+ 
+     // Find the indices of the selected governorates
+     const shippingIndex = governorateOrder.indexOf(shippingLocation);
+     const receivingIndex = governorateOrder.indexOf(receivingLocation);
+ 
+     // Calculate the price based on the difference in indices
+     const priceDifference = Math.abs(shippingIndex - receivingIndex);
+     const basePrice = basePrices[truckSize] || 0;
+     const addedPrice = addedPrices[truckSize] || 0;
+     const calculatedPrice = basePrice + priceDifference * addedPrice;
+ 
+     setShippingPrice(calculatedPrice);
+   };
+ 
+   // Update the shipping price whenever the shipping, receiving location, or truck size changes
+   useEffect(() => {
+     calculateShippingPrice(formData.shipping_location, formData.receiving_location, formData.order_truck_size);
+   }, [formData.shipping_location, formData.receiving_location, formData.order_truck_size]);
+
+   
   return (
     <>
   <link
@@ -164,15 +221,15 @@ const handleInputChange = (e) => {
         <div className="mt-4 grid items-center gap-3 gap-y-5 sm:grid-cols-2">
         <div className="flex flex-col ">
             <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
-             Full Name
+             Name
             </label>
                       <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="full_name"
+            name="name"
             id="fullName"
             type='text'
             placeholder='Ahmad'
-            value={formData.full_name}
+            value={formData.name}
             onChange={handleInputChange}
             required
           />
@@ -375,6 +432,8 @@ const handleInputChange = (e) => {
       />
             The shipment does not contain any dangerous materials or foodstuffs!
           </label>
+
+        <div> hiiii {shippingPrice}</div>  
         <div className="flex flex-col justify-between sm:flex-row">
        
           {/* <Link to={'/NewOrders'}> */}
@@ -402,7 +461,6 @@ const handleInputChange = (e) => {
           </button>
         </div>
         </form>
-        <Link to={'/orderDetails'}><button>order</button></Link>
       </div>
     </div>
   </section>

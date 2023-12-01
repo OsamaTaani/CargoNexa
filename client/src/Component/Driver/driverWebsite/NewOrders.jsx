@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import EditDriverForm from './EditDriverForm';
+import { useCookies } from 'react-cookie';
+
 
 const NewOrders = () => {
 
@@ -18,14 +20,24 @@ const NewOrders = () => {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
   const [editDriverInfo, setEditDriverInfo] = useState({});
   
+  const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
+  console.log(cookies);
 
 
   useEffect(() => {
     // Function to fetch data from the server using Axios
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/order'); // Replace with your actual API endpoint
-        setOrders(response.data); // Assuming the response data is an array of orders
+        const authToken = cookies['token'];
+        console.log(authToken);
+        const response = await axios.get('http://localhost:3001/driver/orders' ,{
+          headers: { 
+            Authorization: `${authToken}`,
+            
+          },
+        
+        }); // Replace with your actual API endpoint
+        setOrders(response.data.data); // Assuming the response data is an array of orders
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -277,7 +289,7 @@ const NewOrders = () => {
               <div className="rounded mx-auto text-center">
                 <div className="opacity-95 border rounded-xl bg-my-green hover:bg-teal-500 px-4">
               
-                  <Link to={`/orderDetailsDriver/${order.id}`}>
+                  <Link to={`/orderDetailsDriver/${order.order_id}`}>
                   <button className="text-sm font-medium leading-normal text-white py-2">
                     More Details
                   </button>

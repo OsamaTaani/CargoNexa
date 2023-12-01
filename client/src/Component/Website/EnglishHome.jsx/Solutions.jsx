@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import heroImage from '../../Images/heroImage.jpg';
 import manHoldBox from '../../Images/manHoldBox.webp';
 import truck from '../../Images/truck.jpeg';
 import map from '../../Images/map.jpg';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Solutions = () => {
+    const [solutionsData, setSolutionsData] = useState([]);
+
+    useEffect(() => {
+      axios.get('http://localhost:3001/solutions')
+        .then(response => {
+          setSolutionsData(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }, []);
+  
     return (
         <div className='mb-20 md:mb-40'>
             <div>
@@ -29,75 +42,46 @@ const Solutions = () => {
                     </Link>
                 </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mx-20">
-                <div className="relative mx-auto w-full">
-                    <a href="#" className="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
-                        <div className="shadow-md hover:shadow-my-green p-4 rounded-lg bg-white">
-                            <div className="flex justify-center relative rounded-lg overflow-hidden h-40 md:h-72">
-                                <div className="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
-                                    <div className="absolute inset-0 ">
-                                        <img src={manHoldBox} alt='' />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mt-4  text-black">
-                                <h2 className="font-medium text-base md:text-lg line-clamp-1" title="New York">
-                                    Last-Mile Delivery
-                                </h2>
-                                <p className="mt-2 text-sm line-clamp-1" title="New York, NY 10004, United States">
-                                    Fast distribution services to ensure last-minute delivery.
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+            <div className='mb-20 md:mb-40'>
+      {/* ... rest of your component code */}
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mx-20 ">
+           
+           {solutionsData.slice(0,3).map((solution, index) => (
+               <Link to={'/solutions'}> 
+              <div class="relative mx-auto w-full">
+                  <a href="#" class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
+                      <div class="shadow p-4 rounded-lg bg-white" >
+                          <div class="flex justify-center relative rounded-lg overflow-hidden h-40 md:h-64">
+                              <div class="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
+                                  <div class="absolute inset-0 ">
+                                      <img src={solution.solutions_image} alt='' />
+                                  </div>
+                              </div>
 
-                <div className="relative mx-auto w-full">
-                    <a href="#" className="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
-                        <div className="shadow-md hover:shadow-my-green p-4 rounded-lg bg-white">
-                            <div className="flex justify-center relative rounded-lg overflow-hidden h-40 md:h-72">
-                                <div className="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
-                                    <div className="absolute inset-0 ">
-                                        <img src={truck} alt='' />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mt-4  text-black">
-                                <h2 className="font-medium text-base md:text-lg line-clamp-1" title="New York">
-                                    Land Transportation
-                                </h2>
-                                <p className="mt-2 text-sm line-clamp-1" title="New York, NY 10004, United States">
-                                    Providing land transportation services for goods movement between cities and regions within the country.
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                          </div>
 
-                <div className="relative mx-auto w-full">
-                    <a href="#" className="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
-                        <div className="shadow-md hover:shadow-my-green p-4 rounded-lg bg-white">
-                            <div className="flex justify-center relative rounded-lg overflow-hidden h-40 md:h-72">
-                                <div className="transition-transform duration-500 transform ease-in-out hover:scale-110 w-full">
-                                    <div className="absolute inset-0 ">
-                                        <img src={map} alt='' />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="mt-4  text-black">
-                                <h2 className="font-medium text-base md:text-lg line-clamp-1" title="New York">
-                                    Technology and Tracking
-                                </h2>
-                                <p className="mt-2 text-sm line-clamp-1" title="New York, NY 10004, United States">
-                                    Providing advanced tracking technology allowing real-time monitoring of goods.
-                                </p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
+                          <div class="mt-4">
+                              <h2 class="font-medium text-base md:text-lg text-gray-800 line-clamp-1" title="New York">
+                              {solution.solutions_title}
+                              </h2>
+                              <p class="mt-2 text-sm text-gray-800 line-clamp-1" title="New York, NY 10004, United States">
+                              {solution.solutions_description}
+                              </p>
+                          </div>
+                      </div>
+                  </a>
+              </div>
+              </Link>  
+          ))}
+            
+       
+          </div>
+    </div>
         </div>
     );
 }
 
 export default Solutions;
+
+
+

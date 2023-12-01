@@ -31,6 +31,13 @@ import UserProfile from './Component/Website/UserProfile';
 import Dashboard from './Component/Admin/Dashboard';
 import Dashboard2 from './Component/Admin/Dashboard2';
 
+import axios from 'axios';
+import Cookies from 'js-cookie';
+// import { useCookies } from 'react-cookie';
+
+// Set the Authorization header globally
+axios.defaults.headers.common['Authorization'] = `${Cookies.get('token')}`;
+
 
 function App() {
   return (

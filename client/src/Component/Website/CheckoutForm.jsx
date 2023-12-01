@@ -2,7 +2,18 @@ import { ElementsConsumer, CardElement, useStripe, useElements } from "@stripe/r
 import React from "react";
 import CardSection from "./CardSection";
 import axios from "axios";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
 function CheckoutForm({stripe, elements}){
+  useEffect
+  (() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const navigate= useNavigate();
 //     const stripe = useStripe();
 
 //   const elements = useElements();
@@ -44,19 +55,65 @@ function CheckoutForm({stripe, elements}){
 } catch (error) {console.log(error);}
 };}
 
-//   render() {
+const handleBuyClick=()=>{
+  Swal.fire({
+    icon: 'success',
+    title: 'Order Successful!',
+    text: 'Thank you for your order.',
+    timer: 2000,
+
+  });
+  setTimeout(() => {
+    navigate('/');
+  }, 1500);
+}
     return (
-      <div>
-        <div class="product-info">
+      <div className="grid grid-cols-2 mx-4 md:mx-20 gap-5 md:gap-40 mt-20 ">
+<div>
+  <h1 className="text-center  text-gray-600 font-bold md:text-2xl mb-2 "> Order Summary</h1>
+<div className="border-2 border-gray-300 shadow-md shadow-gray-300  rounded-lg mb-80 p-5 h-80">
+        <div class="product-info ">
           <h3 className="product-title">Apple MacBook Pro</h3>
           <h4 className="product-price">$999</h4>
         </div>
-        <form onSubmit={handleSubmit}>
+        </div>
+      </div>
+
+      <div>
+      <h1 className="text-center font-bold   text-gray-600 md:text-2xl mb-2">Checkout</h1>
+      <div className="border-2 border-gray-300 shadow-md shadow-gray-300 rounded-lg mb-80 p-5 px-10 h-80 ">
+        
+      <div className="mt-4 p-4">
+  <div className="">
+    <div className="my-3">
+      <input
+        type="text"
+        className="block w-full px-5 py-2 border rounded-lg bg-white shadow-lg placeholder-gray-400 text-gray-700 focus:ring focus:outline-none"
+        placeholder="Card holder"
+        maxLength={22}
+        x-model="cardholder"
+      />
+    </div>
+   
+  </div>
+</div>
+
+        <form  onSubmit={handleSubmit}>
           <CardSection/>
-          <button className="btn-pay">Buy Now</button>
+          <div className="flex justify-center mt-7">
+          <button className="btn-pay bg-orange-400 text-white px-3 py-1 rounded-lg " onClick={handleBuyClick} >Buy Now</button>
+          </div>
         </form>
+     
+
+ 
+</div>
+
+      </div>
+
+
       </div>
     );
-//   }
+
 }
 export default CheckoutForm

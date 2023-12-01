@@ -25,7 +25,7 @@ const About = () => {
             </head>
 
             {/* HERO SECTION  */}
-            <div className="relative bg-cover bg-center h-[40rem] mb-48" style={{ backgroundImage: 'url("https://images.pexels.com/photos/3183186/pexels-photo-3183186.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
+            <div className="relative bg-cover bg-center h-[30rem] mb-48" style={{ backgroundImage: 'url("https://images.pexels.com/photos/3183186/pexels-photo-3183186.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
                 <div className="absolute inset-0 bg-black opacity-60"></div>
                 <div className="absolute inset-0 flex items-center justify-center text-white z-10">
                     <div className="text-center">

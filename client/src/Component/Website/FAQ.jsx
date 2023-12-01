@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 const FAQ = () => {
@@ -7,12 +8,8 @@ const FAQ = () => {
   }, []);
 
 
-  const [questions, setQuestions] = useState([
-    { id: 1, question: 'How can I get started?', answer: 'Getting started is easy! Sign up for an account, and you\'ll have access to our platform\'s features. No credit card required for the initial signup.' },
-    { id: 2, question: 'What is the pricing structure?', answer: 'Our pricing structure is flexible. We offer both free and paid plans. You can choose the one that suits your needs and budget.' },
-    { id: 3, question: 'What kind of support do you provide?', answer: 'We offer comprehensive customer support. You can reach out to our support team through various channels, including email, chat, and a knowledge base.' },
-    { id: 4, question: 'Can I cancel my subscription anytime?', answer: 'Yes, you can cancel your subscription at any time without any hidden fees. We believe in providing a hassle-free experience for our users.' },
-  ]);
+  const [questions, setQuestions] = useState([]);
+
 
   const toggleAnswer = (id) => {
     setQuestions((prevQuestions) => prevQuestions.map((q) => {
@@ -22,6 +19,22 @@ const FAQ = () => {
       return q;
     }));
   };
+  useEffect(() => {
+    // Fetch all questions and answers using Axios
+    const fetchQAFromDB = async () => {
+      try {
+        const response = await axios.get(' http://localhost:3001/faq'); // Replace 'your_all_qa_api_endpoint' with your actual API endpoint
+        const data = response.data;
+
+        // Update state with questions and answers
+        setQuestions(data.map((item) => ({ ...item, isOpen: false })));
+      } catch (error) {
+        console.error('Error fetching questions and answers:', error);
+      }
+    };
+
+    fetchQAFromDB();
+  }, []);
 
   return (
     <section className="py-10 bg-gray-50 sm:py-16 lg:py-24 mb-60">
@@ -48,7 +61,7 @@ const FAQ = () => {
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor "
-                  className={`w-6 h-6 text-[#219C90]  ${q.isOpen ? 'transform rotate-0' : 'transform rotate-180'}`}
+                  className={`w-6 h-6 text-[#219C90]  ${q.isOpen ? 'transform rotate-180' : 'transform rotate-0'}`}
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>

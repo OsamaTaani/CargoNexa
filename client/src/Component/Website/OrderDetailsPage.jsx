@@ -10,18 +10,19 @@ const OrderDetailsPage = () => {
       }, []);
 
       const { orderId } = useParams();
+      console.log(orderId);
       const [orderDetails, setOrderDetails] = useState([]);
-      const [driverData, setdriverData] = useState([]);
+      console.log(orderDetails);
+      // const [driverData, setdriverData] = useState([]);
       
       
       useEffect(() => {
         // Fetch order details using Axios based on the order ID
-        axios.get(`http://localhost:3001/order/${orderId}`)
+        axios.get(`http://localhost:3001/user/order/${orderId}`)
        
           .then(response => {
             // Set the fetched order details to the state
-            console.log(response.data);
-            setOrderDetails(response.data);
+            setOrderDetails(response.data.order);
           })
           .catch(error => {
             console.error('Error fetching order details:', error);
@@ -29,30 +30,28 @@ const OrderDetailsPage = () => {
       }, [orderId]);
 
 
-      useEffect(() => {
-        // Fetch order details using Axios based on the order ID
-        axios.get(`http://localhost:3001/driver/1`)
+      // useEffect(() => {
+      //   // Fetch order details using Axios based on the order ID
+      //   axios.get(`http://localhost:3001/driver/1`)
         
        
-          .then(response => {
-            // Set the fetched order details to the state
-            setdriverData(response.data);
-            // console.log("ggg",response.data)
+      //     .then(response => {
+      //       // Set the fetched order details to the state
+      //       setdriverData(response.data);
+      //       console.log("ggg",response.data)
 
-          })
-          .catch(error => {
-            console.error('Error fetching driver details:', error);
-          });
-      }, []);
+      //     })
+      //     .catch(error => {
+      //       console.error('Error fetching driver details:', error);
+      //     });
+      // }, []);
 
 
       const [showEditForm, setShowEditForm] = useState(false);
 
   const handleEditButtonClick = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-
+    e.preventDefault()
     setShowEditForm(true);
-    console.log(orderDetails);
   };
 
   const handleCloseEditForm = () => {
@@ -61,12 +60,15 @@ const OrderDetailsPage = () => {
 
 
   return (
+   
+ 
+
 
 <>
   {/* component */}
  
   <div className="my-8 mx-4 sm:mx-8 p-4 border border-gray-300 shadow-lg shadow-gray-300 rounded-lg">
-    <h2 className="md:text-xl font-bold mb-4 ml-2 sm:ml-16">Tracking ID : {orderDetails.id}</h2>
+    <h2 className="md:text-xl font-bold mb-4 ml-2 sm:ml-16">Tracking ID : {orderId}</h2>
     <div className="relative block p-3 overflow-hidden rounded-lg ml-2 mr-2 sm:ml-0 sm:mr-0">
       <a
         className="relative block p-6 sm:p-8 overflow-hidden border bg-white border-gray-300 rounded-lg ml-2 mr-2 sm:ml-6 sm:mr-6"
@@ -97,28 +99,28 @@ const OrderDetailsPage = () => {
         </div>
         <dl className="flex flex-col sm:flex-row mt-3 text-center">
           <div className="flex flex-col-reverse mb-2 sm:mb-0">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.full_name}</dt>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.name}</dt>
             <dd className="text-xs text-slate-500">Full Name</dd>
           </div>
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600"> {orderDetails.receiver_name}</dt>
-            <dd className="text-xs text-slate-500">Receiver Name</dd>
+            <dt className="text-sm font-medium text-slate-600"> {orderDetails.shipping_location}</dt>
+            <dd className="text-xs text-slate-500">Shipping Location</dd>
           </div>
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.phone_number}</dt>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.order_phone_number}</dt>
             <dd className="text-xs text-slate-500">Phone Number</dd>
           </div>
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
-            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.order_truck_size}</dt>
+            <dd className="text-xs text-slate-500">Truck Size</dd>
           </div>
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
-            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.message}</dt>
+            <dd className="text-xs text-slate-500">Description</dd>
           </div>
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
-            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.shipping_date}</dt>
+            <dd className="text-xs text-slate-500">Shipping Date</dd>
           </div>
         </dl>
 
@@ -131,28 +133,28 @@ const OrderDetailsPage = () => {
 
         <dl className="flex flex-col sm:flex-row mt-3 text-center">
           <div className="flex flex-col-reverse mb-2 sm:mb-0">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.full_name}</dt>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_name}</dt>
             <dd className="text-xs text-slate-500">Full Name</dd>
           </div>
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600"> {orderDetails.receiver_name}</dt>
-            <dd className="text-xs text-slate-500">Receiver Name</dd>
+            <dt className="text-sm font-medium text-slate-600"> {orderDetails.receiving_location}</dt>
+            <dd className="text-xs text-slate-500">Receiving Location</dd>
           </div>
-          <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.phone_number}</dt>
+          {/* <div className="flex flex-col-reverse ml-0 sm:ml-6">
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
             <dd className="text-xs text-slate-500">Phone Number</dd>
-          </div>
+          </div> */}
+          {/* <div className="flex flex-col-reverse ml-0 sm:ml-6">
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
+            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
+          </div> */}
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
             <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
             <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
           </div>
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
-            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
-          </div>
-          <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiver_phone_number}</dt>
-            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.receiving_timestamp}</dt>
+            <dd className="text-xs text-slate-500">Receiving Time</dd>
           </div>          
 
         </dl>
@@ -163,43 +165,7 @@ const OrderDetailsPage = () => {
       )}
 
 
-        {orderDetails.status === 'shipped' ? (
-           <>
-        <div className='mt-5 '>
-          <strong>
-          Driver Data
-          </strong>
-          <div className='bg-my-green h-1 w-24'></div>
-        </div>
-
-        <dl className="flex flex-col sm:flex-row mt-3 text-center">
-          <div className="flex flex-col-reverse mb-2 sm:mb-0">
-            <dt className="text-sm font-medium text-slate-600">{driverData.driver_username}</dt>
-            <dd className="text-xs text-slate-500">Full Name</dd>
-          </div>
-          <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600"> {driverData.plate_number}</dt>
-            <dd className="text-xs text-slate-500">Receiver Name</dd>
-          </div>
-          <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{driverData.truck_type}</dt>
-            <dd className="text-xs text-slate-500">Phone Number</dd>
-          </div>
-          <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{driverData.driver_license}</dt>
-            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
-          </div>
-          <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{driverData.driver_email}</dt>
-            <dd className="text-xs text-slate-500">Receiver Phone Number</dd>
-          </div>
-
-        </dl>
-
-          <button style={{ display: 'none' }}>Edit</button>
-          <button style={{ display: 'none' }}>Delete</button>
-        </>
-      ) : (
+        {orderDetails.status === 'shipped' && (
         // If status is not shipped, show edit and delete buttons
         <div className='font-bold flex justify-start mt-5 md:text-xl'>
            <button
@@ -210,6 +176,8 @@ const OrderDetailsPage = () => {
           </button>
         <button className='bg-red-700 rounded-xl px-5 text-white'>Delete</button>
           </div> 
+    
+       
       )}
        
 

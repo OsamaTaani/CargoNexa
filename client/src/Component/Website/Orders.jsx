@@ -1,25 +1,45 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
 
 
 const Orders = () => {
   
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   // State to store the fetched data
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; // Adjust as needed
+  console.log(orders)
+
+  const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
+  console.log(cookies);
+
 
   // Effect to fetch data using Axios when the component mounts
   useEffect(() => {
-  
+    const authToken = cookies['token'];
+    console.log(authToken);
+
     // Fetch data using Axios
-    axios.get('http://localhost:3001/order')
+    axios.get(`http://localhost:3001/user/` ,{
+      headers: { 
+        Authorization: `${authToken}`,
+        
+      },
+    
+    })
+    
       .then(response => {
         // Set the fetched data to the state
-        setOrders(response.data);
+        setOrders(response.data.data);
+        console.log(response.data.data)
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -111,10 +131,10 @@ const Orders = () => {
             </thead>
             <tbody>
             {filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(order => (
-              <tr key={order.id}>
+              <tr key={order.order_id}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <div className="flex items-center">
-                  <Link to={`/orderDetails/${order.id}`}>
+                  <Link to={`/orderDetails/${order.order_id}`}>
                     <div className="ml-3">
                       <p className="text-gray-900 whitespace-no-wrap">
                        {order.order_title}
@@ -123,11 +143,9 @@ const Orders = () => {
                      </Link> 
                   </div>
                 </td>
-
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">  {order. shipping_location}</p>
+                  <p className="text-gray-900 whitespace-no-wrap">  {order.shipping_location}</p>
                 </td>
-                
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <p className="text-gray-900 whitespace-no-wrap">
                 
@@ -139,8 +157,8 @@ const Orders = () => {
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
-                ${order.status === 'pending' ? 'bg-gray-500' : ''}
-                ${order.status === 'shipped' ? 'bg-yellow-500' : ''}
+                ${order.status === 'Pending' ? 'bg-gray-500' : ''}
+                ${order.status === 'accepted' ? 'bg-yellow-500' : ''}
                 ${order.status === 'on the way' ? 'bg-orange-500' : ''}
                 ${order.status === 'delivered' ? 'bg-green-500' : ''}
               rounded-full

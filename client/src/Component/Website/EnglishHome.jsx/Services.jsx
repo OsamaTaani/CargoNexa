@@ -50,7 +50,12 @@ const Services = () => {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mx-20 ">
            
              {servicesData.slice(0,3).map((service, index) => (
-                 <Link to={'/services'}> 
+                
+        <Link
+        to="/CreateOrder"
+        state={{ title: service.services_title, description: service.services_description }}
+      
+      >
                 <div class="relative mx-auto w-full">
                     <a href="#" class="relative inline-block duration-300 ease-in-out transition-transform transform hover:-translate-y-2 w-full">
                         <div class="shadow p-4 rounded-lg bg-white" >

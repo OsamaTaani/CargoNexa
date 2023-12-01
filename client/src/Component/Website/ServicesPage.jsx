@@ -27,7 +27,7 @@ const ServicesPage = () => {
   return (
     <>
       {/* HERO SECTION  */}
-      <div className="relative bg-cover bg-center h-[40rem] mb-32" style={{ backgroundImage: 'url("https://images.pexels.com/photos/3183186/pexels-photo-3183186.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
+      <div className="relative bg-cover bg-center h-[30rem] mb-32" style={{ backgroundImage: 'url("https://images.pexels.com/photos/3183186/pexels-photo-3183186.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")' }}>
                 <div className="absolute inset-0 bg-black opacity-60"></div>
                 <div className="absolute inset-0 flex items-center justify-center text-white z-10">
                     <div className="text-center">
@@ -46,8 +46,7 @@ const ServicesPage = () => {
      <article  key={service.id}
           className="mx-auto my-4 flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white text-gray-900 transition hover:translate-y-2 hover:shadow-lg">
         {/* Render your card content based on the structure of your database data */}
-       
-
+  
  
         <Link
       to="/CreateOrder"
