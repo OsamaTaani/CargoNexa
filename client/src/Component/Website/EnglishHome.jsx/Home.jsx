@@ -9,7 +9,7 @@ import ProfileSideBar from './ProfileSideBar';
 
 const Home = () => {
 
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -22,7 +22,7 @@ const Home = () => {
       <Solutions />
       <Carousel />
       <Services />
-    
+     
       <div className='h-[50rem]'></div>
     </>
   );

@@ -4,6 +4,7 @@ import logo3 from '../../Images/logo3.png';
 import logo4 from '../../Images/logo4-transformed.png'
 import ProfileSideBar from './ProfileSideBar';
 import { useAuth } from '../AuthContext';
+import LanguageSwitcher from '../../../LanguageSwitcher';
 const Header = () => {
   const { isLoggedIn, logout, isRegistered } = useAuth();
 
@@ -12,16 +13,7 @@ const Header = () => {
     setIsDropDowOpen(!isDropDownOpen);
   }
 
-  // ProfileSideBar
-  const [isProfileSideBarOpen, setIsProfileSideBarOpen] = useState(false);
 
-  const openProfileSideBar = () => {
-    setIsProfileSideBarOpen(true);
-  };
-
-  const closeProfileSideBar = () => {
-    setIsProfileSideBarOpen(false);
-  };
 
 
   return (
@@ -98,21 +90,30 @@ const Header = () => {
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
 
     </Link>
+
+
+
   </div> 
 
   
  
   
   <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 text-sm md:text-xl">
+ 
 
   {!isRegistered ? ( 
-<div className='hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 text-sm md:text-xl'>
+    <div>
+<div>
+ <LanguageSwitcher />
+ </div>
+<div className='hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 text-sm md:text-xl mr-10'>
 
 <div className="mx-auto flex h-screen w-full items-center justify-center  py-20">
+
 <div className="group relative cursor-pointer py-2">
+
   <div className="flex items-center justify-between space-x-2 bg-white md:px-4">
-  
-      
+
 
   <span  className=" menu-hover inline-flex lg:mx-1 items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"  >
       Login
@@ -136,11 +137,11 @@ const Header = () => {
     </span>
   </div>
   <div className="invisible absolute z-50 flex text-center w-full flex-col bg-my-green rounded-xl py-1 px-4 text-white shadow-xl group-hover:visible">
-    < Link to={'/login'} className=" my-2 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
+    < Link to={'/login'} className=" my-1 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
    
      <p>Shipper</p> 
     </Link>
-    <Link to={'/driverLogin'} className="my-2 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
+    <Link to={'/driverLogin'} className=" block py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
      <p>Driver</p> 
     </Link>
     
@@ -158,14 +159,18 @@ const Header = () => {
       SignUp
     </Link>
   </span>
+
  
 </div>
 
+</div>
 ) : (
 
   <div className='flex'>
 
-
+<div>
+ <LanguageSwitcher />
+ </div>
           <button
               onClick={logout}
               className="inline-flex items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
@@ -185,6 +190,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 20 20"
 </div>
 
   )}
+
   </div>
 
 </nav>

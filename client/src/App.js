@@ -33,6 +33,8 @@ import Dashboard2 from './Component/Admin/Dashboard2';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { Suspense } from 'react';
+import LanguageSwitcher from './LanguageSwitcher';
 // import { useCookies } from 'react-cookie';
 
 // Set the Authorization header globally
@@ -41,8 +43,10 @@ axios.defaults.headers.common['Authorization'] = `${Cookies.get('token')}`;
 
 function App() {
   return (
+    <Suspense fallback="loading">
     <Router>
     <div className="App">
+    
     
       <Header/>
      
@@ -88,6 +92,7 @@ function App() {
       </Routes> */}
       </div>
       </Router>
+      </Suspense>
   );
 }
 

@@ -43,6 +43,14 @@
       "user_phone_number": "0791458962",
       "user_password": "11111",
       "id": 6
+    },
+    {
+      "user_username": "noor",
+      "user_email": "ll@gmail.com",
+      "user_phone_number": "0791235478",
+      "user_password": "mmmjjjj",
+      "id": 7,
+      "isDeleted": "true"
     }
   ],
   "login": [
@@ -419,23 +427,22 @@
       "isDeleted": "true"
     }
   ],
-  "create":[
+  "create": [
     {
-      "order_title":"kkk",
-      "order_description":"kkk description",
-      "name":"kkk",
-      "receiver_name":"kkk",
-      "order_phone_number":"553121212112",
-      "receiver_phone_number":"554544545",
-      "shipping_location":"irbid",
-      "receiving_location":"zarqa",
-      "shipping_date":"kkk",
-      "order_truck_size":"kkk",
-      "shipping_timestamp":"kkk",
-      "receiving_timestamp":"kkk",
-      "message":"kkk",
+      "order_title": "kkk",
+      "order_description": "kkk description",
+      "name": "kkk",
+      "receiver_name": "kkk",
+      "order_phone_number": "553121212112",
+      "receiver_phone_number": "554544545",
+      "shipping_location": "irbid",
+      "receiving_location": "zarqa",
+      "shipping_date": "kkk",
+      "order_truck_size": "kkk",
+      "shipping_timestamp": "kkk",
+      "receiving_timestamp": "kkk",
+      "message": "kkk",
       "contains_dangerous_materials": false
-
     }
   ]
 }
