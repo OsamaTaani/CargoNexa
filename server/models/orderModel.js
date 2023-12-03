@@ -98,11 +98,11 @@ const getDriverOrders = async (driver_id) => {
 
     };
 
-    const getOrdersByUserId = async (userId) => {
+    const getOrdersByUserId = async (userId , orderId) => {
       try {
         const result = await pool.query(
-          'SELECT * FROM orders WHERE user_id = $1',
-          [userId]
+          'SELECT * FROM orders WHERE user_id = $1 AND order_id = $2',
+          [userId , orderId]
         );
     
         return result.rows;

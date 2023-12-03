@@ -11,13 +11,14 @@ const CreateOrder = () => {
   const navigate = useNavigate();
   const location = useLocation(); // Get the location object
 
+  const [showForm, setShowForm] = useState(true); // State to manage form visibility
+  const [step, setStep] = useState(1); // Add state for tracking the step
+
   // Check if location.state exists before accessing its properties
   const { state } = location || {};
   const { title, description } = state || {};
 
-  console.log(title);
 
-console.log(title);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []); 
@@ -68,6 +69,9 @@ const handleInputChange = (e) => {
       text: 'Please check the "containsDangerousMaterials" checkbox.',
     });
     return; // Prevent form submission
+
+  
+
   }
 
 
@@ -92,11 +96,16 @@ const handleInputChange = (e) => {
 
       });
       setTimeout(() => {
-        navigate('/');
+        setShowForm(false);
       }, 1500);
+
+      
+        window.scrollTo(0, 0);
+        setStep(2)
     } catch (error) {
       // Handle errors (e.g., show error message)
       console.error('Error:', error);
+
     }
 
   };
@@ -167,7 +176,33 @@ const handleInputChange = (e) => {
      calculateShippingPrice(formData.shipping_location, formData.receiving_location, formData.order_truck_size);
    }, [formData.shipping_location, formData.receiving_location, formData.order_truck_size]);
 
-   
+   const handleCashClicked = () => {
+    // Display a confirmation dialog using SweetAlert
+    Swal.fire({
+      icon: 'question',
+      title: 'Confirm',
+      text: 'Are you sure you want to proceed to payment?',
+      showCancelButton: true,
+      confirmButtonColor: '#4CAF50',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, proceed!',
+      cancelButtonText: 'No, cancel',
+    }).then((confirmResult) => {
+      // Check if the user clicked the confirm button
+      if (confirmResult.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Order Successful!',
+          text: 'Thank you for your order.',
+          timer: 2000,
+        }).then(() => {
+          // Navigate to the home page after the success message
+          navigate('/');
+        });
+      }
+    });
+  };
+
   return (
     <>
   <link
@@ -179,38 +214,26 @@ const handleInputChange = (e) => {
       __html: "\n  * {\n  font-family: 'Source Sans Pro'; \n  } \n"
     }}
   />
-  <section className="shadow-blue-100 mx-auto max-w-screen-lg rounded-xl bg-white text-gray-600 shadow-lg sm:my-10 sm:border">
+
+
+  <section className="mx-auto max-w-screen-lg rounded-xl bg-white border-gray-400 text-gray-600 shadow-lg sm:my-10 sm:border">
     <div className="container mx-auto flex flex-col flex-wrap px-5 pb-12">
-      <div className="bg-slate-50 mx-auto mt-4 mb-10 flex w-full flex-wrap items-center space-x-4 py-4 md:mb-20 md:justify-center md:px-10">
-        <span className="hidden h-8 w-8 items-center justify-center rounded-full bg-teal-500 text-white shadow md:inline-flex">
+    <div className="bg-white mx-auto mt-4 mb-10 flex w-full flex-wrap items-center space-x-4 py-4 md:mb-20 md:justify-center md:px-10">
+        <span className={`h-8 w-8 items-center justify-center rounded-full ${step === 1 ? 'bg-my-green' : 'bg-my-green'} text-white shadow md:inline-flex`}>
           1
         </span>
-        <span className="hidden text-teal-500 md:inline">shipment details</span>
+        <span className={`${step === 1 ? 'text-teal-500' : 'text-my-green'} md:inline`}>shipment details</span>
         <span className="hidden h-0.5 w-10 bg-teal-400 md:inline" />
-        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-600 text-white shadow">
+        <span className={`flex h-8 w-8 items-center justify-center rounded-full ${step === 2 ? 'bg-my-green' : 'bg-gray-600'} text-white shadow`}>
           2
         </span>
-        <span className="font-semibold text-gray-600 md:inline">payment option</span>
-      
-       
-        <span className="text-xl md:hidden">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="h-3 w-3"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M8.25 4.5l7.5 7.5-7.5 7.5"
-            />
-          </svg>
-        </span>
+        <span className={`font-semibold ${step === 2 ? 'text-my-green' : 'text-gray-600'} md:inline`}>payment option</span>
+
+        {/* ... (rest of your code) */}
       </div>
       
+      {showForm ? (
+
       <div className="flex w-full flex-col">
       <form onSubmit={handleSubmit}>
         <h1 className="text-2xl font-semibold">{formData.order_title}</h1>
@@ -401,7 +424,24 @@ const handleInputChange = (e) => {
                  required
               />
           </div>
-       
+          {/* <div className="col-span-1 flex flex-col">
+            <label
+              className="text-md font-semibold  text-gray-500"
+              htmlFor=""
+            >
+              Shipment Image 
+            </label>
+            <input
+                className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring "
+                name="Image"
+                id="Image"
+                type='file'
+                value={formData.Image}
+                onChange={handleInputChange}
+                 required
+              />
+          </div>
+        */}
           <div className="col-span-1 flex flex-col">
             <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
            Message 
@@ -462,7 +502,46 @@ const handleInputChange = (e) => {
         </div>
         </form>
       </div>
+   
+  ) : (
+   <section className="my-8 sm:my-10 grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 p-6">
+  <div className="flex flex-col justify-center">
+    <div className="flex h-full bg-card dark:bg-card-dark shadow rounded-lg  p-6 xl:p-8 mt-3 bg-my-green">
+      
+        <div>
+      <svg class="text-white w-7 h-7 md:w-12 md:h-12 mr-5 "
+xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+</svg>
+</div>
+<div>
+
+<h4 className=" font-semibold  md:text-3xl text-white leading-tight" onClick={handleCashClicked}>Cash On Delivery</h4>
+
+</div>
+       
     </div>
+  </div>
+  <div className="flex flex-col justify-center">
+    <div className="flex h-full bg-card dark:bg-card-dark shadow  rounded-lg  p-6 xl:p-8 mt-3 bg-my-green">
+    <div>
+    <svg class="w-7 h-7 md:w-12 md:h-12 text-white mr-5"
+xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+</svg>
+
+    </div>
+      <div>
+        <Link to={'/payment' } state= {shippingPrice}>
+        <h4 className=" font-semibold  md:text-3xl text-white  leading-tight">Pay By Card</h4>
+        </Link>
+       </div>
+    </div>
+  </div>
+</section>
+
+  )}
+   </div>
   </section>
 </>
 

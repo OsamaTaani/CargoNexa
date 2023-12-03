@@ -13,7 +13,7 @@ router.get('/driver/orders', authMiddleware.authorize([2]), orderController.getD
 
 router.get('/driver/order/:orderId' , authMiddleware.authorize([2]) , orderController.getDriverOrderByIdController);
 
-router.get('/orders/user/', authMiddleware.authorize([1]) ,orderController.getOrdersByUserId);
+router.get('/orders/user/:orderId', authMiddleware.authorize([1]) ,orderController.getOrdersByUserId);
 
 
 module.exports = router;

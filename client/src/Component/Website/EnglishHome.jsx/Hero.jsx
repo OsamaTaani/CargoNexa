@@ -1,54 +1,67 @@
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import heroImage from '../../Images/heroImage.jpg';
 import locationIcon from '../../Images/location.png'
 import manHoldBox from '../../Images/manHoldBox.webp';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
 
 const Hero = () => {
 
   const { t } = useTranslation();
   
  
-
   const [showPopup, setShowPopup] = useState(false);
   const [orderStatus, setOrderStatus] = useState(null);
   const [error, setError] = useState(null);
+  const [trackingId, setTrackingId] = useState(''); // Add state to store trackingId
+
   const handleTrackClick = async (e) => {
     e.preventDefault();
-
+  
     try {
-      // Get the tracking ID from the input field
-      const trackingId = document.getElementById('trackingId').value;
-
-      // Make an API request to the backend
-      const response = await fetch(`http://localhost:3001/user/${trackingId}`);
-
-      if (response.ok) {
-        const orderData = await response.json();
-
-        // Assuming your orderData has a 'status' field
-        setOrderStatus(orderData.status);
+      // Use the trackingId entered by the user
+      const response = await axios.get(`http://localhost:3001/orders/user/${trackingId}`, {
+        headers: {
+          Authorization: `${Cookies.get('token')}`, // Include the user's authentication token
+        },
+      });
+  
+      console.log("trackingId", trackingId);
+  
+      if (response.data[0].status === 'Pending' ) {
+      //   Swal.fire({
+      //     icon: 'warning',
+      //     title: 'No Status',
+      //     text: 'There is no order status available.',
+      //     confirmButtonColor: '#3085d6',
+      //     confirmButtonText: 'OK',
+      //   });
+      // } else {
+        setOrderStatus(response.data[0].status);
+        console.log(response.data[0].status);
         setShowPopup(true);
         setError(null); // Reset error if it was previously set
-      } else {
-        // Handle error cases
-        const errorData = await response.json();
-        setError(errorData.message); // Assuming your backend sends an error message
-        setOrderStatus(null);
-        setShowPopup(true);
       }
     } catch (error) {
       console.error('Error:', error);
       setError('An unexpected error occurred.');
+      alert(error)
       setOrderStatus(null);
       setShowPopup(true);
     }
   };
+  
+
 
   const handleClosePopup = () => {
     setShowPopup(false);
   };
+
+   
+    
     return (
         <>
             {/* HERO SECTION  */}
@@ -116,6 +129,8 @@ const Hero = () => {
                     className="mb-2 h-12 w-full flex-grow appearance-none rounded border border-gray-300 bg-white px-4 shadow-sm ring-emerald-200 transition duration-200 focus:border-emerald-400 focus:outline-none focus:ring"
                     id="trackingId"
                     name="trackingId"
+                    value={trackingId} // Set the value from the state
+                    onChange={(e) => setTrackingId(e.target.value)}
                   />
                 </div>
               

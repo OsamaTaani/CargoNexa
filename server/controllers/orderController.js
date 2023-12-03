@@ -57,10 +57,12 @@ const getDriverOrders = async (req, res) => {
 
   const getOrdersByUserId = async (req, res) => {
     const userId = req.user.userId;
+    const orderId = req.params.orderId;
+
     console.log(userId);
   
     try {
-      const orders = await OrderModel.getOrdersByUserId(userId);
+      const orders = await OrderModel.getOrdersByUserId(userId ,orderId );
       res.json(orders);
     } catch (error) {
       console.error('Error getting orders by user ID:', error);
