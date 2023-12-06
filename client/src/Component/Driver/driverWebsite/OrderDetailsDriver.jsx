@@ -10,14 +10,42 @@ const OrderDetailsDriver = () => {
   }, []);
 
   const [showShippedButton, setShowShippedButton] = useState(false);
-  const [mais, setMais] = useState(false)
-  console.log(mais);
+ 
   const { orderId } = useParams();
   console.log(orderId)
   const [orderDetails, setOrderDetails] = useState([]);
   console.log(orderDetails)
   const [orderStatus, setOrderStatus] = useState('Pending');
   const [driverStatus, setDriverStatus] = useState('Available');
+
+
+
+
+
+
+  const [status, setStatus] = useState('Shipped');
+
+  const handleStatusChange = async (newStatus) => {
+    // Simulating an API call to update the status
+    try {
+      // Assuming you have an API endpoint to update the status
+      const response = await axios.post(`http://localhost:3001/driver/order/${orderId}`, { status: newStatus });
+
+      if (response.status === 200) {
+        // Update the status in the component state
+        setStatus(newStatus);
+      } else {
+        console.error('Failed to update status');
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+    }
+  };
+
+
+
+
+
 
   const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
   console.log(cookies);
@@ -47,7 +75,6 @@ const OrderDetailsDriver = () => {
 
   const handleConfirmClick = async () => {
     const authToken = cookies['token'];
-
     await axios.put(`http://localhost:3001/orders/accept/${orderId}`, {
       status: 'accepted'
     }, {
@@ -57,10 +84,9 @@ const OrderDetailsDriver = () => {
     })
       .then(response => {
 
-        const ss = response.data.data.order.status
-        console.log(ss);
-        console.log(response.data);
+        // const ss = response.data.data.order.status
         setOrderStatus('accepted');
+        setDriverStatus('busy');
       window.location.reload();
 
       })
@@ -69,21 +95,71 @@ const OrderDetailsDriver = () => {
       });
 
 
-    axios.put(`http://localhost:3001/orders/accept/${orderId}`, {
-      status: 'accepted'
-    }, {
-      headers: {
-        Authorization: `${authToken}`
-      }
-    })
-      .then(response => {
-        const data = response.data;
-        setDriverStatus('busy');
-      })
-      .catch(error => {
-        console.error('Error updating driver status:', error);
-      });
+    // axios.put(`http://localhost:3001/orders/accept/${orderId}`, {
+    //   status: 'accepted'
+    // }, {
+    //   headers: {
+    //     Authorization: `${authToken}`
+    //   }
+    // })
+    //   .then(response => {
+    //     const data = response.data;
+    //     setDriverStatus('busy');
+    //   })
+    //   .catch(error => {
+    //     console.error('Error updating driver status:', error);
+    //   });
   };
+
+
+  const handleShippedClick = async () => {
+    try {
+      const authToken = cookies['token'];
+      await axios.put(`http://localhost:3001/orders/shipped/${orderId}`, {
+        status: 'OutForDelivery',
+      }, {
+        headers: {
+          Authorization: `${authToken}`,
+        },
+      });
+
+      setOrderStatus('OutForDelivery');
+      setStatus('Delivered'); // Assuming you want to move to the next status after shipping
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    }
+  };
+
+
+  const handleDeliveredClick = async () => {
+    try {
+      const authToken = cookies['token'];
+      await axios.put(`http://localhost:3001/orders/delivered/${orderId}`, {
+        status: 'Delivered',
+      }, {
+        headers: {
+          Authorization: `${authToken}`,
+        },
+      });
+
+      setOrderStatus('Delivered');
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    }
+  };
+
+// calculate the Driver Profit
+  const [orderAmount, setOrderAmount] = useState(50);
+  // const [orderAmount, setOrderAmount] = useState(orderDetails.price);
+  const companyPercentage = 10;
+
+  const calculateDriverProfit = () => {
+    return orderAmount * (1 - companyPercentage / 100);
+    setOrderAmount(orderAmount)
+  };
+
+  const driverProfit = calculateDriverProfit();
+  const total = orderAmount - driverProfit;
 
 
   return (
@@ -121,10 +197,7 @@ const OrderDetailsDriver = () => {
             <div className='bg-my-green h-1 w-28'></div>
           </div>
           <dl className="flex flex-col sm:flex-row mt-3 text-center">
-            <div className="flex flex-col-reverse mb-2 sm:mb-0">
-              <dt className="text-sm font-medium text-slate-600">{orderDetails.full_name}</dt>
-              <dd className="text-xs text-slate-500">Full Name</dd>
-            </div>
+           
             <div className="flex flex-col-reverse ml-0 sm:ml-6">
               <dt className="text-sm font-medium text-slate-600"> {orderDetails.name}</dt>
               <dd className="text-xs text-slate-500">Shipper Name</dd>
@@ -133,10 +206,12 @@ const OrderDetailsDriver = () => {
               <dt className="text-sm font-medium text-slate-600">{orderDetails.shipping_location}</dt>
               <dd className="text-xs text-slate-500">Shipping Location </dd>
             </div>
+            {orderDetails.message !== '' && (
             <div className="flex flex-col-reverse ml-0 sm:ml-6">
               <dt className="text-sm font-medium text-slate-600">{orderDetails.message}</dt>
               <dd className="text-xs text-slate-500">Message</dd>
             </div>
+            ) }
             <div className="flex flex-col-reverse ml-0 sm:ml-6">
               <dt className="text-sm font-medium text-slate-600">{orderDetails.order_phone_number}</dt>
               <dd className="text-xs text-slate-500">Shipper Phone Number</dd>
@@ -156,10 +231,7 @@ const OrderDetailsDriver = () => {
           </div>
 
           <dl className="flex flex-col sm:flex-row mt-3 text-center">
-            <div className="flex flex-col-reverse mb-2 sm:mb-0">
-              <dt className="text-sm font-medium text-slate-600">{orderDetails.full_name}</dt>
-              <dd className="text-xs text-slate-500">Full Name</dd>
-            </div>
+           
             <div className="flex flex-col-reverse ml-0 sm:ml-6">
               <dt className="text-sm font-medium text-slate-600"> {orderDetails.receiver_name}</dt>
               <dd className="text-xs text-slate-500">Receiver Name</dd>
@@ -183,7 +255,25 @@ const OrderDetailsDriver = () => {
 
           </dl>
 
+          <div>
+          <div className='mt-5 mb-3'>
+            <strong>
+              Order Invoice
+            </strong>
+            <div className='bg-my-green h-1 w-28'></div>
+          </div>
 
+    <div className='flex '>
+      <div className="flex flex-col-reverse ml-0 sm:ml-6">
+              <dt className="text-sm font-medium text-slate-600">{driverProfit.toFixed(2)} JD</dt>
+              <dd className="text-xs text-slate-500">Driver's Profit:</dd>
+            </div>
+            <div className="flex flex-col-reverse ml-0 sm:ml-6">
+              <dt className="text-sm font-medium text-slate-600"> {total.toFixed(2)} JD</dt>
+              <dd className="text-xs text-slate-500">Company Profit:</dd>
+            </div>
+            </div>
+    </div>
 
           {/* Add the image here for small screens */}
           <div className="sm:hidden mt-4 ">
@@ -202,7 +292,7 @@ const OrderDetailsDriver = () => {
         <div>
           {console.log(orderDetails.status)}
           {orderDetails.status === 'accepted' ? (
-            <button className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">
+            <button onClick={() => handleStatusChange('OutForDelivery') } className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600" >
              Shipped 
             </button>
           ) : 
@@ -212,19 +302,25 @@ const OrderDetailsDriver = () => {
             Cancel
           </button>
         </Link>
-        <button className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600" onClick={handleConfirmClick}>
+        <button className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600" onClick={()=>handleConfirmClick()}>
           Confirm
         </button>
           </>}
 
-
-
-
         </div>
+      
       </div>
 
 
-
+      {orderStatus === 'accepted' && (
+        <button onClick={handleShippedClick}>Shipped</button>
+      )}
+      {orderStatus === 'OutForDelivery' && (
+        <button onClick={handleDeliveredClick}>Delivered</button>
+      )}
+      {orderStatus === 'Delivered' && (
+        <p>Package Delivered!</p>
+      )}
 
     </div>
 

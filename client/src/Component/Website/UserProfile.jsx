@@ -279,9 +279,9 @@ const UserProfile = () => {
         <EditUserForm
           userId={userIdToEdit}
           onClose={() => setShowEditForm(false)}
-          onUpdate={() => {
-            fetchUserData(); // Refresh user data after update
-          }}
+          onUpdate={
+            userData// Refresh user data after update
+           }
         />
       )}
 

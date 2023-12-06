@@ -73,7 +73,7 @@ const getDriverOrders = async (driver_id) => {
         'SELECT o.* FROM orders o JOIN order_driver_association a ON o.order_id = a.order_id WHERE a.driver_id = $1',
         [driver_id]
       );
-  
+        console.log(result.rows);
       return result.rows;
     } catch (error) {
       console.error('Error in getDriverOrders:', error);
@@ -98,11 +98,11 @@ const getDriverOrders = async (driver_id) => {
 
     };
 
-    const getOrdersByUserId = async (userId , orderId) => {
+    const getOrdersByUserId = async (userId, orderId) => {
       try {
         const result = await pool.query(
-          'SELECT * FROM orders WHERE user_id = $1 AND order_id = $2',
-          [userId , orderId]
+          'SELECT * FROM orders WHERE user_id = $1 and order_id = $2',
+          [userId, orderId]
         );
     
         return result.rows;
@@ -121,8 +121,8 @@ const getDriverOrders = async (driver_id) => {
   
       // Update the order status to "accepted" and soft delete the order
       const updatedOrder = await pool.query(
-        'UPDATE orders SET status = $1, isdeleted = $2 WHERE order_id = $3 RETURNING *',
-        ['accepted', true, orderId]
+        'UPDATE orders SET status = $1 WHERE order_id = $2 RETURNING *',
+        ['accepted', orderId]
       );
   
       // Change the driver status to "busy"
@@ -131,13 +131,17 @@ const getDriverOrders = async (driver_id) => {
         ['busy', driver_id]
       );
   
-      console.log('Updated Driver:', updatedDriver.rows[0]); // Log the updated driver
   
       // Update the order_driver_association table with the correct driver ID
-      await pool.query(
-        'UPDATE order_driver_association SET driver_id = $1 WHERE order_id = $2',
-        [driver_id, orderId]
-      );
+// Update the order_driver_association table with the correct driver ID
+await pool.query(
+  'DELETE FROM order_driver_association WHERE order_id = $1', [orderId]
+);
+
+await pool.query(
+  'INSERT INTO order_driver_association (order_id, driver_id) VALUES ($1, $2)',
+  [orderId, driver_id]
+);
   
       // Retrieve user information who created the order
       const userId = updatedOrder.rows[0].user_id;

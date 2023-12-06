@@ -5,7 +5,7 @@ const OrderModel = require('../models/dashboardOrdersModel');
 const getAllOrders = async (req, res) => {
   try {
     const orders = await OrderModel.getAllOrders();
-    res.status(200).json({ orders });
+    res.status(200).json( orders );
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

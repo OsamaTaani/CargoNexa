@@ -4,38 +4,56 @@ import Cookies from "js-cookie";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!Cookies.get("token"));
-  const [isRegistered, setIsRegistered] = useState(!!Cookies.get("token"));
-  const [headers, setHeaders] = useState([]);
-
-  const login = (Token) => {
-    setIsLoggedIn(true);
-    setHeaders({ token: Token });
+  // const [isLoggedIn, setIsLoggedIn] = useState(!!Cookies.get("token"));
+  // const [isRegistered, setIsRegistered] = useState(!!Cookies.get("token"));
+  // const [headers, setHeaders] = useState([]);
+  const [authToken, setAuthToken] = useState(Cookies.get("token") || null);
+  
+  const login = (token) => {
+    setAuthToken(token);
+    Cookies.set("token", token)
   };
-  const register = (Token) => {
-    setIsRegistered(true);
-    setHeaders({ token: Token });
-  };
+  // const register = (Token) => {
+  //   setIsRegistered(true);
+  //   setHeaders({ token: Token });
+  // };
 
   const logout = () => {
+    setAuthToken(null);
+    console.log(authToken);
     Cookies.remove("token");
-    setIsLoggedIn(false);
-    window.location.reload();
-
   };
 
-  useEffect(() => {
-    setIsLoggedIn(!!Cookies.get("token"));
-    setIsRegistered(!!Cookies.get("token"));
-  }, []);
+  const isAuthenticated = () => {
+    return !!authToken;
 
+  }
   return (
-    <AuthContext.Provider
-      value={{ isRegistered, isLoggedIn, login, register, logout, headers }}
-    >
+    <AuthContext.Provider value={{ authToken, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+  // useEffect(() => {
+  //   setIsLoggedIn(!!Cookies.get("token"));
+  //   setIsRegistered(!!Cookies.get("token"));
+    
+  // }, []);
+
+  // return (
+  //   <AuthContext.Provider
+  //     value={{ isRegistered, isLoggedIn, login, register, logout, headers }}
+  //   >
+  //     {children}
+  //   </AuthContext.Provider>
+  // );
+// };
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

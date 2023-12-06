@@ -12,6 +12,13 @@ import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
 import Dashboard from './Component/Admin/website/Dashboard';
 import OrderDetailsPage from './Component/Admin/website/OrderDetailsPage';
 
+import axios from 'axios';
+import Cookies from 'js-cookie';
+// import { useCookies } from 'react-cookie';
+
+// Set the Authorization header globally
+axios.defaults.headers.common['Authorization'] = `${Cookies.get('token')}`;
+
 
 function App() {
   return (

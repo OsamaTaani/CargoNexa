@@ -14,6 +14,7 @@ import AddDriverForm from './AddDriverForm';
 import AddServicesForm from './AddServicesForm';
 import AddSolutionsForm from './AddSolutionsForm';
 import AddFaqForm from './AddFaqForm';
+import EditPopupAdminData from './EditPopupAdminData';
 const Dashboard = () => {
 
     useEffect(() => {
@@ -29,6 +30,10 @@ const Dashboard = () => {
 
       const [editUser, setEditUser] = useState(null);
       const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+
+      const [editAdmin, setEditAdmin] = useState(null);
+      const [isEditAdminPopupOpen, setIsEditAdminPopupOpen] = useState(false);
+
 
       const [editDriver, setEditDriver] = useState(null);
       const [isEditDriverPopupOpen, setIsEditDriverPopupOpen] = useState(false);
@@ -63,10 +68,10 @@ const Dashboard = () => {
           // Make the appropriate API call based on the selected tab
           switch (selectedTab) {
             case 'dashboard':
-              response = await axios.get('http://localhost:3001/order');
+              response = await axios.get('http://localhost:3001/orders');
               break;
             case 'profile':
-              response = await axios.get('http://localhost:3001/register');
+              response = await axios.get('http://localhost:3001/admin');
               break;
             case 'users':
               response = await axios.get('http://localhost:3001/register');
@@ -154,6 +159,31 @@ const Dashboard = () => {
       console.error('Error updating order data:', error);
     }
   };
+
+    //edit handle for users data**********************************************************************************************
+    const handleEditAdminClick = async (admin_id) => {
+      try {
+        const response = await axios.get(`http://localhost:3001/register/${admin_id}`); // Replace with your API endpoint
+        setEditAdmin(response.data);
+       
+        setIsEditAdminPopupOpen(true);
+      } catch (error) {
+        console.error('Error fetching admin data:', error);
+      }
+    };
+  
+    const handleEditAdminSubmit = async (editedAdminData) => {
+      try {
+        // Make a PUT request to update the order data
+        await axios.put(`http://localhost:3001/register/${editUser.id}`, editedAdminData); // Replace with your API endpoint
+        // Close the edit popup and fetch the updated data
+        setIsEditAdminPopupOpen(false);
+        fetchData(); // Implement a function to fetch data from your API
+      } catch (error) {
+        console.error('Error updating admin data:', error);
+      }
+    };
+  
 
   //edit handle for driver data **********************************************************************************************
   const handleDriverEditClick = async (driverId) => {
@@ -260,6 +290,21 @@ const Dashboard = () => {
       console.error('Error soft deleting user:', error);
     }
   };
+
+    //handle soft delete for admins  **********************************************************************************************
+    const handleSoftDeleteAdmin = async (admin_id) => {
+      try {
+        // Send a PATCH request to update the status for soft delete
+        await axios.patch(`http://localhost:3001/register/${admin_id}`, { isDeleted: 'true' });
+    
+        // Refresh the data or handle the removal of the soft-deleted user from your local state
+        fetchData();
+        setIsEditAdminPopupOpen(false); // Close the edit popup
+      } catch (error) {
+        console.error('Error soft deleting admin:', error);
+      }
+    };
+  
   //handle soft delete for drivers  **********************************************************************************************
   
   // Soft delete function for driver data
@@ -771,6 +816,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
 
 
                 </ol>
+                
               </nav>
              
             </div>
@@ -960,8 +1006,8 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
-                ${order.status === 'pending' ? 'bg-gray-500' : ''}
-                ${order.status === 'shipped' ? 'bg-yellow-500' : ''}
+                ${order.status === 'Pending' ? 'bg-gray-500' : ''}
+                ${order.status === 'accepted' ? 'bg-yellow-500' : ''}
                 ${order.status === 'on the way' ? 'bg-orange-500' : ''}
                 ${order.status === 'delivered' ? 'bg-green-500' : ''}
               rounded-full
@@ -1041,42 +1087,42 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
              <tbody>
              {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
               userData.isDeleted !== 'true' && (
-               <tr key={userData.id}>
+               <tr key={userData.admin_id}>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <div className="flex items-center">
                    <Link to={`/OrderDetails/${userData.user_username}`}>
   
                      <div className="ml-3">
                        <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.user_username}
+                        {userData.admin_username}
                        </p>
                      </div>
                       </Link> 
                    </div>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">  {userData.user_phone_number}</p>
+                   <p className="text-gray-900 whitespace-no-wrap">  {userData.admin_phone_number}</p>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                    <p className="text-gray-900 whitespace-no-wrap">
                  
-                   {userData.user_email}
+                   {userData.admin_email}
                    </p>
                  </td>
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">{userData.user_password}</p>
+                   <p className="text-gray-900 whitespace-no-wrap">{userData.admin_password}</p>
                  </td>
                 
                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex space-x-2">
         
-       <button onClick={() => handleEditClick(userData.id)}>
+       <button onClick={() => handleEditAdminClick(userData.admin_id)}>
           <svg class="text-teal-600 w-5 h-5 "
         xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
             {/* ... SVG path for edit */}
             </button>
 
-            <button onClick={() => handleSoftDeleteUser(userData.id)} >
+            <button onClick={() => handleSoftDeleteAdmin(userData.id)} >
           <svg class="text-orange-600 w-5 h-5"
           xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
@@ -1119,12 +1165,12 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
         
          </div>
             )}
-            {isEditPopupOpen && (
-  <EditPopupUserData
-    user={editUser}
-    isOpen={isEditPopupOpen}
-    onClose={() => setIsEditPopupOpen(false)}
-    onSubmit={handleEditSubmit}
+            {isEditAdminPopupOpen && (
+  <EditPopupAdminData
+    admin={editAdmin}
+    isOpen={isEditAdminPopupOpen}
+    onClose={() => setIsEditAdminPopupOpen(false)}
+    onSubmit={handleEditAdminSubmit}
   />
 )}
       {/* USER DATA */}

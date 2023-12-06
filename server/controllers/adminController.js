@@ -79,7 +79,7 @@ const loginAdmin = async (req, res) => {
 const getAllAdmins = async (req, res) => {
   try {
     const admins = await AdminModel.getAllAdmins();
-    res.status(200).json({ admins });
+    res.status(200).json(admins );
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

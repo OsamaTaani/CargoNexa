@@ -243,14 +243,7 @@ const NewOrders = () => {
               </tr>
             
             </tbody>
-            <tbody>
-              <tr className="border-b">
-                <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
-                  Default
-                </td>
-              </tr>
-            
-            </tbody>
+           
           </table>
         </div>
       </div>
@@ -280,12 +273,20 @@ const NewOrders = () => {
             <div key={order.id} className="inline-flex flex-col space-y-2 items-center justify-end flex-1 h-full p-4 mb-10 bg-white border border-gray-300 shadow-lg shadow-gary-500 rounded-xl">
               <p className="w-full md:text-2xl font-semibold text-black">{order.order_title}</p>
               <p className="w-full md:text-md font-semibold text-gray-400">{order.order_description}</p>
+
               <p className="w-full  font-semibold text-base tracking-wide leading-tight text-gray-600">
-               <strong> Shipper Name : </strong>{order.full_name}
+               <strong> Shipper Name : </strong>{order.name}
               </p>
-              <p className="w-full pb-4 font-semibold text-base  tracking-wide leading-tight text-gray-600">
+
+              <p className="w-full  font-semibold text-base  tracking-wide leading-tight text-gray-600">
                 <strong>Receiving location:</strong> {order.receiving_location}
               </p>
+
+              <p className="w-full pb-4 font-semibold text-base  tracking-wide leading-tight text-gray-600">
+                <strong>Shipment Price:</strong>
+                {/* {order.price} */}
+              </p>
+
               <div className="rounded mx-auto text-center">
                 <div className="opacity-95 border rounded-xl bg-my-green hover:bg-teal-500 px-4">
               

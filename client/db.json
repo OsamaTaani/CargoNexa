@@ -429,6 +429,7 @@
   ],
   "create": [
     {
+      "id": 94,
       "order_title": "kkk",
       "order_description": "kkk description",
       "name": "kkk",
@@ -442,7 +443,20 @@
       "shipping_timestamp": "kkk",
       "receiving_timestamp": "kkk",
       "message": "kkk",
-      "contains_dangerous_materials": false
+      "contains_dangerous_materials": false,
+      "status": "Pending"
+    }
+  ],
+  "payment": [
+    {
+      "amount": 222,
+      "type": "card",
+      "id": 5
+    },
+    {
+      "amount": 23,
+      "type": "card",
+      "id": 6
     }
   ]
 }

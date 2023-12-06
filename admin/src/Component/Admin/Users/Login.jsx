@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
-import LogValidate from './LogValidate';
+// import LogValidate from './LogValidate';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
 const Login = () => {
 
   useEffect(() => {
@@ -9,9 +11,13 @@ const Login = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [cookies, setCookie] = useCookies(['token']);
+
   const navigate=useNavigate();
-    const [values,setValues]=useState({ email:'', password:''});
-    const [error,setError]=useState({});
+    const [values,setValues]=useState({ admin_email:'', admin_password:''});
+    // const [error,setError]=useState({});
+    const [error, setError] = useState({ admin_email: '', admin_password: '' });
+
     
     // Handle the change in inputs
     const handleInputs=(e)=>{
@@ -19,28 +25,33 @@ const Login = () => {
        
     }
    // Handle submit for the form
-  const handleSubmit = async (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    try {
+      console.log(values);
+      // Make a POST request to your API endpoint
+      const response = await axios.post('http://localhost:3001/admin/login', values);
 
-   
-      try {
-        // Make a POST request to your API endpoint
-        const response = await axios.post('http://localhost:3001/login', values);
+      const token = response.data.token;
 
-        // Check the response status code and handle it accordingly
-      
-          // Login was successful
-          console.log('Login successful:', response.data);
+      // Set the token in a cookie
+      setCookie('token', token, { path: '/' });
           navigate("/dashboard");
-      
-      } catch (error) {
-        // Handle network or other errors
-        console.error('Login error:', error);
-      
+  
+      // Check the response status code and handle it accordingly
+      // Login was successful
+      console.log('Login successful:', response.data);
+      // navigate("/dashboard");
+    } catch (error) {
+      // Handle network or other errors
+      console.error('Login error:', error.response.data);
+  
+      // Update the state to reflect the errors
+      setError(error.response.data.errors);
     }
   };
-
+  
 
   return (
 
@@ -74,11 +85,11 @@ const Login = () => {
       onChange={handleInputs}
       className="w-full border-gray-300 bg-white  md:pr-24 px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
       placeholder="Enter your email"
-      name='user_email'
+      name='admin_email'
     />
   </div>
 </div>
-{error.user_email && <p style={{color:"red"}}>{error.user_email}</p>}
+{error.admin_email && <p style={{color:"red"}}>{error.admin_email}</p>}
 
 <p className="mb-1 font-medium text-gray-500">Password</p>
 <div className="mb-4 flex flex-col">
@@ -88,11 +99,11 @@ const Login = () => {
       onChange={handleInputs}
       className="w-full border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
       placeholder="Choose a password (minimum 8 characters)"
-      name='user_password'
+      name='admin_password'
     />
   </div>
 </div>
-{error.user_password && <p style={{color:"red"}} >{error.user_password}</p>}
+{error.admin_password && <p style={{color:"red"}} >{error.admin_password}</p>}
 
 
 <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">

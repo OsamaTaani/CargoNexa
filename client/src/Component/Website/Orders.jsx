@@ -16,7 +16,9 @@ const Orders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; // Adjust as needed
-  console.log(orders)
+  // State to store the sorting order
+   const [sortOrder, setSortOrder] = useState('desc'); // default is descending order
+
 
   const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
   console.log(cookies);
@@ -37,14 +39,21 @@ const Orders = () => {
     })
     
       .then(response => {
+        const sortedOrders = response.data.data.sort((a, b) => {
+          if (sortOrder === 'desc') {
+            return new Date(b.shipping_timestamp) - new Date(a.shipping_timestamp);
+          } else {
+            return new Date(a.shipping_timestamp) - new Date(b.shipping_timestamp);
+          }
+        });
         // Set the fetched data to the state
-        setOrders(response.data.data);
+        setOrders(sortedOrders);
         console.log(response.data.data)
       })
       .catch(error => {
         console.error('Error fetching data:', error);
       });
-  }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+  }, [sortOrder]); // The empty dependency array ensures that this effect runs only once when the component mounts
 
 
  const handlePrevClick = () => {

@@ -5,7 +5,6 @@ import Hero from './Hero';
 import Solutions from './Solutions';
 import Services from './Services';
 import Carousel from './Carousel';
-import ProfileSideBar from './ProfileSideBar';
 
 const Home = () => {
 

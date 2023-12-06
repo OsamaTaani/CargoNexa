@@ -62,7 +62,7 @@ const getDriverOrders = async (req, res) => {
     console.log(userId);
   
     try {
-      const orders = await OrderModel.getOrdersByUserId(userId ,orderId );
+      const orders = await OrderModel.getOrdersByUserId(userId , orderId);
       res.json(orders);
     } catch (error) {
       console.error('Error getting orders by user ID:', error);
@@ -81,6 +81,8 @@ const getDriverOrders = async (req, res) => {
   
       res.status(200).json({
         message: 'Order accepted successfully',
+
+
         data: acceptedOrderDetails,
       });
     } catch (error) {

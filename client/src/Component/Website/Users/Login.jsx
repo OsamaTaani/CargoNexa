@@ -3,9 +3,10 @@ import axios from 'axios'; // Import Axios
 // import LogValidate from './LogValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useAuth } from '../AuthContext';
 
 const Login = () => {
-
+const {login}=useAuth()
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -37,11 +38,13 @@ const Login = () => {
           console.log('Login successful:', response.data);
           // Assuming the API returns a token
       const token = response.data.token;
-
+      login(token)
       // Set the token in a cookie
-      setCookie('token', token, { path: '/' });
+      // setCookie('token', token, { path: '/' });
+
           navigate("/");
-          
+          // window.location.reload(true);
+
       } catch (error) {
         // Handle network or other errors
         console.error('Login error:', error);

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const EditUserForm = ({ userId, onClose, onUpdate }) => {
-  const [editedUser, setEditedUserData] = useState({});
-
+  const [editedUser, setEditedUserData] = useState(onUpdate);
+console.log('onUpdate',onUpdate);
+console.log('editedUser',editedUser);
   useEffect(() => {
     // Fetch user data by ID and set it to the state
     const fetchUserDataById = async () => {
@@ -30,7 +31,7 @@ const EditUserForm = ({ userId, onClose, onUpdate }) => {
     try {
       // Send edited user data to the server
       await axios.put(`http://localhost:3001/user-profile/${userId}`, editedUser);
-      onUpdate(); // Trigger a refresh or update action in the parent component
+      // Trigger a refresh or update action in the parent component
       onClose(); // Close the edit form modal
     } catch (error) {
       console.error('Error updating user data:', error);

@@ -31,7 +31,7 @@ const Hero = () => {
   
       console.log("trackingId", trackingId);
   
-      if (response.data[0].status === 'Pending' ) {
+      if (response.data[0].status  ) {
       //   Swal.fire({
       //     icon: 'warning',
       //     title: 'No Status',
@@ -43,14 +43,15 @@ const Hero = () => {
         setOrderStatus(response.data[0].status);
         console.log(response.data[0].status);
         setShowPopup(true);
-        setError(null); // Reset error if it was previously set
+        setError(null); 
+        setTrackingId('')// Reset error if it was previously set
       }
     } catch (error) {
       console.error('Error:', error);
       setError('An unexpected error occurred.');
       alert(error)
       setOrderStatus(null);
-      setShowPopup(true);
+      setShowPopup(false);
     }
   };
   

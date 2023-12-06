@@ -11,6 +11,9 @@ const dashboardUsersRouter = require('./routes/dashboardUsersRouter');
 const dashboardDriversController = require('./routes/dashboardDriversRouter');
 const userProfile = require('./routes/userProfileRouter');
 const services = require('./routes/servicesRouter');
+const contact = require('./routes/contactRouter');
+const solutions = require('./routes/solutionRoutes');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -28,6 +31,8 @@ app.use(dashboardUsersRouter);
 app.use(dashboardDriversController);
 app.use(userProfile);
 app.use(services);
+app.use(contact);
+app.use(solutions);
 
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
