@@ -52,6 +52,7 @@ const Hero = () => {
       alert(error)
       setOrderStatus(null);
       setShowPopup(false);
+      setTrackingId('')
     }
   };
   

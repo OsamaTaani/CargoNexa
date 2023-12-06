@@ -5,7 +5,7 @@ import Registration from './Component/Website/Users/Registration';
 import DriverRegistration from './Component/Driver/Users/Registration';
 import DriverLogin from './Component/Driver/Users/Login';
 
-import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
+import { BrowserRouter as Router , Routes , Route  ,Navigate} from 'react-router-dom';
 
 
 import Contact from './Component/Website/Contact';
@@ -35,6 +35,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Suspense } from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
+import NotFoundPage from './Component/Website/NotFoundPage';
 // import { useCookies } from 'react-cookie';
 
 // Set the Authorization header globally
@@ -42,6 +43,8 @@ axios.defaults.headers.common['Authorization'] = `${Cookies.get('token')}`;
 
 
 function App() {
+
+  const role = 1;
   return (
     <Suspense fallback="loading">
     <Router>
@@ -52,7 +55,7 @@ function App() {
      
       <Routes>
 
-        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={(role == 1 )?(<Home/>) : (<Navigate to="/login" replace />)}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/registration' element={<Registration/>}/>
         <Route path='/solutions' element={<SolutionsPage/>}/>
@@ -67,7 +70,9 @@ function App() {
         <Route path="/orderDetails/:orderId" element={<OrderDetailsPage/>} />
         <Route path='/payment' element={<Payment/>}/>
         <Route path='/userProfile' element={<UserProfile/>}/>
-      
+        <Route path='/*' element={<NotFoundPage/>}/>
+        
+        
 
       {/* Driver routs  */}
       <Route path='/driverRegistration' element={<DriverRegistration/>}/>

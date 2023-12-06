@@ -22,7 +22,7 @@ const Home = () => {
       <Carousel />
       <Services />
      
-      <div className='h-[50rem]'></div>
+      {/* <div className='h-[50rem]'></div> */}
     </>
   );
 };

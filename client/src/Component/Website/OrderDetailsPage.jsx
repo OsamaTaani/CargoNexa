@@ -9,6 +9,7 @@ const OrderDetailsPage = () => {
         window.scrollTo(0, 0);
       }, []);
 
+      
       const { orderId } = useParams();
       console.log(orderId);
       const [orderDetails, setOrderDetails] = useState([]);
@@ -106,6 +107,7 @@ const OrderDetailsPage = () => {
             <dt className="text-sm font-medium text-slate-600"> {orderDetails.shipping_location}</dt>
             <dd className="text-xs text-slate-500">Shipping Location</dd>
           </div>
+
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
             <dt className="text-sm font-medium text-slate-600">{orderDetails.order_phone_number}</dt>
             <dd className="text-xs text-slate-500">Phone Number</dd>
@@ -114,7 +116,7 @@ const OrderDetailsPage = () => {
             <dt className="text-sm font-medium text-slate-600">{orderDetails.order_truck_size}</dt>
             <dd className="text-xs text-slate-500">Truck Size</dd>
           </div>
-          {orderDetails.message !== null && (
+          {orderDetails.message !== '' && (
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
             <dt className="text-sm font-medium text-slate-600">{orderDetails.message}</dt>
             <dd className="text-xs text-slate-500">Description</dd>
@@ -162,26 +164,10 @@ const OrderDetailsPage = () => {
 
         </dl>
 
-        {/* The Edit Component With the props */}
-        {showEditForm && (
-        <EditForm onClose={handleCloseEditForm} orderDetails={orderDetails} />
-      )}
+     
 
 
-        {orderDetails.status === 'Pending' && (
-        // If status is not shipped, show edit and delete buttons
-        <div className='font-bold flex justify-start mt-5 md:text-xl'>
-           <button
-            className='bg-my-green rounded-xl px-7 py-2 mr-5 text-white'
-            onClick={handleEditButtonClick}
-          >
-            Edit
-          </button>
-        <button className='bg-red-700 rounded-xl px-5 text-white'>Delete</button>
-          </div> 
-    
-       
-      )}
+  
        
 
 
@@ -203,7 +189,27 @@ const OrderDetailsPage = () => {
       </a>
     </div>
   </div>
-   
+
+   {/* The Edit Component With the props */}
+   {showEditForm && (
+        <EditForm onClose={handleCloseEditForm} orderDetails={orderDetails} />
+      )}
+
+  {/* {orderDetails.status === 'Pending' && ( */}
+        {/* // If status is not shipped, show edit and delete buttons */}
+        <div className='font-bold flex justify-center mt-5 md:text-xl '>
+           <button
+            className='bg-my-green rounded-xl px-7 py-2 mr-5 text-white'
+            onClick={handleEditButtonClick}
+          >
+            Edit
+          </button>
+        <button className='bg-red-700 rounded-xl px-5 text-white'>Delete</button>
+          </div> 
+    
+       
+      {/* )} */}
+
 
    {/* Time line for status  */}
  

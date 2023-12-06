@@ -168,8 +168,8 @@ const Orders = () => {
                 <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
                 ${order.status === 'Pending' ? 'bg-gray-500' : ''}
                 ${order.status === 'accepted' ? 'bg-yellow-500' : ''}
-                ${order.status === 'on the way' ? 'bg-orange-500' : ''}
-                ${order.status === 'delivered' ? 'bg-green-500' : ''}
+                ${order.status === 'OutForDelivery' ? 'bg-orange-500' : ''}
+                ${order.status === 'Delivered' ? 'bg-green-500' : ''}
               rounded-full
               `}>
               
