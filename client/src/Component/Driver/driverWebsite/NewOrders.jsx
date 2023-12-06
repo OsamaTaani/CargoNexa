@@ -269,7 +269,8 @@ const NewOrders = () => {
 
         <div className="max-w-screen-md md:w-3/4 mx-auto md:order-2 sm:order-1  ">
          
-          {filteredOrders.map((order) => (
+          {filteredOrders.length > 0 ? (
+          filteredOrders.map((order) => (
             <div key={order.id} className="inline-flex flex-col space-y-2 items-center justify-end flex-1 h-full p-4 mb-10 bg-white border border-gray-300 shadow-lg shadow-gary-500 rounded-xl">
               <p className="w-full md:text-2xl font-semibold text-black">{order.order_title}</p>
               <p className="w-full md:text-md font-semibold text-gray-400">{order.order_description}</p>
@@ -298,7 +299,10 @@ const NewOrders = () => {
                 </div>
               </div>
             </div>
-          ))}
+            ))  ):
+          (
+            <div className='text-center'>There is No Orders ...</div>
+          )}
         </div>
       </div>
       </div>

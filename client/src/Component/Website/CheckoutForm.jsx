@@ -159,7 +159,6 @@ function CheckoutForm({stripe, elements,price}){
         card: elements.getElement(CardElement),
       });
 
-
     const card = elements.getElement(CardElement);
     const result = await stripe.createToken(card);
     if (result.error) {
@@ -169,11 +168,13 @@ function CheckoutForm({stripe, elements,price}){
     } 
 //handle amount
     const { id } = paymentMethod;
-    console.log(price)
+    console.log('price before stripe ',price.shippingPrice)
     const response = await axios.post("http://localhost:3001/payment", {
+      
       amount: price.shippingPrice,
       id,
     });
+    console.log('price after stripe ',price.shippingPrice)
 
     if (response.data.success) {
       try {
@@ -206,7 +207,7 @@ const handleBuyClick = () => {
     icon: 'success',
     title: 'Order Successful!',
     text: 'Thank you for your order.',
-    timer: 2000,
+    timer: 1000,
   });
 
   // Delay navigation for a smoother user experience

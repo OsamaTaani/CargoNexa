@@ -49,7 +49,10 @@ const Hero = () => {
     } catch (error) {
       console.error('Error:', error);
       setError('An unexpected error occurred.');
-      alert(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text:"The Order ID Doesn't Eexist :("})
       setOrderStatus(null);
       setShowPopup(false);
       setTrackingId('')
@@ -160,7 +163,9 @@ const Hero = () => {
  {showPopup && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50"  onClick={handleClosePopup}>
           <div className="bg-white p-8 rounded-md shadow-md">
-            <p className="text-lg text-center font-bold text-gray-800 w-52 h-10"> Order Status: {orderStatus}</p>
+            <p className="text-xl text-center font-bold  text-gray-800 w-52 h-14"> Order Status: 
+           <p className='font-semibold text-my-green pb-8'>{orderStatus}</p> 
+            </p>
            
           </div>
         </div>

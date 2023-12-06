@@ -36,6 +36,7 @@ import Cookies from 'js-cookie';
 import { Suspense } from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import NotFoundPage from './Component/Website/NotFoundPage';
+import DriverHistoryPage from './Component/Driver/driverWebsite/DriverHistoryPage';
 // import { useCookies } from 'react-cookie';
 
 // Set the Authorization header globally
@@ -82,6 +83,7 @@ function App() {
       <Route path='/orderDetailsDriver/:orderId' element={<OrderDetailsDriver/>}/>
       <Route path='/confirmedOrder' element={<ConfirmedOrder/>}/>
       <Route path='/confirmedOrder/:orderId' element={<ConfirmedOrder/>}/>
+      <Route path='/driverOrders' element={<DriverHistoryPage/>}/>
 
 
      
