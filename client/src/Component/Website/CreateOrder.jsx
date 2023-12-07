@@ -45,6 +45,7 @@ const CreateOrder = () => {
   });
 
   // const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
+  const [errors, setErrors] = useState({});
 
 
   // Handle form input changes
@@ -53,13 +54,38 @@ const CreateOrder = () => {
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === 'checkbox' ? checked : value,
+      
     }));
+    setErrors({ ...errors, [name]: '' }); // Clear previous error when input changes
 
+
+  };
+
+  const validatePhoneNumber = (phoneNumber) => {
+    // Basic example: Validate that the phone number starts with '+962' and contains only numbers
+    const phoneRegex = /^\+962\d+$/;
+
+    return phoneRegex.test(phoneNumber);
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+     // Validate phone numbers
+     const orderPhoneNumberValid = validatePhoneNumber(formData.order_phone_number);
+     const receiverPhoneNumberValid = validatePhoneNumber(formData.receiver_phone_number);
+ 
+     // Set errors based on validation results
+     setErrors({
+       order_phone_number: orderPhoneNumberValid ? '' : 'Invalid phone number format',
+       receiver_phone_number: receiverPhoneNumberValid ? '' : 'Invalid phone number format',
+     });
+ 
+      // Check if phone number validation failed
+  if (!orderPhoneNumberValid || !receiverPhoneNumberValid) {
+    return; // Prevent form submission
+  }
+     // Continue with form submission if all validations pass
     // Check if the containsDangerousMaterials checkbox is checked
     if (!formData.contains_dangerous_materials) {
       // Display an error message using SweetAlert
@@ -69,9 +95,6 @@ const CreateOrder = () => {
         text: 'Please check the "containsDangerousMaterials" checkbox.',
       });
       return; // Prevent form submission
-
-
-
     }
 
 
@@ -306,7 +329,9 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     />
-
+                  {errors.order_phone_number && (
+                            <p className="text-red-500 text-sm ml-3">{errors.order_phone_number}</p>
+                          )}
                   </div>
                   <div className="col-span-1 flex flex-col">
                     <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
@@ -322,7 +347,9 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     />
-
+                  {errors.receiver_phone_number && (
+                          <p className="text-red-500 text-sm ml-3">{errors.receiver_phone_number}</p>
+                        )}
 
                   </div>
                   <div className="flex flex-col ">
