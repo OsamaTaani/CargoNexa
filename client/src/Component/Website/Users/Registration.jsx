@@ -4,9 +4,13 @@ import axios from 'axios'; // Import Axios
 import RegValidate from './RegValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useAuth } from '../AuthContext';
 
 const Registration = () => {
 const navigate=useNavigate();
+
+const {register}=useAuth()
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -39,7 +43,8 @@ const handleSubmit = async (e) => {
       const token = response.data.token;
 
       // Set the token in a cookie
-      setCookie('token', token, { path: '/' });
+      // setCookie('token', token, { path: '/' });\
+      register(token)
       navigate('/')
     } catch (error) {
       // Handle network or other errors
@@ -47,6 +52,9 @@ const handleSubmit = async (e) => {
     }
   
 }
+
+
+
 
   return (
    

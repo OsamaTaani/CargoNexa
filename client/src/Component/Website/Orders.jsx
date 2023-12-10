@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
+import { useAuth } from './AuthContext';
 
 
 
@@ -23,6 +25,8 @@ const Orders = () => {
   const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
   console.log(cookies);
 
+  const {isUserRole} = useAuth()
+  const role = isUserRole() || Cookies.get('role')
 
   // Effect to fetch data using Axios when the component mounts
   useEffect(() => {
@@ -208,9 +212,13 @@ const Orders = () => {
       </div>
     </div>
   </div>
+  {(role != 1 )&&
+   (<Navigate to="/login" replace/>)
+  }
 </>
 
   )
 }
+
 
 export default Orders

@@ -4,11 +4,13 @@ import axios from 'axios'; // Import Axios
 import RegValidate from './RegValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useAuth } from '../../Website/AuthContext';
 
 const Registration = () => {
+  const [cookies, setCookie] = useCookies(['token']);
 
+  const {register} = useAuth()
 const [values,setValues]=useState([]);
-const [cookies, setCookie] = useCookies(['token']);
 const navigate=useNavigate();
 
 
@@ -43,9 +45,14 @@ const handleSubmit = async (e) => {
           driver_password: '',
         });
         const token = response.data.token;
-
+        // console.log("i am here ", response.data)
+        // console.log("i am here role", response.data.driver.role_id)
+        // cookies.set("role",2)
         // Set the token in a cookie
         setCookie('token', token, { path: '/' });
+      
+        register(token)
+        console.log('registerForDriver' ,token );
         navigate('/NewOrders')
     } catch (error) {
       // Handle network or other errors

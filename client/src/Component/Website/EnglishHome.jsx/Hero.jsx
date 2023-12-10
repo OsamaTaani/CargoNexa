@@ -52,7 +52,7 @@ const Hero = () => {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text:"The Order ID Doesn't Eexist :("})
+        text:"The Order ID Doesn't Exist :("})
       setOrderStatus(null);
       setShowPopup(false);
       setTrackingId('')

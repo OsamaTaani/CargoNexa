@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import bg from '../Images/bg.png'
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import EditUserForm from './EditUserForm';
 import { useCookies } from 'react-cookie';
+import { useAuth } from './AuthContext';
+import Cookies from 'js-cookie';
 
 const UserProfile = () => {
   
@@ -20,8 +22,8 @@ const UserProfile = () => {
   const itemsPerPage = 3; // Adjust as needed
   
 
-
-
+  const {isUserRole} = useAuth()
+  const role = isUserRole() || Cookies.get('role')
 
  // State to store the sorting order
   const [sortOrder, setSortOrder] = useState('desc'); // default is descending order
@@ -29,6 +31,20 @@ const UserProfile = () => {
 
  const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
  console.log(cookies);
+
+ useEffect(()=>{
+  // Fetch user data
+  const fetchUserData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3001/user-profile`);
+      setUserData(response.data.userProfile);
+      // console.log(response.data.)
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  fetchUserData() 
+},[])
 
 
  // Effect to fetch data using Axios when the component mounts
@@ -72,17 +88,6 @@ const UserProfile = () => {
     setCurrentPage(prevPage => prevPage + 1);
   };
 
-    // Fetch user data
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/user-profile`);
-        setUserData(response.data.userProfile);
-        // console.log(response.data.)
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-
     // // Fetch orders data
     // const fetchOrders = async () => {
     //   try {
@@ -95,11 +100,11 @@ const UserProfile = () => {
     // };
 
  
-  useEffect(() => {
-    // Fetch data on component mount
-    fetchUserData();
-    // fetchOrders();
-  }, []); // Dependency array is empty, meaning it will run once on mount
+  // useEffect(() => {
+  //   // Fetch data on component mount
+  //   fetchUserData();
+  //   // fetchOrders();
+  // }, []); // Dependency array is empty, meaning it will run once on mount
 
 
   const handleMyInfoClick = () => {
@@ -326,6 +331,9 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 20 20"
     
    
   </div>
+  {role != 1 &&
+   (<Navigate to="/login" replace/>)
+  }
 </>
 
   
@@ -333,3 +341,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 20 20"
 }
 
 export default UserProfile
+
+
+// added 334 -336  
+// added 25-26

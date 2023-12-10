@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useAuth } from '../../Website/AuthContext';
+import Cookies from 'js-cookie';
 
 
 const DriverHistoryPage = () => {
@@ -22,8 +24,10 @@ const DriverHistoryPage = () => {
       const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
       console.log(cookies);
     
-    
-      // Effect to fetch data using Axios when the component mounts
+      const {isUserRole} = useAuth()
+  const role = isUserRole() || Cookies.get('role')
+
+  // Effect to fetch data using Axios when the component mounts
       useEffect(() => {
         const authToken = cookies['token'];
         console.log(authToken);
@@ -80,6 +84,7 @@ const DriverHistoryPage = () => {
 
   return (
     <>
+    
     {/* component */}
     <div className="bg-white p-8 rounded-md w-full">
       <div className=" flex  items-center justify-between pb-6">
@@ -156,6 +161,8 @@ const DriverHistoryPage = () => {
               <tbody>
               {filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(order => (
                 <tr key={order.order_id}>
+                   {(order.status) === "accepted" && ( 
+<>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <div className="flex items-center">
                 
@@ -233,6 +240,9 @@ const DriverHistoryPage = () => {
                   <span className="relative">{order.status}</span>
                 </span>
               </td>
+              </>
+
+)}
                 </tr>
                  ))}
           
@@ -264,7 +274,13 @@ const DriverHistoryPage = () => {
         </div>
       </div>
     </div>
+    {role != 2 &&
+   (<Navigate to="/driverLogin" replace/>)
+  }
   </>  )
 }
 
 export default DriverHistoryPage
+
+
+// if any problem happened check line 160

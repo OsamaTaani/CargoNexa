@@ -37,6 +37,7 @@ import { Suspense } from 'react';
 import LanguageSwitcher from './LanguageSwitcher';
 import NotFoundPage from './Component/Website/NotFoundPage';
 import DriverHistoryPage from './Component/Driver/driverWebsite/DriverHistoryPage';
+import { AuthProvider, useAuth } from './Component/Website/AuthContext';
 // import { useCookies } from 'react-cookie';
 
 // Set the Authorization header globally
@@ -44,9 +45,15 @@ axios.defaults.headers.common['Authorization'] = `${Cookies.get('token')}`;
 
 
 function App() {
+  const role = Cookies.get("role");
+  // const role = sessionStorage.getItem("role");
+  console.log("role",role)
 
-  const role = 1;
+  
+
   return (
+    <AuthProvider>
+
     <Suspense fallback="loading">
     <Router>
     <div className="App">
@@ -56,7 +63,7 @@ function App() {
      
       <Routes>
 
-        <Route path='/' element={(role == 1 )?(<Home/>) : (<Navigate to="/login" replace />)}/>
+        <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/registration' element={<Registration/>}/>
         <Route path='/solutions' element={<SolutionsPage/>}/>
@@ -78,7 +85,7 @@ function App() {
       {/* Driver routs  */}
       <Route path='/driverRegistration' element={<DriverRegistration/>}/>
       <Route path='/driverLogin' element={<DriverLogin/>}/>
-      <Route path='/NewOrders' element={<NewOrders/>}/>
+      <Route path='/NewOrders' element={<NewOrders />} />
       <Route path='/orderDetailsDriver' element={<OrderDetailsDriver/>}/>
       <Route path='/orderDetailsDriver/:orderId' element={<OrderDetailsDriver/>}/>
       <Route path='/confirmedOrder' element={<ConfirmedOrder/>}/>
@@ -90,16 +97,12 @@ function App() {
       </Routes>
 
       <Footer/>
-       {/* Admin routs  */}
-       {/* <Routes>
-       <Route path='/adminRegistration' element={<DriverRegistration/>}/>
-      <Route path='/adminLogin' element={<DriverLogin/>}/>
-      <Route path='/dashboard' element={<Dashboard/>}/>
-      <Route path='/dashboard2' element={<Dashboard2/>}/>
-      </Routes> */}
+    
       </div>
       </Router>
       </Suspense>
+      </AuthProvider>
+
   );
 }
 

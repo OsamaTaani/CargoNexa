@@ -4,9 +4,13 @@ import axios from 'axios'; // Import Axios
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../AuthContext';
+import Cookies from "js-cookie";
+
 
 const Login = () => {
+
 const {login}=useAuth()
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -37,7 +41,10 @@ const {login}=useAuth()
         
           console.log('Login successful:', response.data);
           // Assuming the API returns a token
+          Cookies.set("role",1)
       const token = response.data.token;
+      
+
       login(token)
       // Set the token in a cookie
       // setCookie('token', token, { path: '/' });

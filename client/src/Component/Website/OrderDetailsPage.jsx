@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import EditForm from './EditOrderForm'; 
+import Cookies from 'js-cookie';
+import { useAuth } from './AuthContext';
 const OrderDetailsPage = () => {
 
 
@@ -17,6 +19,11 @@ const OrderDetailsPage = () => {
       // const [driverData, setdriverData] = useState([]);
       
       
+      const {isUserRole} = useAuth()
+      const role = isUserRole() || Cookies.get('role')
+      console.log("role in user ",role )
+
+
       useEffect(() => {
         // Fetch order details using Axios based on the order ID
         axios.get(`http://localhost:3001/user/order/${orderId}`)
@@ -173,8 +180,8 @@ const OrderDetailsPage = () => {
 
 
           <div className='font-bold text-right md:text-xl'>
-          Totle : 20 JD
-          {/* Totle : {orderDetails.price} JD */}
+          {/* Total : 20 JD */}
+          Total : {orderDetails.amount} JD
 
           </div>
           
@@ -195,20 +202,25 @@ const OrderDetailsPage = () => {
         <EditForm onClose={handleCloseEditForm} orderDetails={orderDetails} />
       )}
 
-  {/* {orderDetails.status === 'Pending' && ( */}
-        {/* // If status is not shipped, show edit and delete buttons */}
-        <div className='font-bold flex justify-center mt-5 md:text-xl '>
-           <button
-            className='bg-my-green rounded-xl px-7 py-2 mr-5 text-white'
-            onClick={handleEditButtonClick}
-          >
-            Edit
-          </button>
-        <button className='bg-red-700 rounded-xl px-5 text-white'>Delete</button>
-          </div> 
-    
-       
-      {/* )} */}
+ 
+
+{ orderDetails.status === 'Pending' && (
+  <div className='font-bold flex justify-center mt-5 md:text-xl'>
+    <button
+      className='bg-my-green rounded-xl px-7 py-2 mr-5 text-white'
+      onClick={handleEditButtonClick}
+    >
+      Edit
+    </button>
+    <button className='bg-red-700 rounded-xl px-5 text-white'
+    //  onClick={handleDeleteButtonClick}
+     >
+      Delete
+    </button>
+  </div>
+)}
+
+     {/* )} */}
 
 
    {/* Time line for status  */}
@@ -341,7 +353,9 @@ const OrderDetailsPage = () => {
     </ul>
   </div>
 </section>
-
+ {role != 1 &&
+   (<Navigate to="/login" replace/>)
+  }
 </>
 
   

@@ -97,11 +97,16 @@ const CreateOrder = () => {
       return; // Prevent form submission
     }
 
-
+    const formDataWithPriceAndType = {
+      ...formData,
+      price: shippingPrice,
+      paymentType: 'cash', // Change this based on your logic for payment type
+    };
+    console.log("formDataWithPriceAndType",formDataWithPriceAndType);
     try {
       // Make a POST request using Axios
       // const authToken = cookies['token'];
-      const response = await axios.post('http://localhost:3001/create', formData, {
+      const response = await axios.post('http://localhost:3001/create', formDataWithPriceAndType, {
         // headers: { 
         //   Authorization: `${authToken}`,
         // },
