@@ -16,6 +16,8 @@ const createOrder = async (userId, orderData) => {
         order_title,
         contains_dangerous_materials,
         shipping_date,
+        payment_method,
+        amount,
     } = orderData;
 
     try {
@@ -41,8 +43,8 @@ const createOrder = async (userId, orderData) => {
 
         // Insert the order into the orders table
         const newOrder = await pool.query(
-            'INSERT INTO orders (user_id, name, receiver_name, shipping_location, receiving_location, receiving_timestamp, shipping_timestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials, shipping_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *',
-            [userId, name, receiver_name, shipping_location, receiving_location, formattedReceivingTimestamp, formattedShippingTimestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials, shipping_date]
+            'INSERT INTO orders (user_id, name, receiver_name, shipping_location, receiving_location, receiving_timestamp, shipping_timestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials, shipping_date , payment_method , amount) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15 , $16 , $17) RETURNING *',
+            [userId, name, receiver_name, shipping_location, receiving_location, formattedReceivingTimestamp, formattedShippingTimestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials, shipping_date , payment_method , amount]
         );
 
         // Associate the order with available drivers
@@ -166,6 +168,47 @@ await pool.query(
 //         );
   
   
+const markOrderAsShipped = async (orderId ) => {
+  try {
+    // Update the order status to "OutForDelivery"
+    const updatedOrder = await pool.query(
+      'UPDATE orders SET status = $1 WHERE order_id = $2 RETURNING *',
+      ['OutForDelivery', orderId]
+    );
+
+    return updatedOrder.rows[0];
+  } catch (error) {
+    console.error('Error in markOrderAsShipped:', error);
+    throw error;
+  }
+};
+
+const markOrderAsDelivered = async (orderId ,driver_id ) => {
+  try {
+    // Update the order status to "OutForDelivery"
+    const updatedOrder = await pool.query(
+      'UPDATE orders SET status = $1 WHERE order_id = $2 RETURNING *',
+      ['Delivered', orderId]
+    );
+
+    const updatedDriver = await pool.query(
+      'UPDATE drivers SET status = $1 WHERE driver_id = $2 RETURNING *',
+      ['Available', driver_id]
+    );
+
+
+    return {
+      order: updatedOrder.rows[0],
+      driver: updatedDriver.rows[0], // Include the updated driver details
+
+    }
+  } catch (error) {
+    console.error('Error in markOrderAsDelivered:', error);
+    throw error;
+  }
+};
+
+
   
   
 module.exports = {
@@ -173,7 +216,9 @@ module.exports = {
     getDriverOrders,
     acceptOrder,
     getDriverOrderById,
-    getOrdersByUserId
+    getOrdersByUserId,
+    markOrderAsShipped,
+    markOrderAsDelivered
 
 };
 

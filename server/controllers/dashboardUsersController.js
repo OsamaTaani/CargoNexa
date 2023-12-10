@@ -5,8 +5,11 @@ require('dotenv').config();
 // Get All Users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await UserModel.getAllUsers();
-    res.status(200).json({ users });
+    const { page = 1, pageSize = 5 } = req.query;
+    const offset = (page - 1) * pageSize;
+
+    const users = await UserModel.getAllUsers(pageSize , offset);
+    res.status(200).json( users );
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

@@ -1,7 +1,7 @@
 
 import './App.css';
 
-import AdminRegistration from './Component/Admin/Users/Registration';
+// import AdminRegistration from './Component/Admin/Users/Registration';
 import AdminLogin from './Component/Admin/Users/Login';
 
 
@@ -28,8 +28,8 @@ function App() {
 
        <Routes>
         
-       <Route path='/' element={<AdminRegistration/>}/>
-      <Route path='/adminLogin' element={<AdminLogin/>}/>
+       {/* <Route path='/' element={<AdminRegistration/>}/> */}
+      <Route path='/' element={<AdminLogin/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/OrderDetails' element={<OrderDetailsPage/>}/>
       <Route path='/OrderDetails/:orderId' element={<OrderDetailsPage/>}/>

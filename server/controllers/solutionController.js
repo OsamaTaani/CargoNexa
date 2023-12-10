@@ -4,7 +4,9 @@ const Firebase = require('../middleware/firebaseMiddleware')
 
 const getAllSolutions = async (req, res) => {
   try {
-    const solutions = await solutionModel.getAllSolutions();
+    const {page =1 , pageSize = 5} = req.query;
+    const offset = (page - 1) * pageSize
+    const solutions = await solutionModel.getAllSolutions(pageSize , offset);
     res.json(solutions);
   } catch (error) {
     console.error('Error in getAllSolutions controller:', error);

@@ -28,12 +28,12 @@ export const AuthProvider = ({ children }) => {
     setUserRole(1)
 
   };
-  const registerForDriver = (token) => {
-    setAuthToken(token);
-    Cookies.set("token", token)
-    setUserRole(2)
+  // const registerForDriver = (token) => {
+  //   setAuthToken(token);
+  //   Cookies.set("token", token)
+  //   setUserRole(2)
 
-  };
+  // };
 
   const logout = () => {
     setAuthToken(null);
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ authToken, login, isUserRole,loginDriver, logout,register,registerForDriver, isAuthenticated }}>
+    <AuthContext.Provider value={{ authToken, login, isUserRole,loginDriver, logout,register, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

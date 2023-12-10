@@ -396,8 +396,16 @@ const NewOrders = () => {
 
   const fetchDriverInfo = async () => {
     try {
+      const authToken = cookies['token'];
+      console.log(authToken);
       // const response = await axios.get(`http://localhost:3001/driver/${driverId}`);
-      const response = await axios.get('http://localhost:3001/driver');
+      const response = await axios.get('http://localhost:3001/driver',{
+        headers: { 
+          Authorization: `${authToken}`,
+          
+        },
+      
+      });
       setDriverInfo(response.data);
     
     } catch (error) {
@@ -568,7 +576,7 @@ const NewOrders = () => {
             <tbody>
               <tr className="border-b">
                 <td className="text-sm text-gray-900 font-medium px-6 py-4 whitespace-nowrap">
-                {driverInfo.truck_size}
+                {driverInfo.driver_size_type}
 
                 </td>
               </tr>

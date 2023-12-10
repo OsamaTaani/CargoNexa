@@ -7,7 +7,11 @@ import logo4 from '../../Images/logo4-transformed.png'
 import { useAuth } from '../AuthContext';
 import LanguageSwitcher from '../../../LanguageSwitcher';
 import Cookies from 'js-cookie';
+import { useTranslation } from 'react-i18next';
 const Header = () => {
+  
+  const { t } = useTranslation();
+
 
   const { isAuthenticated,register,isLoggedIn, logout, login } = useAuth();
 
@@ -80,38 +84,43 @@ const role = isUserRole() || Cookies.get('role')
   {role != 2 && (
 
 <Link to={'/'}>
-<div>home </div>
+<div>
+{t('header.home')} 
+  </div>
 </Link>
   )}
     {role == 2 && (
 
     <Link 
     to={'/NewOrders'}
->    New Orders
+>         {t('header.New Orders')}
       
     </Link>
     )}
+  {role != 2 && (
+
    <Link 
     to={'/services'}
->    Services 
+>     {t('header.Services')}  
     </Link> 
-   
+    )}
     <Link 
     to={'/about'}>
-     Our Mission
+       {t('header.Our Mission')}  
     </Link>
  {role == 1 && (
     <Link 
     to={'/orders'}
     >
-      My Order
+            {t('header.My Order')}
+
     </Link>
 )}
  {role == 2 && (
     <Link 
     to={'/driverOrders'}
     
->      Driver Orders
+>     {t('header.Driver Orders')}
      
     </Link>
 )}
@@ -131,7 +140,8 @@ const role = isUserRole() || Cookies.get('role')
       onClick={() => handleClick('home')}
       className={` cursor-pointer  group font-medium transition duration-150 ease-in-out text-sm md:text-xl ${activeButton === 'home' ? 'border-b-4 border-orange-500 text-black' : ' text-gray-500 hover:text-gray-900'}`}
   >
-      Home
+       {t('header.home')}
+      
       {activeButton != 'home' &&(
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
        )} 
@@ -143,29 +153,37 @@ const role = isUserRole() || Cookies.get('role')
     to={'/NewOrders'}
     onClick={() => handleClick('newOrders')}
     className={` cursor-pointer  group font-medium transition duration-150 ease-in-out text-sm md:text-xl ${activeButton === 'newOrders' ? 'border-b-4 border-orange-500 text-black' : ' text-gray-500 hover:text-gray-900'}`}    >
-      New Orders
+       
+         {t('header.New Orders')}
+
       {activeButton != 'newOrders' &&(
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
       )}
     </Link>
     )}
+  {role != 2 && (
+
     <Link 
     to={'/services'}
     onClick={() => handleClick('services')}
     className={` cursor-pointer  group font-medium transition duration-150 ease-in-out text-sm md:text-xl ${activeButton === 'services' ? 'border-b-4 border-orange-500 text-black' : ' text-gray-500 hover:text-gray-900'}`}    >
-      Services 
-      {activeButton != 'services' &&(
+   
+   {t('header.Services')}  
+
+     {activeButton != 'services' &&(
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
      )} 
 
     </Link>
-   
+  )}
     <Link 
     to={'/about'}
     onClick={() => handleClick('about')}
     className={` cursor-pointer  group font-medium transition duration-150 ease-in-out text-sm md:text-xl ${activeButton === 'about' ? 'border-b-4 border-orange-500 text-black' : ' text-gray-500 hover:text-gray-900'}`}    >
-     Our Mission
-     {activeButton != 'about' &&(
+ 
+   {t('header.Our Mission')}  
+
+      {activeButton != 'about' &&(
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
      )}
      
@@ -176,7 +194,7 @@ const role = isUserRole() || Cookies.get('role')
     
     onClick={() => handleClick('orders')}
     className={` cursor-pointer  group font-medium transition duration-150 ease-in-out text-sm md:text-xl ${activeButton === 'orders' ? 'border-b-4 border-orange-500 text-black' : ' text-gray-500 hover:text-gray-900'}`}    >
-      My Orders
+        {t('header.My Order')}
       {activeButton != 'orders' &&(
 
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
@@ -189,7 +207,7 @@ const role = isUserRole() || Cookies.get('role')
     
     onClick={() => handleClick('driverOrders')}
     className={` cursor-pointer  group font-medium transition duration-150 ease-in-out text-sm md:text-xl ${activeButton === 'driverOrders' ? 'border-b-4 border-orange-500 text-black' : ' text-gray-500 hover:text-gray-900'}`}    >
-      Driver Orders
+        {t('header.Driver Orders')}
       {activeButton != 'driverOrders' &&(
 
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
@@ -244,9 +262,13 @@ const role = isUserRole() || Cookies.get('role')
                 />
               </svg>
             </Link>
-)}
+           )}
+          {role != 2 && (
+
             <div className='mt-12 ml-2 '>
+
            <LanguageSwitcher />
+  
            <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -256,12 +278,18 @@ const role = isUserRole() || Cookies.get('role')
                   className="h-12 w-12"
                 >
                 </svg>
+                
            </div>
+                           )}
+
           </div>
         ) : (
              <div>
+                        {role != 2 && (
+
           <div className='mt-12 ml-2 '>
-           <LanguageSwitcher />
+
+       <LanguageSwitcher />
            <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -272,6 +300,7 @@ const role = isUserRole() || Cookies.get('role')
                 >
                 </svg>
            </div>
+           )}
           <div className='hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 text-sm md:text-xl mr-16'>
           
           <div className="mx-auto flex h-screen w-full items-center justify-center  py-20">

@@ -5,7 +5,9 @@ const Firebase = require('../middleware/firebaseMiddleware')
 // Get All Services
 const getAllServices = async (req, res) => {
   try {
-    const services = await ServiceModel.getAllServices();
+    const {page = 1 , pageSize = 5 } = req.query;
+    const offset = (page -1 ) * pageSize;
+    const services = await ServiceModel.getAllServices(pageSize , offset);
     res.status(200).json( services );
   } catch (error) {
     console.error(error);

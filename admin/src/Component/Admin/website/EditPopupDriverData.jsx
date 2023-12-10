@@ -12,7 +12,7 @@ const EditPopupDriverData = ({ driver, isOpen, onClose, onSubmit }) => {
     setEditedDriver((prevDriver) => ({ ...prevDriver, [name]: value }));
   };
 
- 
+
   
   return (
     isOpen && (
@@ -31,7 +31,7 @@ const EditPopupDriverData = ({ driver, isOpen, onClose, onSubmit }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              {/* <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Driver Email</label>
                 <input
                   type="text"
@@ -40,7 +40,7 @@ const EditPopupDriverData = ({ driver, isOpen, onClose, onSubmit }) => {
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
-              </div>
+              </div> */}
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Driver Password</label>
                 <input

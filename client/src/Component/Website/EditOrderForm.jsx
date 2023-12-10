@@ -18,7 +18,7 @@ const EditForm = ({ onClose, orderDetails }) => {
     e.preventDefault()
     try {
       // Use Axios to send a PUT request to update the order
-      await axios.put(`http://localhost:3001/orders/${editedOrder.id}`, editedOrder);
+      await axios.put(`http://localhost:3001/updateUserOrder/${editedOrder.order_id}`, editedOrder);
 
       // Close the form or perform any other actions upon successful update
       onClose();
@@ -61,9 +61,9 @@ const EditForm = ({ onClose, orderDetails }) => {
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Receiving Timestamp</label>
                 <input
-                id='order_description'
+                id='receiving_timestamp'
                   type="text"
-                  name="order_description"
+                  name="receiving_timestamp"
                   value={editedOrder.receiving_timestamp}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -72,9 +72,9 @@ const EditForm = ({ onClose, orderDetails }) => {
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Shipper Phone Number</label>
                 <input
-                id='order_description'
+                id='order_phone_number'
                   type="text"
-                  name="order_description"
+                  name="order_phone_number"
                   value={editedOrder.order_phone_number}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -83,9 +83,9 @@ const EditForm = ({ onClose, orderDetails }) => {
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Order message</label>
                 <input
-                id='order_description'
+                id='message'
                   type="text"
-                  name="order_description"
+                  name="message"
                   value={editedOrder.message}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -94,9 +94,9 @@ const EditForm = ({ onClose, orderDetails }) => {
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Shipping Date</label>
                 <input
-                id='order_description'
+                id='shipping_date'
                   type="text"
-                  name="order_description"
+                  name="shipping_date"
                   value={editedOrder.shipping_date}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -105,9 +105,9 @@ const EditForm = ({ onClose, orderDetails }) => {
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Receiver Name</label>
                 <input
-                id='order_description'
+                id='receiver_name'
                   type="text"
-                  name="order_description"
+                  name="receiver_name"
                   value={editedOrder.receiver_name}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -116,9 +116,9 @@ const EditForm = ({ onClose, orderDetails }) => {
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Receiver Phone Number</label>
                 <input
-                id='order_description'
+                id='receiver_phone_number'
                   type="text"
-                  name="order_description"
+                  name="receiver_phone_number"
                   value={editedOrder.receiver_phone_number}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"

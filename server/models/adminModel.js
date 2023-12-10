@@ -20,8 +20,8 @@ const verifyCredentials = async(admin_email , admin_password) => {
     };
     return null;
 }
-const getAllAdmins = async () => {
-    const admins = await pool.query('SELECT * FROM admins');
+const getAllAdmins = async (pageSize, offset) => {
+    const admins = await pool.query('SELECT *, COUNT(*) OVER () AS total_count FROM admins ORDER BY admin_id LIMIT $1 OFFSET $2' , [pageSize, offset]);
     return admins.rows;
   };
   

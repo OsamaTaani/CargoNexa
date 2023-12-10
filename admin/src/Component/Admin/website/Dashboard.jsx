@@ -1,527 +1,536 @@
-import React, { useEffect, useState } from 'react'
-import logo4 from '../../Image/logo4-transformed.png'
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import EditPopupUserData from './EditPopupUserData';
-import EditPopupDriverData from './EditPopupDriverData';
-import EditPopupServicesData from './EditPopupServicesData';
-import EditPopupSolutionsData from './EditPopupSolutionsData';
-import EditPopupFaqData from './EditPopupFaqData';
-import AddOrderForm from './AddOrderForm';
-import AddAdminForm from './AddAdminForm';
-import AddUserForm from './AddUserForm';
-import AddDriverForm from './AddDriverForm';
-import AddServicesForm from './AddServicesForm';
-import AddSolutionsForm from './AddSolutionsForm';
-import AddFaqForm from './AddFaqForm';
-import EditPopupAdminData from './EditPopupAdminData';
+import React, { useEffect, useState } from "react";
+import logo4 from "../../Image/logo4-transformed.png";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import EditPopupUserData from "./EditPopupUserData";
+import EditPopupDriverData from "./EditPopupDriverData";
+import EditPopupServicesData from "./EditPopupServicesData";
+import EditPopupSolutionsData from "./EditPopupSolutionsData";
+import EditPopupFaqData from "./EditPopupFaqData";
+import AddOrderForm from "./AddOrderForm";
+import AddAdminForm from "./AddAdminForm";
+import AddUserForm from "./AddUserForm";
+import AddDriverForm from "./AddDriverForm";
+import AddServicesForm from "./AddServicesForm";
+import AddSolutionsForm from "./AddSolutionsForm";
+import AddFaqForm from "./AddFaqForm";
+import EditPopupAdminData from "./EditPopupAdminData";
 const Dashboard = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-      }, []);
+  const [data, setData] = useState([]);
+  const [selectedTab, setSelectedTab] = useState("dashboard");
+  // add useState clicked to change the bg to white when the btn clicked
+  const [clicked, setClicked] = useState(false);
 
-      const [data, setData] = useState([]);
-      const [selectedTab, setSelectedTab] = useState('dashboard');
-      // add useState clicked to change the bg to white when the btn clicked 
-      const [clicked, setClicked] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
+  const [editUser, setEditUser] = useState(null);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
 
+  const [editAdmin, setEditAdmin] = useState(null);
+  const [isEditAdminPopupOpen, setIsEditAdminPopupOpen] = useState(false);
 
-      const [editUser, setEditUser] = useState(null);
-      const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
+  const [editDriver, setEditDriver] = useState(null);
+  const [isEditDriverPopupOpen, setIsEditDriverPopupOpen] = useState(false);
 
-      const [editAdmin, setEditAdmin] = useState(null);
-      const [isEditAdminPopupOpen, setIsEditAdminPopupOpen] = useState(false);
+  const [editServices, setEditServices] = useState(null);
+  const [isEditServicesPopupOpen, setIsEditServicesPopupOpen] = useState(false);
 
+  const [editSolutions, setEditSolutions] = useState(null);
+  const [isEditSolutionsPopupOpen, setIsEditSolutionsPopupOpen] =
+    useState(false);
 
-      const [editDriver, setEditDriver] = useState(null);
-      const [isEditDriverPopupOpen, setIsEditDriverPopupOpen] = useState(false);
+  const [editFaq, setEditFaq] = useState(null);
+  const [isEditFaqPopupOpen, setIsEditFaqPopupOpen] = useState(false);
 
-      const [editServices, setEditServices] = useState(null);
-      const [isEditServicesPopupOpen, setIsEditServicesPopupOpen] = useState(false);
+  // State to store the fetched data
+  const [orders, setOrders] = useState([]);
 
-      const [editSolutions, setEditSolutions] = useState(null);
-      const [isEditSolutionsPopupOpen, setIsEditSolutionsPopupOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalItems, setTotalItems] = useState("");
+  const itemsPerPage = 5; // Adjust as needed
 
-      const [editFaq, setEditFaq] = useState(null);
-      const [isEditFaqPopupOpen, setIsEditFaqPopupOpen] = useState(false);
+  useEffect(() => {
+    // Fetch initial data when the component mounts
+    fetchData();
+  }, [selectedTab,currentPage]);
 
-      
+  const fetchData = async () => {
+    try {
+      let response;
+      // Make the appropriate API call based on the selected tab
+      switch (selectedTab) {
+        case "dashboard":
+          response = await axios.get(`http://localhost:3001/orders?page=${currentPage}`);
+          break;
+        case "profile":
+          response = await axios.get(`http://localhost:3001/admin?page=${currentPage}`);
+          break;
+        case "users":
+          response = await axios.get(`http://localhost:3001/all-users?page=${currentPage}`);
+          break;
+          ///////////////////////////////////////DRIVER TABLE///////////////////////////////////////////
+        case "drivers": 
+          response = await axios.get(`http://localhost:3001/drivers?page=${currentPage}`);
         
+          break;
+        case "services":
+          response = await axios.get(`http://localhost:3001/services?page=${currentPage}`);
+          break;
+        case "solutions":
+          response = await axios.get(`http://localhost:3001/solutions?page=${currentPage}`);
+          break;
+        case "faq":
+          response = await axios.get(`http://localhost:3001/faq?page=${currentPage}`);
+          break;
 
-          // State to store the fetched data
-          const [orders, setOrders] = useState([]);
-          const [currentPage, setCurrentPage] = useState(1);
-          const itemsPerPage = 3; // Adjust as needed
-          
+        default:
+          break;
+      }
 
+      setData(response.data);
+      setTotalItems(response.data[0].total_count);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-      useEffect(() => {
-        // Fetch initial data when the component mounts
-        fetchData();
-      }, [selectedTab]);
-    
-      const fetchData = async () => {
-        try {
-          let response;
-          // Make the appropriate API call based on the selected tab
-          switch (selectedTab) {
-            case 'dashboard':
-              response = await axios.get('http://localhost:3001/orders');
-              break;
-            case 'profile':
-              response = await axios.get('http://localhost:3001/admin');
-              break;
-            case 'users':
-              response = await axios.get('http://localhost:3001/register');
-              break;
-            case 'drivers':
-              response = await axios.get('http://localhost:3001/driver');
-              break;
-            case 'services':
-              response = await axios.get('http://localhost:3001/services');
-              break;
-            case 'solutions':
-              response = await axios.get('http://localhost:3001/solutions');
-              break;
-            case 'faq':
-              response = await axios.get('http://localhost:3001/faq');
-              break;
-          
-            default:
-              break;
-          }
-    
-          setData(response.data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
-    
-      const handleTabClick = (tab) => {
-        setSelectedTab(tab);
-        setClicked(true);
+  const handleTabClick = (tab) => {
+    setSelectedTab(tab);
+    setClicked(true);
+  };
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-      };
-    
-      const handleSignOut = () => {
-        // Implement sign-out logic, e.g., delete token
-        console.log('Signing out...');
-      };
-
+  const handleSignOut = () => {
+    // Implement sign-out logic, e.g., delete token
+    console.log("Signing out...");
+  };
 
   // Effect to fetch data using Axios when the component mounts
-  useEffect(() => {
-  
-    // Fetch data using Axios
-    axios.get('http://localhost:3001/order')
-      .then(response => {
-        // Set the fetched data to the state
-        setOrders(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-      });
-  }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+  // useEffect(() => {
+  //   // Fetch data using Axios
+  //   axios
+  //     .get("http://localhost:3001/order")
+  //     .then((response) => {
+  //       // Set the fetched data to the state
+  //       setOrders(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
 
-
- const handlePrevClick = () => {
-    setCurrentPage(prevPage => Math.max(prevPage - 1, 1));
+  const handlePrevClick = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
   const handleNextClick = () => {
-    setCurrentPage(prevPage => prevPage + 1);
+    setCurrentPage((prevPage) => prevPage + 1);
   };
 
   /////////////////////////////////////   EDIT  ///////////////////////////////////////////////////////
 
+
   //edit handle for users data**********************************************************************************************
-  const handleEditClick = async (userId) => {
+  const handleEditAdminClick = async (admin_id) => {
     try {
-      const response = await axios.get(`http://localhost:3001/register/${userId}`); // Replace with your API endpoint
-      setEditUser(response.data);
-     
-      setIsEditPopupOpen(true);
+      const response = await axios.get(
+        `http://localhost:3001/register/${admin_id}`
+      ); // Replace with your API endpoint
+      setEditAdmin(response.data);
+
+      setIsEditAdminPopupOpen(true);
     } catch (error) {
-      console.error('Error fetching order data:', error);
+      console.error("Error fetching admin data:", error);
     }
   };
 
-  const handleEditSubmit = async (editedUserData) => {
+  const handleEditAdminSubmit = async (editedAdminData) => {
     try {
       // Make a PUT request to update the order data
-      await axios.put(`http://localhost:3001/register/${editUser.id}`, editedUserData); // Replace with your API endpoint
+      await axios.put(
+        `http://localhost:3001/register/${editedAdminData.admin_id}`,
+        editedAdminData
+      ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
-      setIsEditPopupOpen(false);
+      setIsEditAdminPopupOpen(false);
       fetchData(); // Implement a function to fetch data from your API
     } catch (error) {
-      console.error('Error updating order data:', error);
+      console.error("Error updating admin data:", error);
     }
   };
-
-    //edit handle for users data**********************************************************************************************
-    const handleEditAdminClick = async (admin_id) => {
-      try {
-        const response = await axios.get(`http://localhost:3001/register/${admin_id}`); // Replace with your API endpoint
-        setEditAdmin(response.data);
-       
-        setIsEditAdminPopupOpen(true);
-      } catch (error) {
-        console.error('Error fetching admin data:', error);
-      }
-    };
-  
-    const handleEditAdminSubmit = async (editedAdminData) => {
-      try {
-        // Make a PUT request to update the order data
-        await axios.put(`http://localhost:3001/register/${editUser.id}`, editedAdminData); // Replace with your API endpoint
-        // Close the edit popup and fetch the updated data
-        setIsEditAdminPopupOpen(false);
-        fetchData(); // Implement a function to fetch data from your API
-      } catch (error) {
-        console.error('Error updating admin data:', error);
-      }
-    };
-  
 
   //edit handle for driver data **********************************************************************************************
   const handleDriverEditClick = async (driverId) => {
     try {
-      const response = await axios.get(`http://localhost:3001/driver/${driverId}`); // Replace with your API endpoint
+      const response = await axios.get(
+        `http://localhost:3001/drivers/${driverId}`
+      ); // Replace with your API endpoint
       setEditDriver(response.data);
+      console.log(response.data);
       setIsEditDriverPopupOpen(true);
     } catch (error) {
-      console.error('Error fetching driver data:', error);
+      console.error("Error fetching driver data:", error);
     }
   };
 
   const handleDriverEditSubmit = async (editedDriverData) => {
+    console.log(editedDriverData.driver_id);
     try {
       // Make a PUT request to update the driver data
-      await axios.put(`http://localhost:3001/driver/${editDriver.id}`, editedDriverData); // Replace with your API endpoint
+      await axios.put(
+        `http://localhost:3001/update-drivers/${editedDriverData.driver_id}`,
+        editedDriverData
+      ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditDriverPopupOpen(false);
+      console.log(editedDriverData);
       fetchData(); // Implement a function to fetch data from your API
     } catch (error) {
-      console.error('Error updating driver data:', error);
-    }
-  };
-  
-   //edit handle for services data**********************************************************************************************
-   const handleServicesEditClick = async (ServicesId) => {
-    try {
-      const response = await axios.get(`http://localhost:3001/services/${ServicesId}`); // Replace with your API endpoint
-      setEditServices(response.data);
-      setIsEditServicesPopupOpen(true);
-    } catch (error) {
-      console.error('Error fetching services data:', error);
+      console.error("Error updating driver data:", error);
     }
   };
 
-  const handleServicesEditSubmit  = async (editedServicesData) => {
+  //edit handle for services data**********************************************************************************************
+  const handleServicesEditClick = async (ServicesId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/services/${ServicesId}`
+      ); // Replace with your API endpoint
+      setEditServices(response.data);
+      setIsEditServicesPopupOpen(true);
+    } catch (error) {
+      console.error("Error fetching services data:", error);
+    }
+  };
+
+  const handleServicesEditSubmit = async (editedServicesData) => {
     try {
       // Make a PUT request to update the order data
-      await axios.put(`http://localhost:3001/services/${editServices.id}`, editedServicesData); // Replace with your API endpoint
+      await axios.put(
+        `http://localhost:3001/services/${editedServicesData.services_id}`,
+        editedServicesData
+      ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditServicesPopupOpen(false);
       fetchData(); // Implement a function to fetch data from your API
     } catch (error) {
-      console.error('Error updating services data:', error);
+      console.error("Error updating services data:", error);
     }
   };
-   //edit handle for services data**********************************************************************************************
-   const handleSolutionsEditClick = async (solutionsId) => {
+  //edit handle for services data**********************************************************************************************
+  const handleSolutionsEditClick = async (solutionsId) => {
     try {
-      const response = await axios.get(`http://localhost:3001/solutions/${solutionsId}`); // Replace with your API endpoint
+      const response = await axios.get(
+        `http://localhost:3001/solutions/${solutionsId}`
+      ); // Replace with your API endpoint
       setEditSolutions(response.data);
       setIsEditSolutionsPopupOpen(true);
     } catch (error) {
-      console.error('Error fetching solutions data:', error);
+      console.error("Error fetching solutions data:", error);
     }
   };
 
-  const handleSolutionsEditSubmit  = async (editedSolutionsData) => {
+  const handleSolutionsEditSubmit = async (editedSolutionsData) => {
     try {
       // Make a PUT request to update the order data
-      await axios.put(`http://localhost:3001/solutions/${editSolutions.id}`, editedSolutionsData); // Replace with your API endpoint
+      await axios.put(
+        `http://localhost:3001/solutions/${editedSolutionsData.solution_id}`,
+        editedSolutionsData
+      ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditSolutionsPopupOpen(false);
       fetchData(); // Implement a function to fetch data from your API
     } catch (error) {
-      console.error('Error updating solutions data:', error);
+      console.error("Error updating solutions data:", error);
     }
   };
-   //edit handle for services data**********************************************************************************************
-   const handleFaqEditClick = async (faqId) => {
+  //edit handle for services data**********************************************************************************************
+  const handleFaqEditClick = async (faqId) => {
     try {
       const response = await axios.get(`http://localhost:3001/faq/${faqId}`); // Replace with your API endpoint
       setEditFaq(response.data);
       setIsEditFaqPopupOpen(true);
     } catch (error) {
-      console.error('Error fetching order data:', error);
+      console.error("Error fetching order data:", error);
     }
   };
 
   const handleFaqEditSubmit = async (editedFaqData) => {
     try {
       // Make a PUT request to update the order data
-      await axios.put(`http://localhost:3001/faq/${editFaq.id}`, editedFaqData); // Replace with your API endpoint
+      await axios.put(`http://localhost:3001/faq/${editedFaqData.id}`, editedFaqData); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditFaqPopupOpen(false);
       fetchData(); // Implement a function to fetch data from your API
     } catch (error) {
-      console.error('Error updating faq data:', error);
+      console.error("Error updating faq data:", error);
     }
   };
 
-    /////////////////////////////////////   DELETE  ///////////////////////////////////////////////////////
+  /////////////////////////////////////   DELETE  ///////////////////////////////////////////////////////
 
   //handle soft delete for users  **********************************************************************************************
   const handleSoftDeleteUser = async (userId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/register/${userId}`, { isDeleted: 'true' });
-  
+      await axios.patch(`http://localhost:3001/register/${userId}`, {
+        isDeleted: "true",
+      });
+
       // Refresh the data or handle the removal of the soft-deleted user from your local state
       fetchData();
       setIsEditPopupOpen(false); // Close the edit popup
     } catch (error) {
-      console.error('Error soft deleting user:', error);
+      console.error("Error soft deleting user:", error);
     }
   };
 
-    //handle soft delete for admins  **********************************************************************************************
-    const handleSoftDeleteAdmin = async (admin_id) => {
-      try {
-        // Send a PATCH request to update the status for soft delete
-        await axios.patch(`http://localhost:3001/register/${admin_id}`, { isDeleted: 'true' });
-    
-        // Refresh the data or handle the removal of the soft-deleted user from your local state
-        fetchData();
-        setIsEditAdminPopupOpen(false); // Close the edit popup
-      } catch (error) {
-        console.error('Error soft deleting admin:', error);
-      }
-    };
-  
+  //handle soft delete for admins  **********************************************************************************************
+  const handleSoftDeleteAdmin = async (admin_id) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.patch(`http://localhost:3001/register/${admin_id}`, {
+        isDeleted: "true",
+      });
+
+      // Refresh the data or handle the removal of the soft-deleted user from your local state
+      fetchData();
+      setIsEditAdminPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error("Error soft deleting admin:", error);
+    }
+  };
+
   //handle soft delete for drivers  **********************************************************************************************
-  
+
   // Soft delete function for driver data
   const handleSoftDeleteDriver = async (driverId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/driver/${driverId}`, { isDeleted: 'true' });
-  
+      await axios.patch(`http://localhost:3001/driver/${driverId}`, {
+        isDeleted: "true",
+      });
+
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
       fetchData();
       setIsEditDriverPopupOpen(false); // Close the edit popup
     } catch (error) {
-      console.error('Error soft deleting driver:', error);
+      console.error("Error soft deleting driver:", error);
     }
   };
   //handle soft delete for drivers  **********************************************************************************************
-  
+
   // Soft delete function for driver data
   const handleSoftDeleteServices = async (servicesId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/services/${servicesId}`, { isDeleted: 'true' });
-  
+      await axios.patch(`http://localhost:3001/services/${servicesId}`, {
+        isDeleted: "true",
+      });
+
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
       fetchData();
       setIsEditServicesPopupOpen(false); // Close the edit popup
     } catch (error) {
-      console.error('Error soft deleting services:', error);
+      console.error("Error soft deleting services:", error);
     }
   };
   //handle soft delete for drivers  **********************************************************************************************
-  
+
   // Soft delete function for driver data
   const handleSoftDeleteSolutions = async (solutionsId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/solutions/${solutionsId}`, { isDeleted: 'true' });
-  
+      await axios.patch(`http://localhost:3001/solutions/${solutionsId}`, {
+        isDeleted: "true",
+      });
+
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
       fetchData();
       setIsEditSolutionsPopupOpen(false); // Close the edit popup
     } catch (error) {
-      console.error('Error soft deleting solutions:', error);
+      console.error("Error soft deleting solutions:", error);
     }
   };
   //handle soft delete for drivers  **********************************************************************************************
-  
+
   // Soft delete function for driver data
   const handleSoftDeleteFaq = async (faqId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/faq/${faqId}`, { isDeleted: 'true' });
-  
+      await axios.patch(`http://localhost:3001/faq/${faqId}`, {
+        isDeleted: "true",
+      });
+
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
       fetchData();
       setIsEditFaqPopupOpen(false); // Close the edit popup
     } catch (error) {
-      console.error('Error soft deleting faq:', error);
+      console.error("Error soft deleting faq:", error);
     }
   };
- 
+
   /////////////////////////////////////   ADD  //////////////////////////////////////////////
 
-//handle Add order   **********************************************************************************************
-const [showAddOrderPopup, setShowAddOrderPopup] = useState(false);
+  //handle Add order   **********************************************************************************************
+  const [showAddOrderPopup, setShowAddOrderPopup] = useState(false);
 
-const openAddOrderPopup = () => {
-  setShowAddOrderPopup(true);
-};
+  const openAddOrderPopup = () => {
+    setShowAddOrderPopup(true);
+  };
 
-const closeAddOrderPopup = () => {
-  setShowAddOrderPopup(false);
-};
+  const closeAddOrderPopup = () => {
+    setShowAddOrderPopup(false);
+  };
 
-const handleAddOrderSubmit = async (newOrder) => {
-  try {
-    // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/order', newOrder);
-    // Close the popup and fetch the updated data
-    closeAddOrderPopup();
-    fetchData(); // Assuming fetchData is a function that fetches the updated order data
-  } catch (error) {
-    console.error('Error adding new order:', error);
-  }
-};
-//handle Add admin   **********************************************************************************************
-const [showAddAdminPopup, setShowAddAdminPopup] = useState(false);
+  const handleAddOrderSubmit = async (newOrder) => {
+    try {
+      // Make a POST request to add a new order
+      await axios.post("http://localhost:3001/createAdmin", newOrder);
+      // Close the popup and fetch the updated data
+      closeAddOrderPopup();
+      fetchData(); // Assuming fetchData is a function that fetches the updated order data
+    } catch (error) {
+      console.error("Error adding new order:", error);
+    }
+  };
+  //handle Add admin   **********************************************************************************************
+  const [showAddAdminPopup, setShowAddAdminPopup] = useState(false);
 
-const openAddAdminPopup = () => {
-  setShowAddAdminPopup(true);
-};
+  const openAddAdminPopup = () => {
+    setShowAddAdminPopup(true);
+  };
 
-const closeAddAdminPopup = () => {
-  setShowAddAdminPopup(false);
-};
+  const closeAddAdminPopup = () => {
+    setShowAddAdminPopup(false);
+  };
 
-const handleAddAdminSubmit = async (newAdmin) => {
-  try {
-    // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/register', newAdmin);
-    // Close the popup and fetch the updated data
-    closeAddAdminPopup();
-    fetchData(); // Assuming fetchData is a function that fetches the updated order data
-  } catch (error) {
-    console.error('Error adding new admin:', error);
-  }
-};
-//handle Add User   **********************************************************************************************
-const [showAddUserPopup, setShowAddUserPopup] = useState(false);
+  const handleAddAdminSubmit = async (newAdmin) => {
+    try {
+      // Make a POST request to add a new order
+      await axios.post("http://localhost:3001/register", newAdmin);
+      // Close the popup and fetch the updated data
+      closeAddAdminPopup();
+      fetchData(); // Assuming fetchData is a function that fetches the updated order data
+    } catch (error) {
+      console.error("Error adding new admin:", error);
+    }
+  };
+  //handle Add User   **********************************************************************************************
+  const [showAddUserPopup, setShowAddUserPopup] = useState(false);
 
-const openAddUserPopup = () => {
-  setShowAddUserPopup(true);
-};
+  const openAddUserPopup = () => {
+    setShowAddUserPopup(true);
+  };
 
-const closeAddUserPopup = () => {
-  setShowAddUserPopup(false);
-};
+  const closeAddUserPopup = () => {
+    setShowAddUserPopup(false);
+  };
 
-const handleAddUserSubmit = async (newUser) => {
-  try {
-    // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/register', newUser);
-    // Close the popup and fetch the updated data
-    closeAddUserPopup();
-    fetchData(); // Assuming fetchData is a function that fetches the updated order data
-  } catch (error) {
-    console.error('Error adding new user:', error);
-  }
-};
-//handle Add Driver   **********************************************************************************************
-const [showAddDriverPopup, setShowAddDriverPopup] = useState(false);
+  const handleAddUserSubmit = async (newUser) => {
+    try {
+      // Make a POST request to add a new order
+      await axios.post("http://localhost:3001/register", newUser);
+      // Close the popup and fetch the updated data
+      closeAddUserPopup();
+      fetchData(); // Assuming fetchData is a function that fetches the updated order data
+    } catch (error) {
+      console.error("Error adding new user:", error);
+    }
+  };
+  //handle Add Driver   **********************************************************************************************
+  const [showAddDriverPopup, setShowAddDriverPopup] = useState(false);
 
-const openAddDriverPopup = () => {
-  setShowAddDriverPopup(true);
-};
+  const openAddDriverPopup = () => {
+    setShowAddDriverPopup(true);
+  };
 
-const closeAddDriverPopup = () => {
-  setShowAddDriverPopup(false);
-};
+  const closeAddDriverPopup = () => {
+    setShowAddDriverPopup(false);
+  };
 
-const handleAddDriverSubmit = async (newDriver) => {
-  try {
-    // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/driver', newDriver);
-    // Close the popup and fetch the updated data
-    closeAddDriverPopup();
-    fetchData(); // Assuming fetchData is a function that fetches the updated order data
-  } catch (error) {
-    console.error('Error adding new Driver:', error);
-  }
-};
-//handle Add Services   **********************************************************************************************
-const [showAddServicesPopup, setShowAddServicesPopup] = useState(false);
+  const handleAddDriverSubmit = async (newDriver) => {
+    try {
+      // Make a POST request to add a new order
+      await axios.post("http://localhost:3001/driver", newDriver);
+      // Close the popup and fetch the updated data
+      closeAddDriverPopup();
+      fetchData(); // Assuming fetchData is a function that fetches the updated order data
+    } catch (error) {
+      console.error("Error adding new Driver:", error);
+    }
+  };
+  //handle Add Services   **********************************************************************************************
+  const [showAddServicesPopup, setShowAddServicesPopup] = useState(false);
 
-const openAddServicesPopup = () => {
-  setShowAddServicesPopup(true);
-};
+  const openAddServicesPopup = () => {
+    setShowAddServicesPopup(true);
+  };
 
-const closeAddServicesPopup = () => {
-  setShowAddServicesPopup(false);
-};
+  const closeAddServicesPopup = () => {
+    setShowAddServicesPopup(false);
+  };
 
-const handleAddServicesSubmit = async (newServices) => {
-  try {
-    // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/services', newServices);
-    // Close the popup and fetch the updated data
-    closeAddServicesPopup();
-    fetchData(); // Assuming fetchData is a function that fetches the updated order data
-  } catch (error) {
-    console.error('Error adding new Services:', error);
-  }
-};
-//handle Add Solutions   **********************************************************************************************
-const [showAddSolutionsPopup, setShowAddSolutionsPopup] = useState(false);
+  const handleAddServicesSubmit = async (newServices) => {
+    try {
+      // Make a POST request to add a new order
+      await axios.post("http://localhost:3001/services", newServices);
+      // Close the popup and fetch the updated data
+      closeAddServicesPopup();
+      fetchData(); // Assuming fetchData is a function that fetches the updated order data
+    } catch (error) {
+      console.error("Error adding new Services:", error);
+    }
+  };
+  //handle Add Solutions   **********************************************************************************************
+  const [showAddSolutionsPopup, setShowAddSolutionsPopup] = useState(false);
 
-const openAddSolutionsPopup = () => {
-  setShowAddSolutionsPopup(true);
-};
+  const openAddSolutionsPopup = () => {
+    setShowAddSolutionsPopup(true);
+  };
 
-const closeAddSolutionsPopup = () => {
-  setShowAddSolutionsPopup(false);
-};
+  const closeAddSolutionsPopup = () => {
+    setShowAddSolutionsPopup(false);
+  };
 
-const handleAddSolutionsSubmit = async (newSolutions) => {
-  try {
-    // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/solutions', newSolutions);
-    // Close the popup and fetch the updated data
-    closeAddSolutionsPopup();
-    fetchData(); // Assuming fetchData is a function that fetches the updated order data
-  } catch (error) {
-    console.error('Error adding new Solutions:', error);
-  }
-};
-//handle Add FAQ   **********************************************************************************************
-const [showAddFaqPopup, setShowAddFaqPopup] = useState(false);
+  const handleAddSolutionsSubmit = async (newSolutions) => {
+    try {
+      // Make a POST request to add a new order
+      await axios.post("http://localhost:3001/solutions", newSolutions);
+      // Close the popup and fetch the updated data
+      closeAddSolutionsPopup();
+      fetchData(); // Assuming fetchData is a function that fetches the updated order data
+    } catch (error) {
+      console.error("Error adding new Solutions:", error);
+    }
+  };
+  //handle Add FAQ   **********************************************************************************************
+  const [showAddFaqPopup, setShowAddFaqPopup] = useState(false);
 
-const openAddFaqPopup = () => {
-  setShowAddFaqPopup(true);
-};
+  const openAddFaqPopup = () => {
+    setShowAddFaqPopup(true);
+  };
 
-const closeAddFaqPopup = () => {
-  setShowAddFaqPopup(false);
-};
+  const closeAddFaqPopup = () => {
+    setShowAddFaqPopup(false);
+  };
 
-const handleAddFaqSubmit = async (newFaq) => {
-  try {
-    // Make a POST request to add a new order
-    await axios.post('http://localhost:3001/faq', newFaq);
-    // Close the popup and fetch the updated data
-    closeAddFaqPopup();
-    fetchData(); // Assuming fetchData is a function that fetches the updated order data
-  } catch (error) {
-    console.error('Error adding new FAQ:', error);
-  }
-};
+  const handleAddFaqSubmit = async (newFaq) => {
+    try {
+      // Make a POST request to add a new order
+      await axios.post("http://localhost:3001/faq", newFaq);
+      // Close the popup and fetch the updated data
+      closeAddFaqPopup();
+      fetchData(); // Assuming fetchData is a function that fetches the updated order data
+    } catch (error) {
+      console.error("Error adding new FAQ:", error);
+    }
+  };
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
@@ -533,169 +542,212 @@ const handleAddFaqSubmit = async (newFaq) => {
     setIsSideBarOpen(false);
   };
 
+  const handleSearch = (e)=>{
+    e.preventDefult();
+    axios.post(`http://localhost:3001/`, searchQuery).then((response)=>{}).catch((err)=>{})
+  }
+
   return (
     <>
-    {/* component */}
-    <div className="min-h-screen bg-gray-50/50">
-
-    <aside className={`${isSideBarOpen ? 'translate-x-0 ' : ''} bg-gradient-to-br bg-my-green -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0`}>
-        <div className="relative border-b border-white/20">
-          <a className="flex items-center gap-4 py-6 px-8" href="#/">
-            <h3 className="block antialiased tracking-normal font-sans text-3xl text-center font-semibold leading-relaxed text-white">
-             CargoNexa
-            </h3>
-          </a>
-          <button
-            className="middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-white hover:bg-white/10 active:bg-white/30 absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
-            type="button"
-            onClick={handleCloseSideClick}
-          >
-            <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2.5"
-                stroke="currentColor"
-                aria-hidden="true"
-                className="h-5 w-5 text-white"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-             
-            </span>
-          </button>
-        </div>
-        <div className="m-4">
-          <ul className="mb-4 flex flex-col gap-1">
-          <li>
-              <a aria-current="page" className="active" href="#">
-                <button
-                  className={`middle none font-sans font-bold center transition-all disabled:opacity-50  hover:bg-white disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                    selectedTab === 'dashboard' ? 'bg-white' : ''
-                    }  ${selectedTab !== 'dashboard'  ? 'bg-my-green' : ''}`}
-                  type="button"
-                  onClick={() => handleTabClick('dashboard')}
+      {/* component */}
+      <div className="min-h-screen bg-gray-50/50">
+        <aside
+          className={`${
+            isSideBarOpen ? "translate-x-0 " : ""
+          } bg-gradient-to-br bg-my-green -translate-x-80 fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0`}
+        >
+          <div className="relative border-b border-white/20">
+            <a className="flex items-center gap-4 py-6 px-8" href="#/">
+              <h3 className="block antialiased tracking-normal font-sans text-3xl text-center font-semibold leading-relaxed text-white">
+                CargoNexa
+              </h3>
+            </a>
+            <button
+              className="middle none font-sans font-medium text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none w-8 max-w-[32px] h-8 max-h-[32px] rounded-lg text-xs text-white hover:bg-white/10 active:bg-white/30 absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
+              type="button"
+              onClick={handleCloseSideClick}
+            >
+              <span className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2.5"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  className="h-5 w-5 text-white"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="w-5 h-5 text-inherit"
-                  >
-                    <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
-                    <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
-                  </svg>
-                  <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    dashboard
-                  </p>
-                </button>
-              </a>
-            </li>
-
-            <li>
-              <a className="" href="#">
-              <button
-                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                      selectedTab === 'profile' ? 'bg-white' : ''
-                    }  ${selectedTab !== 'profile'  ? 'bg-my-green' : ''}`}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+          <div className="m-4">
+            <ul className="mb-4 flex flex-col gap-1">
+              <li>
+                <a aria-current="page" className="active" href="#">
+                  <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50  hover:bg-white disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === "dashboard" ? "bg-white" : ""
+                    }  ${selectedTab !== "dashboard" ? "bg-my-green" : ""}`}
                     type="button"
-                    onClick={() => handleTabClick('profile')}
+                    onClick={() => handleTabClick("dashboard")}
                   >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    className="w-5 h-5 text-inherit"
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      className="w-5 h-5 text-inherit"
+                    >
+                      <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" />
+                      <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
+                    </svg>
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                      dashboard
+                    </p>
+                  </button>
+                </a>
+              </li>
+
+              <li>
+                <a className="" href="#">
+                  <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === "profile" ? "bg-white" : ""
+                    }  ${selectedTab !== "profile" ? "bg-my-green" : ""}`}
+                    type="button"
+                    onClick={() => handleTabClick("profile")}
                   >
-                    <path
-                      fillRule="evenodd"
-                      d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    profile
-                  </p>
-                </button>
-              </a>
-            </li>
-            <li>
-              <a className="" href="#">
-              <button
-                  className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                    selectedTab === 'users' ? 'bg-white' : ''
-                  }  ${selectedTab !== 'users'  ? 'bg-my-green' : ''}`}
-                  type="button"
-                  onClick={() => handleTabClick('users')}
-                >
-                  <svg class="w-5 h-5"
-xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-</svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      aria-hidden="true"
+                      className="w-5 h-5 text-inherit"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                      profile
+                    </p>
+                  </button>
+                </a>
+              </li>
+              <li>
+                <a className="" href="#">
+                  <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === "users" ? "bg-white" : ""
+                    }  ${selectedTab !== "users" ? "bg-my-green" : ""}`}
+                    type="button"
+                    onClick={() => handleTabClick("users")}
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                      />
+                    </svg>
 
-                  <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    Users
-                  </p>
-                </button>
-              </a>
-            </li>
-            <li>
-              <a className="" href="#">
-              <button
-                className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md  active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-                  selectedTab === 'drivers' ? 'bg-white' : ''
-                    }  ${selectedTab !== 'drivers'  ? 'bg-my-green' : ''}`}
-                type="button"
-                onClick={() => handleTabClick('drivers')}
-              >
-                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z"/> <circle cx="7" cy="17" r="2" /> <circle cx="17" cy="17" r="2" /> <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" /></svg>
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                      Users
+                    </p>
+                  </button>
+                </a>
+              </li>
+              <li>
+                <a className="" href="#">
+                  <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md  active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === "drivers" ? "bg-white" : ""
+                    }  ${selectedTab !== "drivers" ? "bg-my-green" : ""}`}
+                    type="button"
+                    onClick={() => handleTabClick("drivers")}
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke-width="2"
+                      stroke="currentColor"
+                      fill="none"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      {" "}
+                      <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                      <circle cx="7" cy="17" r="2" />{" "}
+                      <circle cx="17" cy="17" r="2" />{" "}
+                      <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
+                    </svg>
 
-                  <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                    Drivers
-                  </p>
-                </button>
-              </a>
-            </li>
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                      Drivers
+                    </p>
+                  </button>
+                </a>
+              </li>
 
-          
+              <li>
+                <a className="" href="#">
+                  <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === "services" ? "bg-white" : ""
+                    }  ${selectedTab !== "services" ? "bg-my-green" : ""}`}
+                    type="button"
+                    onClick={() => handleTabClick("services")}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z" />
+                      <path
+                        fill-rule="evenodd"
+                        d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                      Services
+                    </p>
+                  </button>
+                </a>
+              </li>
 
-<li>
-  <a className="" href="#">
-    <button
-      className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-        selectedTab === 'services' ? 'bg-white' : ''
-      }  ${selectedTab !== 'services' ? 'bg-my-green' : ''}`}
-      type="button"
-      onClick={() => handleTabClick('services')}
-    >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
-      <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z" />
-      <path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.62 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
-    </svg>
-          <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-        Services
-      </p>
-    </button>
-  </a>
-</li>
-
-<li>
-  <a className="" href="#">
-    <button
-      className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-        selectedTab === 'solutions' ? 'bg-white' : ''
-      }  ${selectedTab !== 'solutions' ? 'bg-my-green' : ''}`}
-      type="button"
-      onClick={() => handleTabClick('solutions')}
-    >
-     <svg
+              <li>
+                <a className="" href="#">
+                  <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === "solutions" ? "bg-white" : ""
+                    }  ${selectedTab !== "solutions" ? "bg-my-green" : ""}`}
+                    type="button"
+                    onClick={() => handleTabClick("solutions")}
+                  >
+                    <svg
                       version="1.1"
                       viewBox="0 0 1600 1600"
                       xmlns="http://www.w3.org/2000/svg"
@@ -712,44 +764,52 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                         fill="#000100"
                       />
                     </svg>
-      <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-        Solutions
-      </p>
-    </button>
-  </a>
-</li>
-<li>
-  <a className="" href="#">
-    <button
-      className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
-        selectedTab === 'faq' ? 'bg-white' : ''
-      }  ${selectedTab !== 'faq' ? 'bg-my-green' : ''}`}
-      type="button"
-      onClick={() => handleTabClick('faq')}
-    >
-                <svg class="w-5 h-5"
-                xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                      Solutions
+                    </p>
+                  </button>
+                </a>
+              </li>
+              <li>
+                <a className="" href="#">
+                  <button
+                    className={`middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg bg-gradient-to-tr hover:bg-white text-black shadow-md active:opacity-[0.85] w-full flex items-center gap-4 px-4 capitalize ${
+                      selectedTab === "faq" ? "bg-white" : ""
+                    }  ${selectedTab !== "faq" ? "bg-my-green" : ""}`}
+                    type="button"
+                    onClick={() => handleTabClick("faq")}
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
 
-      <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-       FAQ
-      </p>
-    </button>
-  </a>
-</li>
-
-
-
-          </ul>
-          <ul className="mb-4 flex flex-col gap-1">
-            <li className="mx-3.5 mt-4 mb-2">
-              <p className="block antialiased font-sans text-sm leading-normal text-white font-black uppercase opacity-75">
-                {/* auth pages */}
-              </p>
-            </li>
-            <li>
-             
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                      FAQ
+                    </p>
+                  </button>
+                </a>
+              </li>
+            </ul>
+            <ul className="mb-4 flex flex-col gap-1">
+              <li className="mx-3.5 mt-4 mb-2">
+                <p className="block antialiased font-sans text-sm leading-normal text-white font-black uppercase opacity-75">
+                  {/* auth pages */}
+                </p>
+              </li>
+              <li>
                 <button
                   className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-black hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
                   type="button"
@@ -767,1089 +827,1508 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24" fill="none" viewBox="
                       clipRule="evenodd"
                     />
                   </svg>
-                  <p onClick={handleSignOut}  className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
+                  <p
+                    onClick={handleSignOut}
+                    className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize"
+                  >
                     sign out
                   </p>
                 </button>
-            
-            </li>
-            <li>
-              <a className="" href="#">
-                <button
-                  className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-black hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
-                  type="button"
-                >
-                 
-                  <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                  </p>
-                </button>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </aside>
-     
-      <div className="p-4 xl:ml-80">
-        <nav className="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
-          <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
-            <div className="capitalize">
-              <nav aria-label="breadcrumb" className="w-max">
-                <ol className="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
-                  <li className="flex items-center text-black antialiased font-sans text-lg font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
-                   
+              </li>
+              <li>
+                <a className="" href="#">
+                  <button
+                    className="middle none font-sans font-bold center transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 rounded-lg text-black hover:bg-white/10 active:bg-white/30 w-full flex items-center gap-4 px-4 capitalize"
+                    type="button"
+                  >
+                    <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize"></p>
+                  </button>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </aside>
+
+        <div className="p-4 xl:ml-80">
+          <nav className="block w-full max-w-full bg-transparent text-white shadow-none rounded-xl transition-all px-0 py-1">
+            <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
+              <div className="capitalize">
+                <nav aria-label="breadcrumb" className="w-max">
+                  <ol className="flex flex-wrap items-center w-full bg-opacity-60 rounded-md bg-transparent p-0 transition-all">
+                    <li className="flex items-center text-black antialiased font-sans text-lg font-normal leading-normal cursor-pointer transition-colors duration-300 hover:text-light-blue-500">
                       <p className="block antialiased font-sans text-2xl leading-normal text-black font-bold  transition-all hover:text-blue-500 hover:opacity-100">
-                      <button
-                  type="button"
-                  onClick={() => {
-                    if (isSideBarOpen) {
-                      handleCloseSideClick();
-                    } else {
-                      handleOpenSideClick();
-                    }
-                  }}
-          
-                >dashboard</button>
-                        
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (isSideBarOpen) {
+                              handleCloseSideClick();
+                            } else {
+                              handleOpenSideClick();
+                            }
+                          }}
+                        >
+                          dashboard
+                        </button>
                       </p>
-                  </li>
-
-
-
-                </ol>
-                
-              </nav>
-             
-            </div>
-            <div className="flex items-center">
-              <div className="mr-auto md:mr-4 md:w-56">
-                <div className="relative w-full min-w-[200px] h-10">
-                 
+                    </li>
+                  </ol>
+                </nav>
+              </div>
+              <div className="flex items-center">
+                <div className="mr-auto md:mr-4 md:w-56">
+                  <div className="relative w-full min-w-[200px] h-10"></div>
                 </div>
               </div>
-      
             </div>
-          </div>
-        </nav>
-        <div className="mt-12">
-          <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
-            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="w-6 h-6 text-black"
-                >
-                  <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
-                  <path
-                    fillRule="evenodd"
-                    d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
-                    clipRule="evenodd"
-                  />
-                  <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
-                </svg>
-              </div>
-              <div className="p-4 text-right">
-                <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                  Today's Money
-                </p>
-                <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                  $53k
-                </h4>
-              </div>
-            
-            </div>
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
-              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="w-6 h-6 text-black"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="p-4 text-right">
-                <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                  Today's Users
-                </p>
-                <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                  2,300
-                </h4>
-              </div>
-             
-            </div>
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
-              <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
-
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="w-6 h-6 text-black"
-                >
-                  <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
-                </svg>
-              </div>
-              <div className="p-4 text-right">
-                <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                Today's Drivers
-                </p>
-                <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                    20
-                </h4>
-              </div>
-           
-            </div>
-            <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
-            <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="w-6 h-6 text-black"
-                >
-                  <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z" />
-                </svg>
-              </div>
-              <div className="p-4 text-right">
-                <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                  Orders
-                </p>
-                <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                  $103,430
-                </h4>
-              </div>
-             
-            </div>
-          </div>
-          <div className="mb-4 grid grid-cols-1 gap-6 ">
-          
-            <div className="bg-white p-8 rounded-md w-full">
-    <div className=" flex  items-center justify-between pb-6">
-    </div>
-    <div>
-     
-
-      {/* Conditional rendering based on selected tab */}
-
-      {/* DASHBOARD DATA */} 
-      {selectedTab === 'dashboard' && (
-        <div>
-          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-          <div className='font-bold text-xl md:mb-10'> Order </div>
-
-          <button onClick={openAddOrderPopup} className='bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3'>Add Order</button>
-
-{/* Add Order Popup */}
-{showAddOrderPopup && (
-  <AddOrderForm onSubmit={handleAddOrderSubmit} onCancel={closeAddOrderPopup} />
-)}
-
-        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-          <table className="min-w-full leading-normal">
-            <thead>
-              <tr>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Order Name
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                shipping Location
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                receiving Location
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                shipping Date
-                </th>
-                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Status
-                </th>
-               
-              </tr>
-            </thead>
-            <tbody>
-            {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(order => (
-              <tr key={order.id}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <div className="flex items-center">
-                  <Link to={`/OrderDetails/${order.id}`}>
-                    <div className="ml-3">
-                      <p className="text-gray-900 whitespace-no-wrap">
-                       {order.order_title}
-                      </p>
-                    </div>
-                     </Link> 
-                  </div>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">  {order. shipping_location}</p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">
-                
-                  {order.receiving_location}
+          </nav>
+          <div className="mt-12">
+            <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
+              <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+                <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="w-6 h-6 text-black"
+                  >
+                    <path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z" />
+                    <path
+                      fillRule="evenodd"
+                      d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z"
+                      clipRule="evenodd"
+                    />
+                    <path d="M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z" />
+                  </svg>
+                </div>
+                <div className="p-4 text-right">
+                  <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                    Today's Money
                   </p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">{order.shipping_date}</p>
-                </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
-                ${order.status === 'Pending' ? 'bg-gray-500' : ''}
-                ${order.status === 'accepted' ? 'bg-yellow-500' : ''}
-                ${order.status === 'on the way' ? 'bg-orange-500' : ''}
-                ${order.status === 'delivered' ? 'bg-green-500' : ''}
+                  <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                    $53k
+                  </h4>
+                </div>
+              </div>
+              <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+                <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="w-6 h-6 text-black"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div className="p-4 text-right">
+                  <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                    Today's Users
+                  </p>
+                  <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                    2,300
+                  </h4>
+                </div>
+              </div>
+              <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+                <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="w-6 h-6 text-black"
+                  >
+                    <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
+                  </svg>
+                </div>
+                <div className="p-4 text-right">
+                  <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                    Today's Drivers
+                  </p>
+                  <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                    20
+                  </h4>
+                </div>
+              </div>
+              <div className="relative flex flex-col bg-clip-border h-24 rounded-xl bg-white text-gray-700 shadow-md">
+                <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-[#219C90] to-[#54beb3] text-white  shadow-md absolute -mt-4 grid h-12 w-32 place-items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="w-6 h-6 text-black"
+                  >
+                    <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z" />
+                  </svg>
+                </div>
+                <div className="p-4 text-right">
+                  <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                    Orders
+                  </p>
+                  <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                    $103,430
+                  </h4>
+                </div>
+              </div>
+            </div>
+            <div className="mb-4 grid grid-cols-1 gap-6 ">
+              <div className="bg-white p-8 rounded-md w-full">
+                <div className=" flex  items-center justify-between pb-6"></div>
+                <div>
+
+                  {/* search */}
+                  <form>
+                    <label
+                      for="default-search"
+                      class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+                    >
+                      Search
+                    </label>
+                    <div class="relative">
+                      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg
+                          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            stroke="currentColor"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        type="search"
+                        id="default-search"
+                        class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Search Mockups, Logos..."
+                        onChange={(e)=>setSearchQuery(e.target.value)}
+                        required
+                      />
+                      <button
+                        type="submit"
+                        onClick={(e)=>handleSearch(e)}
+                        class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      >
+                        Search
+                      </button>
+                    </div>
+                  </form>
+
+                  {/* Conditional rendering based on selected tab */}
+
+                  {/* DASHBOARD DATA */}
+                  {selectedTab === "dashboard" && (
+                    <div>
+                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="font-bold text-xl md:mb-10">
+                          {" "}
+                          Order{" "}
+                        </div>
+
+                        <button
+                          onClick={openAddOrderPopup}
+                          className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
+                        >
+                          Add Order
+                        </button>
+
+                        {/* Add Order Popup */}
+                        {showAddOrderPopup && (
+                          <AddOrderForm
+                            onSubmit={handleAddOrderSubmit}
+                            onCancel={closeAddOrderPopup}
+                          />
+                        )}
+
+                        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                          <table className="min-w-full leading-normal">
+                            <thead>
+                              <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Order Name
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  shipping Location
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  receiving Location
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  shipping Date
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Status
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )
+                                .map((order) => (
+                                  <tr key={order.order_id}>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                      <div className="flex items-center">
+                                        <Link to={`/OrderDetails/${order.id}`}>
+                                          <div className="ml-3">
+                                            <p className="text-gray-900 whitespace-no-wrap">
+                                              {order.order_title}
+                                            </p>
+                                          </div>
+                                        </Link>
+                                      </div>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                      <p className="text-gray-900 whitespace-no-wrap">
+                                        {" "}
+                                        {order.shipping_location}
+                                      </p>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                      <p className="text-gray-900 whitespace-no-wrap">
+                                        {order.receiving_location}
+                                      </p>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                      <p className="text-gray-900 whitespace-no-wrap">
+                                        {order.shipping_date}
+                                      </p>
+                                    </td>
+                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                      <span
+                                        className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
+                ${order.status === "Pending" ? "bg-gray-500" : ""}
+                ${order.status === "accepted" ? "bg-yellow-500" : ""}
+                ${order.status === "on the way" ? "bg-orange-500" : ""}
+                ${order.status === "delivered" ? "bg-green-500" : ""}
               rounded-full
-              `}>
-              
-                <span className="relative">{order.status}</span>
-              </span>
-            </td>
-          
-              </tr>
-               ))}
-        
-            </tbody>
-          </table>
-           </div>
-          <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
-            <div className="inline-flex mt-2 xs:mt-0">
-              <button  onClick={handlePrevClick}
-            disabled={currentPage === 1}
-            className={`text-sm text-white transition duration-150 ${
-              currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-            } font-semibold py-2 px-4 rounded-l`}>
-                Prev
-              </button>
-              &nbsp; &nbsp;
-              <button
-            onClick={handleNextClick}
-            disabled={orders.length < itemsPerPage}
-            className={`text-sm text-white transition duration-150 ${
-              orders.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-            } font-semibold py-2 px-4 rounded-r`}
-          >
-                Next
-              </button>
+              `}
+                                      >
+                                        <span className="relative">
+                                          {order.status}
+                                        </span>
+                                      </span>
+                                    </td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+                          <div className="inline-flex mt-2 xs:mt-0">
+                            <button
+                              onClick={handlePrevClick}
+                              disabled={currentPage === 1}
+                              className={`text-sm text-white transition duration-150 ${
+                                currentPage === 1
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-l`}
+                            >
+                              Prev
+                            </button>
+                            <span className="mr-4 font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+                            {/* &nbsp; &nbsp; */}
+                            <button
+                              onClick={handleNextClick}
+                              disabled={data.length < itemsPerPage}
+                              className={`text-sm text-white transition duration-150 ${
+                                data.length < itemsPerPage
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-r`}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* PROFILE DATA */}
+                  {selectedTab === "profile" && (
+                    <div>
+                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="font-bold text-xl md:mb-10">
+                          {" "}
+                          Admin{" "}
+                        </div>
+
+                        <button
+                          onClick={openAddAdminPopup}
+                          className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
+                        >
+                          Add Admin
+                        </button>
+
+                        {/* Add Order Popup */}
+                        {showAddAdminPopup && (
+                          <AddAdminForm
+                            onSubmit={handleAddAdminSubmit}
+                            onCancel={closeAddAdminPopup}
+                          />
+                        )}
+
+                        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                          <table className="min-w-full leading-normal">
+                            <thead>
+                              <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Name
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Phone Number
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Email
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Password
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data.sort((a, b) => a.admin_id - b.admin_id)
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )
+                                .map(
+                                  (userData) =>
+                                    userData.isDeleted !== "true" && (
+                                      <tr key={userData.admin_id}>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex items-center">
+                                            <Link
+                                              to={`/OrderDetails/${userData.user_username}`}
+                                            >
+                                              <div className="ml-3">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                  {userData.admin_username}
+                                                </p>
+                                              </div>
+                                            </Link>
+                                          </div>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {" "}
+                                            {userData.admin_phone_number}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {userData.admin_email}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {userData.admin_password}
+                                          </p>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex space-x-2">
+                                            <button
+                                              onClick={() =>
+                                                handleEditAdminClick(
+                                                  userData.admin_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-teal-600 w-5 h-5 "
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="currentColor"
+                                                fill="none"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                {" "}
+                                                <path
+                                                  stroke="none"
+                                                  d="M0 0h24v24H0z"
+                                                />{" "}
+                                                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />{" "}
+                                                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />{" "}
+                                                <line
+                                                  x1="16"
+                                                  y1="5"
+                                                  x2="19"
+                                                  y2="8"
+                                                />
+                                              </svg>
+                                              {/* ... SVG path for edit */}
+                                            </button>
+
+                                            <button
+                                              onClick={() =>
+                                                handleSoftDeleteAdmin(
+                                                  userData.admin_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-orange-600 w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                />
+                                              </svg>
+                                            </button>
+
+                                            {/* ... SVG path for delete */}
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    )
+                                )}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+                          <div className="inline-flex mt-2 xs:mt-0">
+                            <button
+                              onClick={handlePrevClick}
+                              disabled={currentPage === 1}
+                              className={`text-sm text-white transition duration-150 ${
+                                currentPage === 1
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-l`}
+                            >
+                              Prev
+                            </button>
+                            <span className="mr-4 font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+                            {/* &nbsp; &nbsp; */}
+                            <button
+                              onClick={handleNextClick}
+                              disabled={data.length < itemsPerPage}
+                              className={`text-sm text-white transition duration-150 ${
+                                data.length < itemsPerPage
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-r`}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {isEditAdminPopupOpen && (
+                    <EditPopupAdminData
+                      admin={editAdmin}
+                      isOpen={isEditAdminPopupOpen}
+                      onClose={() => setIsEditAdminPopupOpen(false)}
+                      onSubmit={handleEditAdminSubmit}
+                    />
+                  )}
+                  {/* USER DATA */}
+                  {selectedTab === "users" && (
+                    <div>
+                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="font-bold text-xl md:mb-10">
+                          {" "}
+                          Users{" "}
+                        </div>
+                        <button
+                          onClick={openAddUserPopup}
+                          className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
+                        >
+                          Add User
+                        </button>
+
+                        {/* Add Order Popup */}
+                        {showAddUserPopup && (
+                          <AddUserForm
+                            onSubmit={handleAddUserSubmit}
+                            onCancel={closeAddUserPopup}
+                          />
+                        )}
+                        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                          <table className="min-w-full leading-normal">
+                            <thead>
+                              <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Name
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Phone Number
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Email
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  User Password
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )
+                                .map(
+                                  (userData) =>
+                                    userData.isDeleted !== "true" && (
+                                      <tr key={userData.user_id}>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex items-center">
+                                            <Link
+                                              to={`/OrderDetails/${userData.user_username}`}
+                                            >
+                                              <div className="ml-3">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                  {userData.user_username}
+                                                </p>
+                                              </div>
+                                            </Link>
+                                          </div>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {" "}
+                                            {userData.user_phone_number}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {userData.user_email}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {userData.user_password}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex space-x-2">
+                                            <button
+                                              onClick={() =>
+                                                handleSoftDeleteUser(
+                                                  userData.user_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-orange-600 w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                />
+                                              </svg>
+                                            </button>
+
+                                            {/* ... SVG path for delete */}
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    )
+                                )}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+                          <div className="inline-flex mt-2 xs:mt-0">
+                            <button
+                              onClick={handlePrevClick}
+                              disabled={currentPage === 1}
+                              className={`text-sm text-white transition duration-150 ${
+                                currentPage === 1
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-l`}
+                            >
+                              Prev
+                            </button>
+                            <span className="mr-4 font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+                            {/* &nbsp; &nbsp; */}
+                            <button
+                              onClick={handleNextClick}
+                              disabled={data.length < itemsPerPage}
+                              className={`text-sm text-white transition duration-150 ${
+                                data.length < itemsPerPage
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-r`}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {/* DRIVER DATA */}
+                  {selectedTab === "drivers"  && (
+                    <div>
+                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="font-bold text-xl md:mb-10">
+                          {" "}
+                          Drivers{" "}
+                        </div>
+                        <button
+                          onClick={openAddDriverPopup}
+                          className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
+                        >
+                          Add Driver
+                        </button>
+
+                        {/* Add Order Popup */}
+                        {showAddDriverPopup && (
+                          <AddDriverForm
+                            onSubmit={handleAddDriverSubmit}
+                            onCancel={closeAddDriverPopup}
+                          />
+                        )}
+
+                        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                          <table className="min-w-full leading-normal">
+                            <thead>
+                              <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  driver_username
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  driver_email
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  driver_license
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  truck_size
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  plate_number
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  production_year
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  truck_type
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  driver_password
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  status
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data.sort((a, b) => a.driver_id - b.driver_id)
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )  
+                                .map(
+                                  (driverData,id) =>
+                                    driverData.isDeleted !== "true" && (
+                                      <tr key={id}>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex items-center">
+                                            <Link
+                                              to={`/OrderDetails/${driverData.driver_username}`}
+                                            >
+                                              <div className="ml-3">
+                                                <p className="text-gray-900 whitespace-no-wrap">
+                                                  {driverData.driver_username}
+                                                </p>
+                                              </div>
+                                            </Link>
+                                          </div>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {" "}
+                                            {driverData.driver_email}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.driver_license}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.truck_size}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.plate_number}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.production_year}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.truck_type}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.driver_password}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.status}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {driverData.driver_id}
+                                          </p>
+                                        </td>
+                                       
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex space-x-2">
+                                            <button
+                                              onClick={() =>
+                                                handleDriverEditClick(
+                                                  driverData.driver_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-teal-600 w-5 h-5 "
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="currentColor"
+                                                fill="none"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                {" "}
+                                                <path
+                                                  stroke="none"
+                                                  d="M0 0h24v24H0z"
+                                                />{" "}
+                                                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />{" "}
+                                                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />{" "}
+                                                <line
+                                                  x1="16"
+                                                  y1="5"
+                                                  x2="19"
+                                                  y2="8"
+                                                />
+                                              </svg>
+                                              {/* ... SVG path for edit */}
+                                            </button>
+
+                                            <button
+                                              onClick={() =>
+                                                handleSoftDeleteDriver(
+                                                  driverData.driver_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-orange-600 w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                />
+                                              </svg>
+                                            </button>
+
+                                            {/* ... SVG path for delete */}
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    )
+                                )}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+                          <div className="inline-flex mt-2 xs:mt-0">
+                            <button
+                              onClick={handlePrevClick}
+                              disabled={currentPage === 1}
+                              className={`text-sm text-white transition duration-150 ${
+                                currentPage === 1
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-l`}
+                            >
+                              Prev
+                            </button>
+                            <span className="mr-4 font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+                            {/* &nbsp; &nbsp; */}
+                            <button
+                              onClick={handleNextClick}
+                              disabled={data.length < itemsPerPage}
+                              className={`text-sm text-white transition duration-150 ${
+                                data.length < itemsPerPage
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-r`}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                              
+                      </div>
+                    </div>
+                  )}
+                  {isEditDriverPopupOpen && (
+                    <EditPopupDriverData
+                      driver={editDriver}
+                      isOpen={isEditDriverPopupOpen}
+                      onClose={() => setIsEditDriverPopupOpen(false)}
+                      onSubmit={handleDriverEditSubmit}
+                    />
+                  )}
+                  {/* SERVICES DATA */}
+                  {selectedTab === "services" && (
+                    <div>
+                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="font-bold text-xl md:mb-10">
+                          {" "}
+                          Services{" "}
+                        </div>
+                        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                          <button
+                            onClick={openAddServicesPopup}
+                            className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
+                          >
+                            Add Services
+                          </button>
+
+                          {/* Add Order Popup */}
+                          {showAddServicesPopup && (
+                            <AddServicesForm
+                              onSubmit={handleAddServicesSubmit}
+                              onCancel={closeAddServicesPopup}
+                            />
+                          )}
+                          <table className="min-w-full leading-normal">
+                            <thead>
+                              <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Title
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Description
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Image
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Actions
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data.sort((a, b) => a.services_id - b.services_id)
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )
+                                .map(
+                                  (userData) =>
+                                    userData.isDeleted !== "true" && (
+                                      <tr key={userData.services_id}>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex items-center">
+                                            <div className="ml-3">
+                                              <p className="text-gray-900 whitespace-no-wrap">
+                                                {userData.services_title}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {" "}
+                                            {userData.services_description}
+                                          </p>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {userData.services_image}
+                                          </p>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex space-x-2">
+                                            <button
+                                              onClick={() =>
+                                                handleServicesEditClick(
+                                                  userData.services_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-teal-600 w-5 h-5 "
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="currentColor"
+                                                fill="none"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                {" "}
+                                                <path
+                                                  stroke="none"
+                                                  d="M0 0h24v24H0z"
+                                                />{" "}
+                                                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />{" "}
+                                                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />{" "}
+                                                <line
+                                                  x1="16"
+                                                  y1="5"
+                                                  x2="19"
+                                                  y2="8"
+                                                />
+                                              </svg>
+                                              {/* ... SVG path for edit */}
+                                            </button>
+
+                                            <button
+                                              onClick={() =>
+                                                handleSoftDeleteServices(
+                                                  userData.services_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-orange-600 w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                />
+                                              </svg>
+                                            </button>
+
+                                            {/* ... SVG path for delete */}
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    )
+                                )}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+                          <div className="inline-flex mt-2 xs:mt-0">
+                            <button
+                              onClick={handlePrevClick}
+                              disabled={currentPage === 1}
+                              className={`text-sm text-white transition duration-150 ${
+                                currentPage === 1
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-l`}
+                            >
+                              Prev
+                            </button>
+                            <span className="mr-4 font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+                            {/* &nbsp; &nbsp; */}
+                            <button
+                              onClick={handleNextClick}
+                              disabled={data.length < itemsPerPage}
+                              className={`text-sm text-white transition duration-150 ${
+                                data.length < itemsPerPage
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-r`}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {isEditServicesPopupOpen && (
+                    <EditPopupServicesData
+                      services={editServices}
+                      isOpen={isEditServicesPopupOpen}
+                      onClose={() => setIsEditServicesPopupOpen(false)}
+                      onSubmit={handleServicesEditSubmit}
+                    />
+                  )}
+                  {/* SOLUTIONS DATA */}
+                  {selectedTab === "solutions" && (
+                    <div>
+                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="font-bold text-xl md:mb-10">
+                          {" "}
+                          Solutions{" "}
+                        </div>
+                        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                          <button
+                            onClick={openAddSolutionsPopup}
+                            className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
+                          >
+                            Add Solutions
+                          </button>
+
+                          {/* Add Order Popup */}
+                          {showAddSolutionsPopup && (
+                            <AddSolutionsForm
+                              onSubmit={handleAddSolutionsSubmit}
+                              onCancel={closeAddSolutionsPopup}
+                            />
+                          )}
+                          <table className="min-w-full leading-normal">
+                            <thead>
+                              <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Title
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Description
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Image
+                                </th>
+
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data.sort((a, b) => a.solution_id - b.solution_id)
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )
+                                .map(
+                                  (userData) =>
+                                    userData.isDeleted !== "true" && (
+                                      <tr key={userData.solution_id}>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex items-center">
+                                            <div className="ml-3">
+                                              <p className="text-gray-900 whitespace-no-wrap">
+                                                {userData.solution_title}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {" "}
+                                            {userData.solution_description}
+                                          </p>
+                                        </td>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {userData.solution_image}
+                                          </p>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex space-x-2">
+                                            <button
+                                              onClick={() =>
+                                                handleSolutionsEditClick(
+                                                  userData.solution_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-teal-600 w-5 h-5 "
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="currentColor"
+                                                fill="none"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                {" "}
+                                                <path
+                                                  stroke="none"
+                                                  d="M0 0h24v24H0z"
+                                                />{" "}
+                                                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />{" "}
+                                                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />{" "}
+                                                <line
+                                                  x1="16"
+                                                  y1="5"
+                                                  x2="19"
+                                                  y2="8"
+                                                />
+                                              </svg>
+                                              {/* ... SVG path for edit */}
+                                            </button>
+
+                                            <button
+                                              onClick={() =>
+                                                handleSoftDeleteSolutions(
+                                                  userData.solution_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                class="text-orange-600 w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                />
+                                              </svg>
+                                            </button>
+
+                                            {/* ... SVG path for delete */}
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    )
+                                )}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+                          <div className="inline-flex mt-2 xs:mt-0">
+                            <button
+                              onClick={handlePrevClick}
+                              disabled={currentPage === 1}
+                              className={`text-sm text-white transition duration-150 ${
+                                currentPage === 1
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-l`}
+                            >
+                              Prev
+                            </button>
+                            <span className="mr-4 font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+                            {/* &nbsp; &nbsp; */}
+                            <button
+                              onClick={handleNextClick}
+                              disabled={data.length < itemsPerPage}
+                              className={`text-sm text-white transition duration-150 ${
+                                data.length < itemsPerPage
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-r`}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {isEditSolutionsPopupOpen && (
+                    <EditPopupSolutionsData
+                      solutions={editSolutions}
+                      isOpen={isEditSolutionsPopupOpen}
+                      onClose={() => setIsEditSolutionsPopupOpen(false)}
+                      onSubmit={handleSolutionsEditSubmit}
+                    />
+                  )}
+                  {/* FAQ DATA */}
+                  {selectedTab === "faq" && (
+                    <div>
+                      <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                        <div className="font-bold text-xl md:mb-10"> FAQ </div>
+                        <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                          <button
+                            onClick={openAddFaqPopup}
+                            className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
+                          >
+                            Add FAQ
+                          </button>
+
+                          {/* Add Order Popup */}
+                          {showAddFaqPopup && (
+                            <AddFaqForm
+                              onSubmit={handleAddFaqSubmit}
+                              onCancel={closeAddFaqPopup}
+                            />
+                          )}
+                          <table className="min-w-full leading-normal">
+                            <thead>
+                              <tr>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Question
+                                </th>
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Answer
+                                </th>
+
+                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  Action
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {data.sort((a, b) => a.faq_id - b.faq_id)
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )
+                                .map(
+                                  (userData) =>
+                                    userData.isDeleted !== "true" && (
+                                      <tr key={userData.faq_id}>
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex items-center">
+                                            <div className="ml-3">
+                                              <p className="text-gray-900 whitespace-no-wrap">
+                                                {userData.question}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <p className="text-gray-900 whitespace-no-wrap">
+                                            {userData.answer}
+                                          </p>
+                                        </td>
+
+                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                          <div className="flex space-x-2">
+                                            <button
+                                              onClick={() =>
+                                                handleFaqEditClick(userData.faq_id)
+                                              }
+                                            >
+                                              <svg
+                                                class="text-teal-600 w-5 h-5 "
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                stroke-width="2"
+                                                stroke="currentColor"
+                                                fill="none"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                              >
+                                                {" "}
+                                                <path
+                                                  stroke="none"
+                                                  d="M0 0h24v24H0z"
+                                                />{" "}
+                                                <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />{" "}
+                                                <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />{" "}
+                                                <line
+                                                  x1="16"
+                                                  y1="5"
+                                                  x2="19"
+                                                  y2="8"
+                                                />
+                                              </svg>
+                                              {/* ... SVG path for edit */}
+                                            </button>
+
+                                            <button
+                                              onClick={() =>
+                                                handleSoftDeleteFaq(userData.faq_id)
+                                              }
+                                            >
+                                              <svg
+                                                class="text-orange-600 w-5 h-5"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="24"
+                                                height="24"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                              >
+                                                <path
+                                                  stroke-linecap="round"
+                                                  stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                                />
+                                              </svg>
+                                            </button>
+
+                                            {/* ... SVG path for delete */}
+                                          </div>
+                                        </td>
+                                      </tr>
+                                    )
+                                )}
+                            </tbody>
+                          </table>
+                        </div>
+                        <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
+                          <div className="inline-flex mt-2 xs:mt-0">
+                            <button
+                              onClick={handlePrevClick}
+                              disabled={currentPage === 1}
+                              className={`text-sm text-white transition duration-150 ${
+                                currentPage === 1
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-l`}
+                            >
+                              Prev
+                            </button>
+                            <span className="mr-4 font-semibold">
+          Page {currentPage} of {totalPages}
+        </span>
+                            {/* &nbsp; &nbsp; */}
+                            <button
+                              onClick={handleNextClick}
+                              disabled={data.length < itemsPerPage}
+                              className={`text-sm text-white transition duration-150 ${
+                                data.length < itemsPerPage
+                                  ? "bg-gray-300"
+                                  : "hover:bg-[#51aaa1] bg-my-green"
+                              } font-semibold py-2 px-4 rounded-r`}
+                            >
+                              Next
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {isEditFaqPopupOpen && (
+                    <EditPopupFaqData
+                      faq={editFaq}
+                      isOpen={isEditFaqPopupOpen}
+                      onClose={() => setIsEditFaqPopupOpen(false)}
+                      onSubmit={handleFaqEditSubmit}
+                    />
+                  )}
+
+                  {selectedTab === "signout" && (
+                    <div>Render sign-out logic</div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
-       
+          <div className="text-blue-gray-600">
+            <footer className="py-2">
+              <div className="flex w-full flex-wrap items-center justify-center gap-6 px-2 md:justify-between">
+                <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">
+                  © 2023, made with{" "}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="-mt-0.5 inline-block h-3.5 w-3.5"
+                  >
+                    <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                  </svg>{" "}
+                  by Malath Yasin & Osama Taani{" "}
+                </p>
+              </div>
+            </footer>
+          </div>
+        </div>
       </div>
-       
-        </div>
-      )}
-    
-{/* PROFILE DATA */} 
-      {selectedTab === 'profile' && (
-           <div>
-           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-           <div className='font-bold text-xl md:mb-10'> Admin </div>
+    </>
+  );
+};
 
-           <button onClick={openAddAdminPopup} className='bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3'>Add Admin</button>
-
-{/* Add Order Popup */}
-{showAddAdminPopup && (
-  <AddAdminForm onSubmit={handleAddAdminSubmit} onCancel={closeAddAdminPopup} />
-)}
-
-         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-           <table className="min-w-full leading-normal">
-             <thead>
-               <tr>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                   User Name
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 User Phone Number
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 User Email
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 User Password
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Action
-                </th>
-               </tr>
-             </thead>
-             <tbody>
-             {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
-              userData.isDeleted !== 'true' && (
-               <tr key={userData.admin_id}>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <div className="flex items-center">
-                   <Link to={`/OrderDetails/${userData.user_username}`}>
-  
-                     <div className="ml-3">
-                       <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.admin_username}
-                       </p>
-                     </div>
-                      </Link> 
-                   </div>
-                 </td>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">  {userData.admin_phone_number}</p>
-                 </td>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">
-                 
-                   {userData.admin_email}
-                   </p>
-                 </td>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">{userData.admin_password}</p>
-                 </td>
-                
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex space-x-2">
-        
-       <button onClick={() => handleEditAdminClick(userData.admin_id)}>
-          <svg class="text-teal-600 w-5 h-5 "
-        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-            {/* ... SVG path for edit */}
-            </button>
-
-            <button onClick={() => handleSoftDeleteAdmin(userData.id)} >
-          <svg class="text-orange-600 w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-          </button>
-
-            {/* ... SVG path for delete */}
-         
-        </div>
-      </td>
-               </tr>
-              )  ))}
-         
-             </tbody>
-           </table>
-            </div>
-           <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
-             <div className="inline-flex mt-2 xs:mt-0">
-               <button  onClick={handlePrevClick}
-             disabled={currentPage === 1}
-             className={`text-sm text-white transition duration-150 ${
-               currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-l`}>
-                 Prev
-               </button>
-               &nbsp; &nbsp;
-               <button
-             onClick={handleNextClick}
-             disabled={data.length < itemsPerPage}
-             className={`text-sm text-white transition duration-150 ${
-               data.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-r`}
-           >
-                 Next
-               </button>
-             </div>
-           </div>
-        
-       </div>
-        
-         </div>
-            )}
-            {isEditAdminPopupOpen && (
-  <EditPopupAdminData
-    admin={editAdmin}
-    isOpen={isEditAdminPopupOpen}
-    onClose={() => setIsEditAdminPopupOpen(false)}
-    onSubmit={handleEditAdminSubmit}
-  />
-)}
-      {/* USER DATA */}
-      {selectedTab === 'users' && (
-         <div>
-         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-         <div className='font-bold text-xl md:mb-10'> Users </div>
-         <button onClick={openAddUserPopup} className='bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3'>Add User</button>
-
-{/* Add Order Popup */}
-{showAddUserPopup && (
-  <AddUserForm onSubmit={handleAddUserSubmit} onCancel={closeAddUserPopup} />
-)}
-       <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-         <table className="min-w-full leading-normal">
-           <thead>
-             <tr>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 User Name
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               User Phone Number
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               User Email
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               User Password
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Action
-                </th>
-             </tr>
-           </thead>
-           <tbody>
-           {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
-            userData.isDeleted !== 'true' && (
-             <tr key={userData.id}>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <div className="flex items-center">
-                 <Link to={`/OrderDetails/${userData.user_username}`}>
-
-                   <div className="ml-3">
-                     <p className="text-gray-900 whitespace-no-wrap">
-                      {userData.user_username}
-                     </p>
-                   </div>
-                    </Link> 
-                 </div>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">  {userData.user_phone_number}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">
-               
-                 {userData.user_email}
-                 </p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{userData.user_password}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex space-x-2">
-        
-      
-            <button onClick={() => handleSoftDeleteUser(userData.id)}>
-          <svg class="text-orange-600 w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-          </button>
-
-            {/* ... SVG path for delete */}
-         
-        </div>
-      </td>
-
-             </tr>
-            )  ))}
-       
-           </tbody>
-         </table>
-          </div>
-         <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
-           <div className="inline-flex mt-2 xs:mt-0">
-             <button  onClick={handlePrevClick}
-           disabled={currentPage === 1}
-           className={`text-sm text-white transition duration-150 ${
-             currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-           } font-semibold py-2 px-4 rounded-l`}>
-               Prev
-             </button>
-             &nbsp; &nbsp;
-             <button
-           onClick={handleNextClick}
-           disabled={data.length < itemsPerPage}
-           className={`text-sm text-white transition duration-150 ${
-             data.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-           } font-semibold py-2 px-4 rounded-r`}
-         >
-               Next
-             </button>
-           </div>
-         </div>
-      
-     </div>
-      
-       </div>
-      )}
-          {/* DRIVER DATA */} 
-      {selectedTab === 'drivers' && (
-         <div>
-         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-         <div className='font-bold text-xl md:mb-10'> Drivers </div>
-         <button onClick={openAddDriverPopup} className='bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3'>Add Driver</button>
-
-{/* Add Order Popup */}
-{showAddDriverPopup && (
-  <AddDriverForm onSubmit={handleAddDriverSubmit} onCancel={closeAddDriverPopup} />
-)}
-
-       <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-         <table className="min-w-full leading-normal">
-           <thead>
-             <tr>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               driver_username
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               driver_email
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               driver_license
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               truck_size
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               plate_number
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               production_year
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               truck_type
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               driver_password
-               </th>
-               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-               status
-               </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Action
-                </th>
-             </tr>
-           </thead>
-           <tbody>
-           {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(driverData => (
-            driverData.isDeleted !== 'true' && (
-             <tr key={driverData.id}>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <div className="flex items-center">
-                 <Link to={`/OrderDetails/${driverData.driver_username}`}>
-                   <div className="ml-3">
-                     <p className="text-gray-900 whitespace-no-wrap">
-                      {driverData.driver_username}
-                     </p>
-                   </div>
-                    </Link> 
-                 </div>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">  {driverData. driver_email}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">
-               
-                 {driverData.driver_license}
-                 </p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{driverData.truck_size}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{driverData.plate_number}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{driverData.production_year}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{driverData.truck_type}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{driverData.driver_password}</p>
-               </td>
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                 <p className="text-gray-900 whitespace-no-wrap">{driverData.status}</p>
-               </td>
-             
-               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex space-x-2">
-        
-       <button onClick={() => handleDriverEditClick(driverData.id)}>
-          <svg class="text-teal-600 w-5 h-5 "
-        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-            {/* ... SVG path for edit */}
-            </button>
-
-            <button  onClick={() => handleSoftDeleteDriver(driverData.id)}>
-          <svg class="text-orange-600 w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-          </button>
-
-            {/* ... SVG path for delete */}
-         
-        </div>
-      </td>
-             </tr>
-              )))}
-       
-           </tbody>
-         </table>
-          </div>
-         <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
-           <div className="inline-flex mt-2 xs:mt-0">
-             <button  onClick={handlePrevClick}
-           disabled={currentPage === 1}
-           className={`text-sm text-white transition duration-150 ${
-             currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-           } font-semibold py-2 px-4 rounded-l`}>
-               Prev
-             </button>
-             &nbsp; &nbsp;
-             <button
-           onClick={handleNextClick}
-           disabled={orders.length < itemsPerPage}
-           className={`text-sm text-white transition duration-150 ${
-             orders.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-           } font-semibold py-2 px-4 rounded-r`}
-         >
-               Next
-             </button>
-           </div>
-         </div>
-      
-     </div>
-      
-       </div>
-      )}
-           {isEditDriverPopupOpen && (
-  <EditPopupDriverData
-    driver={editDriver}
-    isOpen={isEditDriverPopupOpen}
-    onClose={() => setIsEditDriverPopupOpen(false)}
-    onSubmit={handleDriverEditSubmit}
-  />
-)}
-{/* SERVICES DATA */} 
-{selectedTab === 'services' && (
-           <div>
-           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-            <div className='font-bold text-xl md:mb-10'> Services </div>
-         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-         <button onClick={openAddServicesPopup} className='bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3'>Add Services</button>
-
-{/* Add Order Popup */}
-{showAddServicesPopup && (
-  <AddServicesForm onSubmit={handleAddServicesSubmit} onCancel={closeAddServicesPopup} />
-)}
-           <table className="min-w-full leading-normal">
-             <thead>
-               <tr>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                   Title
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Description             
-                    </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Image
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Actions
-                 </th>
-                
-               </tr>
-             </thead>
-             <tbody>
-             {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
-              userData.isDeleted !== 'true' && (
-               <tr key={userData.id}>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <div className="flex items-center">
-                
-                     <div className="ml-3">
-                       <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.services_title}
-                       </p>
-                     </div>
-                    
-                   </div>
-                 </td>
-
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">  {userData.services_description}</p>
-                 </td>
-
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">
-                 
-                   {userData.services_image}
-                   </p>
-                 </td>
-
-                 
-                
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex space-x-2">
-        
-       <button onClick={() => handleServicesEditClick(userData.id)}>
-          <svg class="text-teal-600 w-5 h-5 "
-        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-            {/* ... SVG path for edit */}
-            </button>
-
-            <button onClick={() => handleSoftDeleteServices(userData.id)} >
-          <svg class="text-orange-600 w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-          </button>
-
-            {/* ... SVG path for delete */}
-         
-        </div>
-      </td>
-               </tr>
-              )  ))}
-         
-             </tbody>
-           </table>
-            </div>
-           <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
-             <div className="inline-flex mt-2 xs:mt-0">
-               <button  onClick={handlePrevClick}
-             disabled={currentPage === 1}
-             className={`text-sm text-white transition duration-150 ${
-               currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-l`}>
-                 Prev
-               </button>
-               &nbsp; &nbsp;
-               <button
-             onClick={handleNextClick}
-             disabled={data.length < itemsPerPage}
-             className={`text-sm text-white transition duration-150 ${
-               data.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-r`}
-           >
-                 Next
-               </button>
-             </div>
-           </div>
-        
-       </div>
-        
-         </div>
-            )}
-            
-            {isEditServicesPopupOpen && (
-  <EditPopupServicesData
-    services={editServices}
-    isOpen={isEditServicesPopupOpen}
-    onClose={() => setIsEditServicesPopupOpen(false)}
-    onSubmit={handleServicesEditSubmit}
-  />
-)}
-{/* SOLUTIONS DATA */} 
-{selectedTab === 'solutions' && (
-           <div>
-           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-            <div className='font-bold text-xl md:mb-10'> Solutions </div>
-         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-     
-         <button onClick={openAddSolutionsPopup} className='bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3'>Add Solutions</button>
-
-{/* Add Order Popup */}
-{showAddSolutionsPopup && (
-  <AddSolutionsForm onSubmit={handleAddSolutionsSubmit} onCancel={closeAddSolutionsPopup} />
-)}
-           <table className="min-w-full leading-normal">
-             <thead>
-               <tr>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Title
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                 Description
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                Image 
-                 </th>
-                
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Action
-                </th>
-               </tr>
-             </thead>
-             <tbody>
-             {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
-              userData.isDeleted !== 'true' && (
-               <tr key={userData.id}>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <div className="flex items-center">
-                     <div className="ml-3">
-                       <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.solutions_title}
-                       </p>
-                     </div>
-                  
-                   </div>
-                 </td>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">  {userData.solutions_description}</p>
-                 </td>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">
-                 
-                   {userData.solutions_image}
-                   </p>
-                 </td>
-                
-                
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex space-x-2">
-        
-       <button onClick={() => handleSolutionsEditClick(userData.id)}>
-          <svg class="text-teal-600 w-5 h-5 "
-        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-            {/* ... SVG path for edit */}
-            </button>
-
-            <button onClick={() => handleSoftDeleteSolutions(userData.id)} >
-          <svg class="text-orange-600 w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-          </button>
-
-            {/* ... SVG path for delete */}
-         
-        </div>
-      </td>
-               </tr>
-              )  ))}
-         
-             </tbody>
-           </table>
-            </div>
-           <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
-             <div className="inline-flex mt-2 xs:mt-0">
-               <button  onClick={handlePrevClick}
-             disabled={currentPage === 1}
-             className={`text-sm text-white transition duration-150 ${
-               currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-l`}>
-                 Prev
-               </button>
-               &nbsp; &nbsp;
-               <button
-             onClick={handleNextClick}
-             disabled={data.length < itemsPerPage}
-             className={`text-sm text-white transition duration-150 ${
-               data.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-r`}
-           >
-                 Next
-               </button>
-             </div>
-           </div>
-        
-       </div>
-        
-         </div>
-            )}
-            {isEditSolutionsPopupOpen && (
-  <EditPopupSolutionsData
-    solutions={editSolutions}
-    isOpen={isEditSolutionsPopupOpen}
-    onClose={() => setIsEditSolutionsPopupOpen(false)}
-    onSubmit={handleSolutionsEditSubmit}
-  />
-)}
-{/* FAQ DATA */} 
-{selectedTab === 'faq' && (
-           <div>
-           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-            <div className='font-bold text-xl md:mb-10'> FAQ </div>
-         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
- 
-         <button onClick={openAddFaqPopup} className='bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3'>Add FAQ</button>
-
-{/* Add Order Popup */}
-{showAddFaqPopup && (
-  <AddFaqForm onSubmit={handleAddFaqSubmit} onCancel={closeAddFaqPopup} />
-)}
-           <table className="min-w-full leading-normal">
-             <thead>
-               <tr>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Question
-                 </th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Answer
-                 </th>
-                
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Action
-                </th>
-               </tr>
-             </thead>
-             <tbody>
-             {data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(userData => (
-              userData.isDeleted !== 'true' && (
-               <tr key={userData.id}>
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <div className="flex items-center">
-                     <div className="ml-3">
-                       <p className="text-gray-900 whitespace-no-wrap">
-                        {userData.question}
-                       </p>
-                     </div>
-                   </div>
-                 </td>
-                
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                   <p className="text-gray-900 whitespace-no-wrap">{userData.answer}</p>
-                 </td>
-                
-                
-                
-                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex space-x-2">
-        
-       <button onClick={() => handleFaqEditClick(userData.id)}>
-          <svg class="text-teal-600 w-5 h-5 "
-        xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-            {/* ... SVG path for edit */}
-            </button>
-
-            <button onClick={() => handleSoftDeleteFaq(userData.id)} >
-          <svg class="text-orange-600 w-5 h-5"
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-          </svg>
-          </button>
-
-            {/* ... SVG path for delete */}
-         
-        </div>
-      </td>
-               </tr>
-              )  ))}
-         
-             </tbody>
-           </table>
-            </div>
-           <div className="px-5 py-5 bg-white flex flex-col xs:flex-row items-center xs:justify-between          ">
-             <div className="inline-flex mt-2 xs:mt-0">
-               <button  onClick={handlePrevClick}
-             disabled={currentPage === 1}
-             className={`text-sm text-white transition duration-150 ${
-               currentPage === 1 ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-l`}>
-                 Prev
-               </button>
-               &nbsp; &nbsp;
-               <button
-             onClick={handleNextClick}
-             disabled={data.length < itemsPerPage}
-             className={`text-sm text-white transition duration-150 ${
-               data.length < itemsPerPage ? 'bg-gray-300' : 'hover:bg-[#51aaa1] bg-my-green'
-             } font-semibold py-2 px-4 rounded-r`}
-           >
-                 Next
-               </button>
-             </div>
-           </div>
-        
-       </div>
-        
-         </div>
-            )}
-            {isEditFaqPopupOpen && (
-  <EditPopupFaqData
-    faq={editFaq}
-    isOpen={isEditFaqPopupOpen}
-    onClose={() => setIsEditFaqPopupOpen(false)}
-    onSubmit={handleFaqEditSubmit}
-  />
-)}
-
-      {selectedTab === 'signout' && (
-        <div>
-          Render sign-out logic
-        </div>
-      )}
-    </div>
-  </div>
-
-          </div>
-        </div>
-        <div className="text-blue-gray-600">
-          <footer className="py-2">
-            <div className="flex w-full flex-wrap items-center justify-center gap-6 px-2 md:justify-between">
-              <p className="block antialiased font-sans text-sm leading-normal font-normal text-inherit">
-                © 2023, made with{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                  className="-mt-0.5 inline-block h-3.5 w-3.5"
-                >
-                  <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
-                </svg>{" "}
-                by{" "}
-                
-                
-                 Malath Yasin & Osama Taani
-                {" "}
-                
-              </p>
-             
-            </div>
-          </footer>
-        </div>
-      </div>
-    </div>
-
-  </>
-  
-  )
-}
-
-export default Dashboard
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
+export default Dashboard;

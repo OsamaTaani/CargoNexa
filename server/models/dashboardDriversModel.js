@@ -1,13 +1,16 @@
 const {pool} = require('../db');
 
-const getAllDrivers = async () => {
-  const drivers = await pool.query('SELECT * FROM drivers');
-  return drivers.rows;
+const getAllDrivers = async (pageSize , offset) => {
+  const drivers = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM drivers ORDER BY driver_id LIMIT $1 OFFSET $2' , [pageSize , offset]);
+  return drivers.rows;           
 };
 
 const getDriverById = async (driverId) => {
   const driver = await pool.query('SELECT * FROM drivers WHERE driver_id = $1', [driverId]);
+  console.log(driverId);
+
   return driver.rows[0];
+
 };
 
 const updateDriverById = async (driverId, driver_username, driver_email, driver_password, driver_license,

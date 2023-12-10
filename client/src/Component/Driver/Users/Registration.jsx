@@ -51,9 +51,9 @@ const handleSubmit = async (e) => {
         // Set the token in a cookie
         setCookie('token', token, { path: '/' });
       
-        register(token)
-        console.log('registerForDriver' ,token );
-        navigate('/NewOrders')
+        // register(token)
+        // console.log('registerForDriver' ,token );
+        navigate('/driverLogin')
     } catch (error) {
       // Handle network or other errors
       console.error('Registration error:', error);

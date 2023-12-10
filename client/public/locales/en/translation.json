@@ -6,5 +6,19 @@
         "trackTitle":"Track your shipment",
         "trackingId":"Tracking ID",
         "trackBtn":"Track"
+    },
+    "header":{
+        "home":"home",
+        "New Orders":" New Orders",     
+        "Services":"Services" ,
+        "Our Mission":" Our Mission",
+        "My Order":"My Order",
+        "Login ":"Login",
+        "Logout ":"Logout",
+        "Driver ":"Driver",
+        "Shipper ":"Shipper",
+        "SignUp ":"SignUp"
+        
+
     }
 }

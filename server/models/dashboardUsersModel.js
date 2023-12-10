@@ -1,8 +1,8 @@
 const {pool} = require('../db');
 
 
-const getAllUsers = async () => {
-  const users = await pool.query('SELECT * FROM users WHERE isDeleted = false');
+const getAllUsers = async (pageSize , offset) => {
+  const users = await pool.query('SELECT *, COUNT(*) OVER () AS total_count FROM users ORDER BY user_id LIMIT $1 OFFSET $2', [pageSize , offset]);
   return users.rows;
 };
 

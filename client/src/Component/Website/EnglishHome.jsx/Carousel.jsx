@@ -47,7 +47,7 @@ const Carousel = () => {
                                 ❮
                             </a>
                             <div className='flex  flex-wrap  justify-center'>
-                                <div className='text-white  sm:text-1xl  md:text-3xl  lg:text-4xl  text-center font-bold  mt-10 mb-2 mx-20' >We make shipping big stuff cheap and easy by helping customers directly connect with providers  who have extra truck space.</div>
+                                <div className='text-white  sm:text-1xl  md:text-3xl  lg:text-4xl  text-center font-bold  mt-10 mb-2 md:mx-20' >We make shipping big stuff cheap and easy by helping customers directly connect with providers  who have extra truck space.</div>
 
                                 <div>
                                  <Link to={'/services '}>  <button type="button" class="ml-2 text-white bg-my-green hover:bg-[#54beb3] font-bold rounded-lg md:text-xl md:px-5 md:py-3 px-2 py-1  text-center mr-3 md:mr-0 ">Quote Now </button></Link> 

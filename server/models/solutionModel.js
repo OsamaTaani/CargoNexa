@@ -1,9 +1,9 @@
 // models/solutionModel.js
 const {pool} = require('../db');
 
-const getAllSolutions = async () => {
+const getAllSolutions = async (pageSize , offset) => {
   try {
-    const result = await pool.query('SELECT * FROM solutions WHERE isdeleted = false');
+    const result = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM solutions ORDER BY solution_id LIMIT $1 OFFSET $2',[pageSize , offset]);
     return result.rows;
   } catch (error) {
     console.error('Error in getAllSolutions:', error);

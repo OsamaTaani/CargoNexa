@@ -1,5 +1,6 @@
 const UserModel = require('../models/userProfileModel');
 
+const Firebase = require('../middleware/firebaseMiddleware')
 
 
 const getUserProfile = async (req, res) => {
@@ -26,8 +27,22 @@ const getUserProfile = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
     try {
-      const userId = req.user.user_id;
+
+      const file = req.file;
+
+      if (file) {
+          const fileName = `${Date.now()}_${file.originalname}`;
+          const fileUrl = await Firebase.uploadFileToFirebase(file, fileName);
+          console.log(fileUrl);
+
+          req.body.user_image = fileUrl;
+      }
+
+      const userId = req.user.userId;
+      console.log(userId);
+
       const updatedInfo = req.body;
+      console.log(updatedInfo);
   
       const updatedUser = await UserModel.updateUserProfile(userId, updatedInfo);
   
@@ -51,6 +66,26 @@ const updateUserProfile = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+
+
+// Update order for a specific user
+const updateOrder = async (req, res) => {
+  const orderId = req.params.orderId; // Assuming orderId is passed in the URL
+  console.log(orderId);
+  const userId = req.user.userId; // Assuming userId is passed in the URL
+  console.log(userId);
+  const updatedOrderData = req.body; // Assuming the updated data is sent in the request body
+
+  try {
+    const updatedOrder = await UserModel.updateOrder(userId, orderId, updatedOrderData);
+    res.status(200).json(updatedOrder);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
   
-  module.exports = { updateUserProfile, getUserOrders , getUserProfile };
+  module.exports = { updateUserProfile, getUserOrders , getUserProfile,updateOrder };
   

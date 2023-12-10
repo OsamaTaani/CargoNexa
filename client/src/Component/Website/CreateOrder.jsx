@@ -99,8 +99,8 @@ const CreateOrder = () => {
 
     const formDataWithPriceAndType = {
       ...formData,
-      price: shippingPrice,
-      paymentType: 'cash', // Change this based on your logic for payment type
+      amount: shippingPrice,
+      payment_type: 'cash', // Change this based on your logic for payment type
     };
     console.log("formDataWithPriceAndType",formDataWithPriceAndType);
     try {
@@ -110,7 +110,6 @@ const CreateOrder = () => {
         // headers: { 
         //   Authorization: `${authToken}`,
         // },
-
       });
 
       // Handle the response as needed (e.g., show success message)
@@ -230,7 +229,7 @@ const CreateOrder = () => {
           // Uncomment the axios.post request to send cash payment information
           axios.post("http://localhost:3002/payment", {
             amount: shippingPrice,
-            type: "cash"
+            payment_type: "cash"
           })
           .then(response => {
             // Handle the response if needed

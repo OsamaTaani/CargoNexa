@@ -78,7 +78,10 @@ const loginAdmin = async (req, res) => {
 // Get all admins
 const getAllAdmins = async (req, res) => {
   try {
-    const admins = await AdminModel.getAllAdmins();
+    const { page = 1, pageSize = 5 } = req.query;
+    const offset = (page - 1) * pageSize;
+
+    const admins = await AdminModel.getAllAdmins(pageSize, offset);
     res.status(200).json(admins );
   } catch (error) {
     console.error(error);
