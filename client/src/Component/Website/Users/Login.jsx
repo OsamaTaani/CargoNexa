@@ -17,6 +17,7 @@ const {login}=useAuth()
 
   const navigate=useNavigate();
   const [cookies, setCookie] = useCookies(['token']);
+  const [error,setError]=useState(null);
 
     const [values,setValues]=useState({ user_email:'', user_password:''});
     // const [error,setError]=useState({});
@@ -55,6 +56,8 @@ const {login}=useAuth()
       } catch (error) {
         // Handle network or other errors
         console.error('Login error:', error);
+        setError(error.response.data.error)
+
       }
     
   };
@@ -96,7 +99,7 @@ const {login}=useAuth()
     />
   </div>
 </div>
-{/* {error.user_email && <p style={{color:"red"}}>{error.user_email}</p>} */}
+{(error !== null && error.includes("email"))&& <p className='text-red-500'>"email shouldn't be empty"</p>}
 
 <p className="mb-1 font-medium text-gray-500">Password</p>
 <div className="mb-4 flex flex-col">
@@ -110,8 +113,10 @@ const {login}=useAuth()
     />
   </div>
 </div>
-{/* {error.user_password && <p style={{color:"red"}} >{error.user_password}</p>} */}
+{(error !== null && error.includes("password"))&& <p className='text-red-500'>"password shouldn't be empty"</p>}
 
+<div>          {(error !== null && error.includes("Invalid credentials"))&& <p className='text-red-500'>"email or password not correct "</p>}
+</div>
 
 <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">
   Login 

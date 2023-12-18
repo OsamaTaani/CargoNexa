@@ -66,8 +66,6 @@ const handleSubmit = async (e) => {
   return (
     
     <>
-    <div>{error}</div>
-    {(error !== null && error.includes("driver_username"))&& <p>"driver_username"</p>}
     <div className=" mx-auto flex justify-center h-[45rem] max-w-lg flex-col md:max-w-none md:flex-row  md:pr-10 md:my-10 lg:my-10 my-96 ">
 
   <div className=" max-w-md rounded-3xl bg-gradient-to-t from-[#219C90] via-[#219C90] to-[#42a399] px-4 py-20 text-white sm:px-10 md:m-6 md:mr-8 ">
@@ -100,12 +98,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    <div> 
-        {{error} == '"driver_username" is required' &&(
-          <div>ssss</div>
-        )} 
-</div>
-{error}
+    {(error !== null && error.includes("driver_username"))&& <p className='text-red-500'>"driver_username shouldn't be empty"</p>}
+
     <p className="mb-1 font-medium text-gray-500">Email</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -118,6 +112,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("driver_email"))&& <p className='text-red-500'>"driver_email shouldn't be empty"</p>}
+    {(error !== null && error.includes("Email is already registered"))&& <p className='text-red-500'>"Email is already registered"</p>}
    
     <p className="mb-1 font-medium text-gray-500">Driver License</p>
     <div className="mb-2 flex flex-col">
@@ -131,6 +127,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("driver_license"))&& <p className='text-red-500'>"driver_license shouldn't be empty"</p>}
+
     <p className="mb-1 font-medium text-gray-500">Truck Type</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -143,6 +141,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("truck_type"))&& <p className='text-red-500'>"truck_type shouldn't be empty"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Production Year</p>
     <div className="mb-2 flex flex-col">
@@ -156,6 +155,10 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("production_year"))&& <p className='text-red-500'>"production_year shouldn't be empty"</p>}
+    {(error !== null && error.includes('"production_year" must be a number'))&& <p className='text-red-500'>"production_year" must be a number</p>}
+
+
     <p className="mb-1 font-medium text-gray-500">Plate Number</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -168,6 +171,9 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("plate_number"))&& <p className='text-red-500'>"plate_number shouldn't be empty"</p>}
+    {(error !== null && error.includes('"plate_number" must be a number'))&& <p className='text-red-500'>"plate_number" must be a number</p>}
+
     <p className="mb-1 font-medium text-gray-500">Truck Size</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -187,6 +193,8 @@ const handleSubmit = async (e) => {
           </select>
       </div>
     </div>
+    {(error !== null && error.includes("driver_size_type"))&& <p className='text-red-500'>"driver_size_type shouldn't be empty"</p>}
+
     <p className="mb-1 font-medium text-gray-500">Password</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -199,6 +207,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("driver_password"))&& <p className='text-red-500'>"driver_password shouldn't be empty"</p>}
 
    
 

@@ -15,6 +15,7 @@ const {register}=useAuth()
     window.scrollTo(0, 0);
   }, []);
   const [cookies, setCookie] = useCookies(['token']);
+  const [error,setError]=useState(null);
 
 const [values,setValues]=useState({ user_username:'' , user_email:'',user_phone_number:'', user_password:''});
 // const [error,setError]=useState({});
@@ -49,6 +50,8 @@ const handleSubmit = async (e) => {
     } catch (error) {
       // Handle network or other errors
       console.error('Registration error:', error);
+      setError(error.response.data.error)
+
     }
   
 }
@@ -94,6 +97,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("user_username"))&& <p className='text-red-500'>"username shouldn't be empty"</p>}
+
     <p className="mb-1 font-medium text-gray-500">Email</p>
     <div className="mb-4 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -106,6 +111,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("email"))&& <p className='text-red-500'>"email shouldn't be empty"</p>}
+    {(error !== null && error.includes("Email is already registered"))&& <p className='text-red-500'>"Email is already registered"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Phone</p>
     <div className="mb-4 flex flex-col">
@@ -119,6 +126,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("phone"))&& <p className='text-red-500'>"phone number shouldn't be empty"</p>}
+
     <p className="mb-1 font-medium text-gray-500">Password</p>
     <div className="mb-4 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -131,6 +140,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    {(error !== null && error.includes("password"))&& <p className='text-red-500'>"password shouldn't be empty"</p>}
 
     {/* <p className="mb-1 font-medium text-gray-500">Confirm Password</p> */}
     {/* <div className="mb-4 flex flex-col">
