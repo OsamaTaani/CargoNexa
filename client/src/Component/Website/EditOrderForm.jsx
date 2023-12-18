@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
-const EditForm = ({ onClose, orderDetails }) => {
+const EditForm = ({ onClose, orderDetails ,onSubmit}) => {
   const [editedOrder, setEditedOrder] = useState(orderDetails);
 
 
@@ -16,16 +16,8 @@ const EditForm = ({ onClose, orderDetails }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    try {
-      // Use Axios to send a PUT request to update the order
-      await axios.put(`http://localhost:3001/updateUserOrder/${editedOrder.order_id}`, editedOrder);
+    onSubmit(editedOrder);
 
-      // Close the form or perform any other actions upon successful update
-      onClose();
-    } catch (error) {
-      console.error('Error updating order:', error);
-      // Handle the error, e.g., display an error message to the user
-    }
   };
  
   
@@ -36,7 +28,7 @@ const EditForm = ({ onClose, orderDetails }) => {
           <div className="bg-white w-96 p-6 rounded-lg z-10 my-6">
             <h2 className="text-2xl font-semibold mb-4">Edit User</h2>
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Shipper Name</label>
                 <input
                 id='name'
@@ -47,7 +39,7 @@ const EditForm = ({ onClose, orderDetails }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Order Title</label>
                 <input
                 id='order_title'
@@ -58,7 +50,7 @@ const EditForm = ({ onClose, orderDetails }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Receiving Timestamp</label>
                 <input
                 id='receiving_timestamp'
@@ -69,7 +61,7 @@ const EditForm = ({ onClose, orderDetails }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Shipper Phone Number</label>
                 <input
                 id='order_phone_number'
@@ -80,7 +72,7 @@ const EditForm = ({ onClose, orderDetails }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Order message</label>
                 <input
                 id='message'
@@ -91,7 +83,7 @@ const EditForm = ({ onClose, orderDetails }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Shipping Date</label>
                 <input
                 id='shipping_date'
@@ -102,7 +94,7 @@ const EditForm = ({ onClose, orderDetails }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Receiver Name</label>
                 <input
                 id='receiver_name'
@@ -113,7 +105,7 @@ const EditForm = ({ onClose, orderDetails }) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
+              <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Receiver Phone Number</label>
                 <input
                 id='receiver_phone_number'

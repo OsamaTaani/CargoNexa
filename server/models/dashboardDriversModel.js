@@ -13,12 +13,10 @@ const getDriverById = async (driverId) => {
 
 };
 
-const updateDriverById = async (driverId, driver_username, driver_email, driver_password, driver_license,
-    truck_type, production_year, plate_number, truck_image, driver_size_type , status) => {
+const updateDriverById = async ( driver_username, driver_email, driver_password, status,driverId) => {
   const updatedDriver = await pool.query(
-    'UPDATE drivers SET driver_username = $1, driver_email = $2, driver_password = $3, driver_license = $4, truck_type = $5, production_year = $6, plate_number = $7, truck_image = $8, driver_size_type = $9, status = $10 WHERE driver_id = $11  RETURNING *',
-    [driver_username, driver_email, driver_password, driver_license,
-        truck_type, production_year, plate_number, truck_image, driver_size_type , status, driverId]
+    'UPDATE drivers SET driver_username = $1, driver_email = $2, driver_password = $3,  status = $4 WHERE driver_id = $5  RETURNING *',
+    [driver_username, driver_email, driver_password, status, driverId]
   );
 
   return updatedDriver.rows[0];

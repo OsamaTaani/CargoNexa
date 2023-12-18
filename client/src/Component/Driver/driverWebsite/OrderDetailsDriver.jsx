@@ -419,15 +419,23 @@ const OrderDetailsDriver = () => {
   // handleStatusChange ******************************************************************
 
 
-  const handleStatusChange = async (newStatus) => {
+  const handleStatusChange = async () => {
     // Simulating an API call to update the status
     try {
       // Assuming you have an API endpoint to update the status
-      const response = await axios.put(`http://localhost:3001/orders/shipped/${orderId}`, { status: newStatus });
+    const authToken = cookies['token'];
+
+      const response = await axios.put(`http://localhost:3001/orders/shipped/${orderId}`, { status: 'OutForDelivery' }, {
+        headers: {
+          Authorization: `${authToken}`
+        }
+      });
 
       if (response.status === 200) {
         // Update the status in the component state
-        setOrderStatus(newStatus);
+        setOrderStatus('OutForDelivery');
+      window.location.reload();
+
       } else {
         console.error('Failed to update status');
       }
@@ -448,6 +456,7 @@ const OrderDetailsDriver = () => {
         // Update the status in the component state
         setOrderStatus(newStatus);
         setDriverStatus('Available');
+        window.location.reload();
 
       } else {
         console.error('Failed to update status');
@@ -620,7 +629,7 @@ const OrderDetailsDriver = () => {
       <div>
   {console.log(orderDetails.status)}
   {orderDetails.status === 'accepted' ? (
-    <button onClick={() => handleStatusChange('OutForDelivery')} className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">
+    <button onClick={() => handleStatusChange()} className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">
       Shipped
     </button>
   ) : orderDetails.status === 'OutForDelivery' ? (

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const EditUserForm = ({ userId, onClose, onUpdate }) => {
+const EditUserForm = ({ userId, onClose, onUpdate ,onSubmit}) => {
   const [editedUser, setEditedUserData] = useState(
     onUpdate || {
       user_username: "",
@@ -10,22 +10,24 @@ const EditUserForm = ({ userId, onClose, onUpdate }) => {
       user_image: null,
     }
   );
-  const [image,setImage] = useState(null);
 
-  console.log("onUpdate", onUpdate);
-  console.log("editedUser", editedUser);
+
+  // console.log("editedUser", editedUser);
 useEffect(() => {
   // Fetch user data by ID and set it to the state
   const fetchUserDataById = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/user-profile/${userId}`);
+
       setEditedUserData({
         user_username: response.data.user_username,
-        user_email: response.data.user_email,
+        // user_email: response.data.user_email,
         user_phone_number: response.data.user_phone_number,
         user_image: response.data.user_image,
+        
       });
-      console.log("data", response.data);
+      // setPreviousImage(response.data.user_image);
+      console.log("data in edit user ", response.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -44,30 +46,24 @@ useEffect(() => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setEditedUserData((prevData) => ({ ...prevData, image: file }));
-    setImage(file)
   };
+  
+ 
   const form = new FormData();
   form.append("user_username",editedUser.user_username);
-  form.append("user_email",editedUser.user_email);
+  // form.append("user_email",editedUser.user_email);
   form.append("user_phone_number",editedUser.user_phone_number);
-  form.append("image", image);
-  console.log(form);
-  const handleUpdateUser = async () => {
-    try {
-     
-      // Send edited user data to the server
-      await axios.put(`http://localhost:3001/update-user-profile`, form,
-      {
-        headers:{
-          "Content-Type": "multipart/form-data",
-        }
-      });
-      // Trigger a refresh or update action in the parent component
-      onClose(); // Close the edit form modal
-    } catch (error) {
-      console.error("Error updating user data:", error);
-    }
+  form.append("image", editedUser.user_image);
+  // form.append("image", previousImage);
+
+  // console.log(form);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    onSubmit(editedUser);
+
   };
+  
 
   return (
     // Your edit form JSX here, using editedUserData and handleInputChange
@@ -77,14 +73,12 @@ useEffect(() => {
         <div className="bg-white w-96 p-6 rounded-lg z-10">
           <h2 className="text-2xl font-semibold mb-4">Edit User</h2>
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleUpdateUser(editedUser);
-            }}
+            onSubmit={handleSubmit}
           >
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 User Name
+                
               </label>
               <input
                 type="text"
@@ -94,7 +88,7 @@ useEffect(() => {
                 className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 User Email
               </label>
@@ -105,7 +99,7 @@ useEffect(() => {
                 onChange={handleInputChange}
                 className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
-            </div>
+            </div> */}
             <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2">
                 user_phone_number
@@ -139,6 +133,8 @@ useEffect(() => {
                 onChange={handleImageChange}
                 className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
+             
+
             </div>
 
             <div className="flex justify-end">

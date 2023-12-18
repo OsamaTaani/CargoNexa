@@ -25,8 +25,8 @@ const OrderDetailsPage = () => {
       console.log("role in user ",role )
 
 
-      useEffect(() => {
        
+        const fetchOrderData = async () => {
 
         // Fetch order details using Axios based on the order ID
         axios.get(`http://localhost:3001/user/order/${orderId}`)
@@ -37,10 +37,11 @@ const OrderDetailsPage = () => {
           })
           .catch(error => {
             console.error('Error fetching order details:', error);
-          });
+          });}
+
+      useEffect(() => {
+        fetchOrderData()
       }, [orderId]);
-
-
     
 
 
@@ -56,10 +57,40 @@ const OrderDetailsPage = () => {
   };
 
 
+const handleEditFormSubmit = async (updatedOrderInfo) => {
+
+try {
+  // Use Axios to send a PUT request to update the order
+  await axios.put(`http://localhost:3001/updateUserOrder/${updatedOrderInfo.order_id}`, updatedOrderInfo);
+
+  // Close the form or perform any other actions upon successful update
+  setShowEditForm(false);
+  fetchOrderData()
+} catch (error) {
+  console.error('Error updating order:', error);
+  // Handle the error, e.g., display an error message to the user
+}}
+
+const handleSoftDeleteOrder = async () => {
+  try {
+    // Send a PATCH request to update the status for soft delete
+    await axios.put(`http://localhost:3001/user/order/${orderId}`, {
+      isdeleted: "true",
+    });
+
+    // Refresh the data or handle the removal of the soft-deleted drciver from your local state
+    fetchOrderData()
+  } catch (error) {
+    console.error("Error soft deleting order:", error);
+  }
+};
+
+console.log(orderDetails.isdeleted);
+
   return (
 <>
   {/* component */}
- 
+ {orderDetails.isdeleted == false && (
   <div className="my-8 mx-4 sm:mx-8 p-4 border border-gray-300 shadow-lg shadow-gray-300 rounded-lg">
     <h2 className="md:text-xl font-bold mb-4 ml-2 sm:ml-16">Tracking ID : {orderId}</h2>
     <div className="relative block p-3 overflow-hidden rounded-lg ml-2 mr-2 sm:ml-0 sm:mr-0">
@@ -182,10 +213,10 @@ const OrderDetailsPage = () => {
       </a>
     </div>
   </div>
-
+)}
    {/* The Edit Component With the props */}
    {showEditForm && (
-        <EditForm onClose={handleCloseEditForm} orderDetails={orderDetails} />
+        <EditForm onClose={handleCloseEditForm} orderDetails={orderDetails} onSubmit={handleEditFormSubmit}/>
       )}
 
  
@@ -199,7 +230,7 @@ const OrderDetailsPage = () => {
       Edit
     </button>
     <button className='bg-red-700 rounded-xl px-5 text-white'
-    //  onClick={handleDeleteButtonClick}
+     onClick={handleSoftDeleteOrder}
      >
       Delete
     </button>

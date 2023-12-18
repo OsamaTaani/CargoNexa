@@ -8,6 +8,7 @@ import { useAuth } from '../../Website/AuthContext';
 
 const Registration = () => {
   const [cookies, setCookie] = useCookies(['token']);
+  const [error,setError]=useState(null);
 
   const {register} = useAuth()
 const [values,setValues]=useState([]);
@@ -56,15 +57,17 @@ const handleSubmit = async (e) => {
         navigate('/driverLogin')
     } catch (error) {
       // Handle network or other errors
-      console.error('Registration error:', error);
+      console.error('Registration error:', error.response.data.error);
+      setError(error.response.data.error)
     }
   
 }
-
+// console.log('type of error ',(error).includes("driver_username"));
   return (
     
     <>
-    
+    <div>{error}</div>
+    {(error !== null && error.includes("driver_username"))&& <p>"driver_username"</p>}
     <div className=" mx-auto flex justify-center h-[45rem] max-w-lg flex-col md:max-w-none md:flex-row  md:pr-10 md:my-10 lg:my-10 my-96 ">
 
   <div className=" max-w-md rounded-3xl bg-gradient-to-t from-[#219C90] via-[#219C90] to-[#42a399] px-4 py-20 text-white sm:px-10 md:m-6 md:mr-8 ">
@@ -85,7 +88,6 @@ const handleSubmit = async (e) => {
     <Link to="/login" className="mb-10 block font-bold text-gray-600">
       Have an account
     </Link> */}
-   
     <p className="mb-1 font-medium text-gray-500">Username</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -98,6 +100,12 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
+    <div> 
+        {{error} == '"driver_username" is required' &&(
+          <div>ssss</div>
+        )} 
+</div>
+{error}
     <p className="mb-1 font-medium text-gray-500">Email</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">

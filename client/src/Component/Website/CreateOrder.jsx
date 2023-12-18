@@ -40,8 +40,6 @@ const CreateOrder = () => {
     shipping_timestamp: '',
     message: '',
     status: ''
-
-
   });
 
   // const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
@@ -69,38 +67,12 @@ const CreateOrder = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-     // Validate phone numbers
-     const orderPhoneNumberValid = validatePhoneNumber(formData.order_phone_number);
-     const receiverPhoneNumberValid = validatePhoneNumber(formData.receiver_phone_number);
- 
-     // Set errors based on validation results
-     setErrors({
-       order_phone_number: orderPhoneNumberValid ? '' : 'Invalid phone number format',
-       receiver_phone_number: receiverPhoneNumberValid ? '' : 'Invalid phone number format',
-     });
- 
-      // Check if phone number validation failed
-  if (!orderPhoneNumberValid || !receiverPhoneNumberValid) {
-    return; // Prevent form submission
-  }
-     // Continue with form submission if all validations pass
-    // Check if the containsDangerousMaterials checkbox is checked
-    if (!formData.contains_dangerous_materials) {
-      // Display an error message using SweetAlert
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Please check the "containsDangerousMaterials" checkbox.',
-      });
-      return; // Prevent form submission
-    }
-
+  const handleCashClicked = async (e) => {
+  
     const formDataWithPriceAndType = {
       ...formData,
       amount: shippingPrice,
-      payment_type: 'cash', // Change this based on your logic for payment type
+      payment_method: 'cash', // Change this based on your logic for payment type
     };
     console.log("formDataWithPriceAndType",formDataWithPriceAndType);
     try {
@@ -110,25 +82,51 @@ const CreateOrder = () => {
         // headers: { 
         //   Authorization: `${authToken}`,
         // },
+        amount: shippingPrice,
+        payment_method: 'cash',
       });
+      Swal.fire({
+            icon: 'question',
+            title: 'Confirm',
+            text: `Are you sure you want to proceed to payment? Total amount: ${shippingPrice}`,
+            showCancelButton: true,
+            confirmButtonColor: '#4CAF50',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, proceed!',
+            cancelButtonText: 'No, cancel',
+          }).then((confirmResult) => {
+            // Check if the user clicked the confirm button
+            if (confirmResult.isConfirmed) {
+              // Show success message using Swal
+              Swal.fire({
+                icon: 'success',
+                title: 'Order Successful!',
+                text: 'Thank you for your order.',
+                timer: 1000,
+              }).then(() => {
+                navigate('/');
+      
+                // Uncomment the axios.post request to send cash payment information
+                axios.post("http://localhost:3002/payment", {
+                  amount: shippingPrice,
+                  payment_type: "cash"
+                })
+                .then(response => {
+                  // Handle the response if needed
+                  console.log(response);
+        
+                  // Navigate after successful payment
+                })
+                .catch(error => {
+                  // Handle errors if needed
+                  console.error(error);
+        
+                  // Still navigate even if there's an error (adjust as needed)
+                  navigate('/');
+                });
 
-      // Handle the response as needed (e.g., show success message)
-      console.log('Response:', response.data);
-      // Display an good message using SweetAlert
-      // Swal.fire({
-      //   icon: 'success',
-      //   title: 'Order Successful!',
-      //   text: 'Thank you for your order.',
-      //   timer: 2000,
-
-      // });
-      // setTimeout(() => {
-        setShowForm(false);
-      // }, 1500);
-
-
-      window.scrollTo(0, 0);
-      setStep(2)
+          }) } })
+    
     } catch (error) {
       // Handle errors (e.g., show error message)
       console.error('Error:', error);
@@ -136,6 +134,43 @@ const CreateOrder = () => {
     }
 
   };
+
+
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Validate phone numbers
+    const orderPhoneNumberValid = validatePhoneNumber(formData.order_phone_number);
+    const receiverPhoneNumberValid = validatePhoneNumber(formData.receiver_phone_number);
+
+    // Set errors based on validation results
+    setErrors({
+      order_phone_number: orderPhoneNumberValid ? '' : 'Invalid phone number format',
+      receiver_phone_number: receiverPhoneNumberValid ? '' : 'Invalid phone number format',
+    });
+
+     // Check if phone number validation failed
+ if (!orderPhoneNumberValid || !receiverPhoneNumberValid) {
+   return; // Prevent form submission
+ }
+    // Continue with form submission if all validations pass
+   // Check if the containsDangerousMaterials checkbox is checked
+   if (!formData.contains_dangerous_materials) {
+     // Display an error message using SweetAlert
+     Swal.fire({
+       icon: 'error',
+       title: 'Oops...',
+       text: 'Please check the "containsDangerousMaterials" checkbox.',
+     });
+     return; // Prevent form submission
+   }
+
+    setStep(2)
+    setShowForm(false);
+    window.scrollTo(0, 0);
+
+  }
 
   // Function to reset form data
   const resetForm = () => {
@@ -203,51 +238,51 @@ const CreateOrder = () => {
     calculateShippingPrice(formData.shipping_location, formData.receiving_location, formData.order_truck_size);
   }, [formData.shipping_location, formData.receiving_location, formData.order_truck_size]);
 
-  const handleCashClicked = () => {
-    // Display a confirmation dialog using SweetAlert
-    Swal.fire({
-      icon: 'question',
-      title: 'Confirm',
-      text: `Are you sure you want to proceed to payment? Total amount: ${shippingPrice}`,
-      showCancelButton: true,
-      confirmButtonColor: '#4CAF50',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, proceed!',
-      cancelButtonText: 'No, cancel',
-    }).then((confirmResult) => {
-      // Check if the user clicked the confirm button
-      if (confirmResult.isConfirmed) {
-        // Show success message using Swal
-        Swal.fire({
-          icon: 'success',
-          title: 'Order Successful!',
-          text: 'Thank you for your order.',
-          timer: 1000,
-        }).then(() => {
-          navigate('/');
+  // const handleCashClicked = () => {
+  //   // Display a confirmation dialog using SweetAlert
+  //   Swal.fire({
+  //     icon: 'question',
+  //     title: 'Confirm',
+  //     text: `Are you sure you want to proceed to payment? Total amount: ${shippingPrice}`,
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#4CAF50',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, proceed!',
+  //     cancelButtonText: 'No, cancel',
+  //   }).then((confirmResult) => {
+  //     // Check if the user clicked the confirm button
+  //     if (confirmResult.isConfirmed) {
+  //       // Show success message using Swal
+  //       Swal.fire({
+  //         icon: 'success',
+  //         title: 'Order Successful!',
+  //         text: 'Thank you for your order.',
+  //         timer: 1000,
+  //       }).then(() => {
+  //         navigate('/');
 
-          // Uncomment the axios.post request to send cash payment information
-          axios.post("http://localhost:3002/payment", {
-            amount: shippingPrice,
-            payment_type: "cash"
-          })
-          .then(response => {
-            // Handle the response if needed
-            console.log(response);
+  //         // Uncomment the axios.post request to send cash payment information
+  //         axios.post("http://localhost:3002/payment", {
+  //           amount: shippingPrice,
+  //           payment_type: "cash"
+  //         })
+  //         .then(response => {
+  //           // Handle the response if needed
+  //           console.log(response);
   
-            // Navigate after successful payment
-          })
-          .catch(error => {
-            // Handle errors if needed
-            console.error(error);
+  //           // Navigate after successful payment
+  //         })
+  //         .catch(error => {
+  //           // Handle errors if needed
+  //           console.error(error);
   
-            // Still navigate even if there's an error (adjust as needed)
-            navigate('/');
-          });
-        });
-      }
-    });
-  };
+  //           // Still navigate even if there's an error (adjust as needed)
+  //           navigate('/');
+  //         });
+  //       });
+  //     }
+  //   });
+  // };
 
   return (
     <>
@@ -281,7 +316,7 @@ const CreateOrder = () => {
           {showForm ? (
 
             <div className="flex w-full flex-col">
-              <form onSubmit={handleSubmit}>
+              <form >
                 <h1 className="text-2xl font-semibold">{formData.order_title}</h1>
                 <p className="mt-2 text-gray-500">
                   {formData.order_description}
@@ -527,7 +562,7 @@ const CreateOrder = () => {
                 <div className="flex flex-col justify-between sm:flex-row">
 
                   {/* <Link to={'/NewOrders'}> */}
-                  <button type='submit' className="group my-2 flex w-full items-center justify-center rounded-lg bg-my-green py-2 text-center font-bold text-white outline-none transition sm:order-1 sm:w-40 focus:ring">
+                  <button type='button' onClick={handleSubmit}  className="group my-2 flex w-full items-center justify-center rounded-lg bg-my-green py-2 text-center font-bold text-white outline-none transition sm:order-1 sm:w-40 focus:ring">
                     Continue
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -581,10 +616,9 @@ const CreateOrder = () => {
                     </svg>
 
                   </div>
-                  <Link to={{ pathname: '/payment' }} state={{ price: {shippingPrice} }}>
-                    <h4 className="font-semibold md:text-3xl text-white leading-tight">Pay By Card</h4>
+                  <Link to={{ pathname: '/payment' }} state={{ price: {shippingPrice} , formData : {formData}}} >
+                    <h4 className="font-semibold md:text-3xl text-white leading-tight">Pay By Card  </h4>
                   </Link>
-
 
                 </div>
               </div>

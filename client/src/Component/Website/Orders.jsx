@@ -20,7 +20,8 @@ const Orders = () => {
   const itemsPerPage = 3; // Adjust as needed
   // State to store the sorting order
    const [sortOrder, setSortOrder] = useState('desc'); // default is descending order
-
+  
+console.log(orders.isdeleted);
 
   const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
   console.log(cookies);
@@ -36,8 +37,7 @@ const Orders = () => {
     // Fetch data using Axios
     axios.get(`http://localhost:3001/user/` ,{
       headers: { 
-        Authorization: `${authToken}`,
-        
+        Authorization: `${authToken}`,        
       },
     
     })
@@ -82,6 +82,9 @@ const Orders = () => {
     setCurrentPage(1); // Reset page when search term changes
   };
 
+  // console.log('orders.isdeleted',orders.isdeleted);
+  // console.log('orders.isdeleted',orders[0]);
+
   return (
     <>
   {/* component */}
@@ -119,6 +122,7 @@ const Orders = () => {
       
     
     </div>
+    {orders.isdeleted !== false &&(
     <div>
       <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
@@ -182,6 +186,7 @@ const Orders = () => {
             </td>
 
               </tr>
+           
                ))}
         
             </tbody>
@@ -211,6 +216,7 @@ const Orders = () => {
        
       </div>
     </div>
+    )}
   </div>
   {(role != 1 )&&
    (<Navigate to="/login" replace/>)

@@ -120,7 +120,7 @@ const role = isUserRole() || Cookies.get('role')
     <Link 
     to={'/driverOrders'}
     
->     {t('header.Driver Orders')}
+>     Driver Orders
      
     </Link>
 )}
@@ -207,7 +207,7 @@ const role = isUserRole() || Cookies.get('role')
     
     onClick={() => handleClick('driverOrders')}
     className={` cursor-pointer  group font-medium transition duration-150 ease-in-out text-sm md:text-xl ${activeButton === 'driverOrders' ? 'border-b-4 border-orange-500 text-black' : ' text-gray-500 hover:text-gray-900'}`}    >
-        {t('header.Driver Orders')}
+       Driver Orders
       {activeButton != 'driverOrders' &&(
 
       <div className="w-0 group-hover:w-full h-1 bg-orange-400 ease-out-in duration-500  "></div>
@@ -235,56 +235,8 @@ const role = isUserRole() || Cookies.get('role')
           <LanguageSwitcher />
         </div>
 
-        {isAuthenticated() ? (
-          // User is authenticated, show profile icon and logout button
-          <div className="flex items-center">
-            
-            <button
-              onClick={logout}
-              className="inline-flex items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
-            >
-              Logout
-            </button>
-           {role == 1 &&(
-            <Link to={'/userProfile'}>
-              <svg
-                className="text-teal-600 w-12 h-12"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </Link>
-           )}
-          {role != 2 && (
-
-            <div className='mt-12 ml-2 '>
-
-           <LanguageSwitcher />
-  
-           <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 50 50"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="h-12 w-12"
-                >
-                </svg>
-                
-           </div>
-                           )}
-
-          </div>
-        ) : (
-             <div>
+        {!isAuthenticated() ? (
+           <div>
                         {role != 2 && (
 
           <div className='mt-12 ml-2 '>
@@ -359,6 +311,55 @@ const role = isUserRole() || Cookies.get('role')
           </div>
           
           </div>
+          
+        ) : (
+            // User is authenticated, show profile icon and logout button
+          <div className="flex items-center">
+            
+          <button
+            onClick={logout}
+            className="inline-flex items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
+          >
+            Logout
+          </button>
+         {role == 1 &&(
+          <Link to={'/userProfile'}>
+            <svg
+              className="text-teal-600 w-12 h-12"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </Link>
+         )}
+        {role != 2 && (
+
+          <div className='mt-12 ml-2 '>
+
+         <LanguageSwitcher />
+
+         <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 50 50"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="h-12 w-12"
+              >
+              </svg>
+              
+         </div>
+                         )}
+
+        </div>
         )}
       </div>
 

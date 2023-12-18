@@ -12,9 +12,9 @@ import Cookies from 'js-cookie';
 const stripePromise = loadStripe('pk_test_51OGQ5sJlCMJqHMZePfpmiwsr8SeKyd6N8UOZobwBGPY0cHqUG9MvtOOlEUlTdxZfKhpNb7lyzO7BXVDwcifRLBoi006lDxNQEH');
 const Payment = () => {
   const location = useLocation()
-  const { price } = location.state
-
-
+  const { price , formData} = location.state
+console.log(price);
+console.log(formData);
   const {isUserRole} = useAuth()
   const role = isUserRole() || Cookies.get('role')
   console.log("role in user ",role )
@@ -23,6 +23,7 @@ const Payment = () => {
     console.log("location in payment page ",price);
     window.scrollTo(0, 0);
   }, []);
+
 
   return (
     <div className="product">
@@ -39,7 +40,7 @@ const Payment = () => {
     <Elements stripe={stripePromise}>
   <ElementsConsumer>
     {({ stripe, elements }) => (
-      <CheckoutForm stripe={stripe} elements={elements} price={price} />
+      <CheckoutForm stripe={stripe} elements={elements} price={price}  formData={formData}/>
     )}
   </ElementsConsumer>
 </Elements>

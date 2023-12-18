@@ -38,12 +38,10 @@ const getDriverById = async (req, res) => {
 const updateDriverById = async (req, res) => {
   const driverId = req.user.driver_id;
   console.log(driverId);
-  const { driver_username, driver_email, driver_password, driver_license,
-    truck_type, production_year, plate_number, truck_image, driver_size_type , status } = req.body;
+  const { driver_username, driver_email, driver_password, status } = req.body;
 
   try {
-    const updatedDriver = await DriverModel.updateDriverById( driver_username, driver_email, driver_password, driver_license,
-        truck_type, production_year, plate_number, truck_image, driver_size_type , status,driverId,);
+    const updatedDriver = await DriverModel.updateDriverById( driver_username, driver_email, driver_password, status,driverId,);
 
     if (!updatedDriver) {
       return res.status(404).json({ error: 'Driver not found' });
