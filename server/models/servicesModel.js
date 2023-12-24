@@ -1,7 +1,7 @@
 const { pool } = require('../db');
 
-const getAllServices = async (pageSize , offset) => {
-  const services = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM services ORDER BY services_id LIMIT $1 OFFSET $2' , [pageSize , offset]);
+const getAllServices = async (pageSize , offset , searchTerm) => {
+  const services = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM services WHERE services_title ILIKE $3 ORDER BY services_id LIMIT $1 OFFSET $2' , [pageSize , offset , `%${searchTerm}%`]);
   return services.rows;
 };
 

@@ -4,18 +4,18 @@ const Firebase = require('../middleware/firebaseMiddleware')
 
 const getAllSolutions = async (req, res) => {
   try {
-    const {page =1 , pageSize = 5} = req.query;
+    const {page =1 , pageSize = 5 , search } = req.query;
     const offset = (page - 1) * pageSize
-    const solutions = await solutionModel.getAllSolutions(pageSize , offset);
-    res.json(solutions);
+    const solutions = await solutionModel.getAllSolutions(pageSize , offset , search);
+    res.status(200).json( solutions );
   } catch (error) {
     console.error('Error in getAllSolutions controller:', error);
-    res.status(500).json({ success: false, message: 'An error occurred while processing the request' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 const getSolutionById = async (req, res) => {
-  const { solutionId } = req.params;
+  const  solutionId  = req.params.solutionId;
 
   try {
     const solution = await solutionModel.getSolutionById(solutionId);
@@ -84,7 +84,8 @@ const updateSolution = async (req, res) => {
 };
 
 const softDeleteSolution = async (req, res) => {
-  const  solutionId  = req.params.solutionId;
+  const solutionId  = req.params.solutionId;
+  console.log(solutionId);
 
   try {
     const deletedSolution = await solutionModel.softDeleteSolution(solutionId);

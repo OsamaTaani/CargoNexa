@@ -7,12 +7,19 @@ require('dotenv').config();
 
 const registerDriver = async (req, res) => {
   const validationSchema = Joi.object({
-  
     driver_username: Joi.string().pattern(/^[^\s]+$/).required().messages({
       'string.pattern.base': 'Username must not contain spaces.',
     }),
-    driver_email: Joi.string().email().required(),
-
+    driver_email: Joi.string().pattern(/.*@.*/).required().messages({
+      'string.email': 'Email must be valid and contain @.',
+    }),
+    driver_password: Joi.string()
+      .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
+      .required()
+      .messages({
+        'string.pattern.base':
+          'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+      }),
     driver_license: Joi.number().integer().min(10000000).max(99999999).required().messages({
       'number.base': 'Driver license must be a number with 8 digits.',
     }),
@@ -22,12 +29,8 @@ const registerDriver = async (req, res) => {
     }),
     plate_number: Joi.number().integer().required(),
     driver_size_type: Joi.string().required(),
-    driver_password: Joi.string()
-    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
-    .required()
-    .messages({
-      'string.pattern.base':
-        'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+    driver_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
+      'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
     }),
   });
 
@@ -79,9 +82,17 @@ const registerDriver = async (req, res) => {
 
 const loginDriver = async (req, res) => {
     const validationSchema = Joi.object({
-      driver_email: Joi.string().email().required(),
-      driver_password: Joi.string().required(),
-    });
+      driver_email: Joi.string().pattern(/.*@.*/).required().messages({
+        'string.email': 'Email must be valid and contain @.',
+      }),
+      driver_password: Joi.string()
+        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
+        .required()
+        .messages({
+          'string.pattern.base':
+            'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+        }),
+          });
   
     const { error } = validationSchema.validate(req.body);
     if (error) {
@@ -134,10 +145,10 @@ const loginDriver = async (req, res) => {
   const updateDriver = async (req, res) => {
     const driverId = req.user.driver_id;
     console.log(driverId);
-    const { driver_username, driver_password, status } = req.body;
+    const { driver_username, driver_email, driver_password, status } = req.body;
   
     try {
-      const updatedDriver = await DriverModel.updateDriver( driver_username, driver_password,status,driverId);
+      const updatedDriver = await DriverModel.updateDriver( driver_username, driver_email, driver_password,status,driverId);
   
       if (!updatedDriver) {
         return res.status(404).json({ error: 'Driver not found' });

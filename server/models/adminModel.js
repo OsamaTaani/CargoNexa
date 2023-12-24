@@ -40,8 +40,8 @@ const verifyCredentials = async(admin_email , admin_password) => {
     };
     return null;
 }
-const getAllAdmins = async (pageSize, offset) => {
-    const admins = await pool.query('SELECT *, COUNT(*) OVER () AS total_count FROM admins ORDER BY admin_id LIMIT $1 OFFSET $2' , [pageSize, offset]);
+const getAllAdmins = async (pageSize, offset , searchTerm) => {
+    const admins = await pool.query('SELECT *, COUNT(*) OVER () AS total_count FROM admins WHERE admin_username ILIKE $3 ORDER BY admin_id LIMIT $1 OFFSET $2' , [pageSize, offset , `%${searchTerm}%`]);
     return admins.rows;
   };
   
@@ -50,7 +50,7 @@ const getAllAdmins = async (pageSize, offset) => {
     return admin.rows[0];
   };
   
-  const updateAdminById = async (adminId, admin_username, admin_email, admin_phone_number , admin_password) => {
+  const updateAdminById = async ( admin_username, admin_email, admin_phone_number , admin_password ,adminId) => {
     const updatedAdmin = await pool.query(
       'UPDATE admins SET admin_username = $1, admin_email = $2, admin_phone_number = $3 , admin_password = $4 WHERE admin_id = $5 RETURNING *',
       [admin_username, admin_email, admin_phone_number, admin_password, adminId ]
@@ -61,7 +61,7 @@ const getAllAdmins = async (pageSize, offset) => {
 //Soft delete
   const deleteAdminById = async (adminId) => {
     const deletedAdmin = await pool.query(
-      'UPDATE admins SET isdeleted = true WHERE admin_id = $1 RETURNING *',
+      'UPDATE admins SET isDeleted = true WHERE admin_id = $1 RETURNING *',
       [adminId]
     );
   

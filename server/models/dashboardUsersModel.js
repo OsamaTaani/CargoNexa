@@ -23,8 +23,8 @@ const getUserByEmail = async (user_email) => {
 
 
 
-const getAllUsers = async (pageSize , offset) => {
-  const users = await pool.query('SELECT *, COUNT(*) OVER () AS total_count FROM users ORDER BY user_id LIMIT $1 OFFSET $2', [pageSize , offset]);
+const getAllUsers = async (pageSize , offset , searchTerm) => {
+  const users = await pool.query('SELECT *, COUNT(*) OVER () AS total_count FROM users WHERE user_username ILIKE $3 ORDER BY user_id LIMIT $1 OFFSET $2', [pageSize , offset , `%${searchTerm}%`]);
   return users.rows;
 };
 

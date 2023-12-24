@@ -8,8 +8,16 @@ require("dotenv").config(); // Load environment variables from .env
 const loginAdmin = async (req, res) => {
   // Validation check
   const validationSchema = Joi.object({
-    admin_email: Joi.string().email().required(),
-    admin_password: Joi.string().required(),
+    admin_email: Joi.string().pattern(/.*@.*/).required().messages({
+      'string.email': 'Email must be valid and contain @.',
+    }),
+    admin_password: Joi.string()
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
+    .required()
+    .messages({
+      'string.pattern.base':
+        'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+    }),
   });
 
   const { error } = validationSchema.validate(req.body);
@@ -52,11 +60,21 @@ const loginAdmin = async (req, res) => {
 const registerAdmin = async (req, res) => {
   // Validation check
   const validationSchema = Joi.object({
-    admin_username: Joi.string().trim().regex(/^\S*$/).required(), // No spaces allowed
-    admin_password: Joi.string().min(8).max(16).required()
-      .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\w@$!%*?&]{8,16}$/), // At least one uppercase, one digit, and one special character
-    admin_email: Joi.string().email().required().regex(/@/), // Must contain '@'
-    admin_phone_number: Joi.string().pattern(/^(07\d{8})$/).required(),
+    admin_email: Joi.string().pattern(/.*@.*/).required().messages({
+      'string.email': 'Email must be valid and contain @.',
+    }),
+    admin_password: Joi.string()
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
+    .required()
+    .messages({
+      'string.pattern.base':
+        'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+    }),
+      admin_phone_number: 
+      Joi.string().pattern(/^07\d{8}$/).required().messages({
+        'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
+      }),
+  
   });
   
   const { error } = validationSchema.validate(req.body);
@@ -103,10 +121,10 @@ const registerAdmin = async (req, res) => {
 // Get all admins
 const getAllAdmins = async (req, res) => {
   try {
-    const { page = 1, pageSize = 5 } = req.query;
+    const { page = 1, pageSize = 5 , search} = req.query;
     const offset = (page - 1) * pageSize;
 
-    const admins = await AdminModel.getAllAdmins(pageSize, offset);
+    const admins = await AdminModel.getAllAdmins(pageSize, offset , search);
     res.status(200).json(admins);
   } catch (error) {
     console.error(error);
@@ -141,11 +159,12 @@ const updateAdminById = async (req, res) => {
 
   try {
     const updatedAdmin = await AdminModel.updateAdminById(
-      adminId,
       admin_username,
       admin_email,
       admin_phone_number,
-      admin_password
+      admin_password,
+      adminId,
+
     );
 
     if (!updatedAdmin) {

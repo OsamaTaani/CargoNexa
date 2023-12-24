@@ -79,10 +79,10 @@ const getDriverByEmail = async (driver_email) => {
   
   };
   
-  const updateDriver = async ( driver_username, driver_password,status,driverId) => {
+  const updateDriver = async ( driver_username, driver_email, driver_password,status,driverId) => {
     const updatedDriver = await pool.query(
-      'UPDATE drivers SET driver_username = $1, driver_password = $2, status = $3 WHERE driver_id = $4  RETURNING *',
-      [driver_username,  driver_password,status, driverId]
+      'UPDATE drivers SET driver_username = $1, driver_email = $2, driver_password = $3, status = $4 WHERE driver_id = $5  RETURNING *',
+      [driver_username, driver_email, driver_password,status, driverId]
     );
   
     return updatedDriver.rows[0];

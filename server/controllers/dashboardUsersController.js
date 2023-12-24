@@ -8,11 +8,23 @@ const Joi = require('joi');
 const addUser = async (req, res) => {
   // Validation check
   const validationSchema = Joi.object({
-    user_username: Joi.string().trim().regex(/^\S*$/).required(), // No spaces allowed
-    user_password: Joi.string().min(8).max(16).required()
-      .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\w@$!%*?&]{8,16}$/), // At least one uppercase, one digit, and one special character
-    user_email: Joi.string().email().required().regex(/@/), // Must contain '@'
-    user_phone_number: Joi.string().pattern(/^(07\d{8})$/).required(),
+    user_username: Joi.string().pattern(/^[^\s]+$/).required().messages({
+      'string.pattern.base': 'Username must not contain spaces.',
+    }), // No spaces allowed
+    user_password: Joi.string()
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
+    .required()
+    .messages({
+      'string.pattern.base':
+        'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+    }), // At least one uppercase, one digit, and one special character
+    user_email: Joi.string().pattern(/.*@.*/).required().messages({
+      'string.email': 'Email must be valid and contain @.',
+    }), // Must contain '@'
+    user_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
+      'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
+    }),
+
   });
 
   const { error } = validationSchema.validate(req.body);
@@ -41,10 +53,10 @@ const addUser = async (req, res) => {
 // Get All Users
 const getAllUsers = async (req, res) => {
   try {
-    const { page = 1, pageSize = 5 } = req.query;
+    const { page = 1, pageSize = 5 , search} = req.query;
     const offset = (page - 1) * pageSize;
 
-    const users = await UserModel.getAllUsers(pageSize , offset);
+    const users = await UserModel.getAllUsers(pageSize , offset , search);
     res.status(200).json( users );
   } catch (error) {
     console.error(error);

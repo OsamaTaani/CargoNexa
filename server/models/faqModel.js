@@ -16,9 +16,9 @@ const saveFAQ = async (question, answer) => {
 };
 
 // Function to get all FAQs
-const getAllFAQs = async (pageSize , offset) => {
+const getAllFAQs = async (pageSize , offset , searchTerm) => {
   try {
-    const result = await pool.query('SELECT *, COUNT (*) OVER () AS total_count FROM faq ORDER BY faq_id LIMIT $1 OFFSET $2' , [pageSize , offset]);
+    const result = await pool.query('SELECT *, COUNT (*) OVER () AS total_count FROM faq WHERE question ILIKE $3 ORDER BY faq_id LIMIT $1 OFFSET $2' , [pageSize , offset , `%${searchTerm}%`]);
 
     return result.rows;
   } catch (error) {
@@ -42,7 +42,7 @@ const getFAQById = async (faqId) => {
 };
 
 // Function to update a FAQ
-const updateFAQ = async (faqId, question, answer) => {
+const updateFAQ = async (question, answer,faqId) => {
   try {
     const result = await pool.query(
       'UPDATE faq SET question = $1, answer = $2 WHERE faq_id = $3 AND isdeleted = false RETURNING *',

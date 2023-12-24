@@ -1,9 +1,9 @@
 // models/solutionModel.js
 const {pool} = require('../db');
 
-const getAllSolutions = async (pageSize , offset) => {
+const getAllSolutions = async (pageSize , offset , searchTerm) => {
   try {
-    const result = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM solutions ORDER BY solution_id LIMIT $1 OFFSET $2',[pageSize , offset]);
+    const result = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM solutions WHERE solution_title ILIKE $3 ORDER BY solution_id LIMIT $1 OFFSET $2',[pageSize , offset , `%${searchTerm}%`]);
     return result.rows;
   } catch (error) {
     console.error('Error in getAllSolutions:', error);

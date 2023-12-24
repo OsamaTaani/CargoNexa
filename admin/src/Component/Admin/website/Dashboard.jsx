@@ -71,27 +71,27 @@ const Dashboard = () => {
       // Make the appropriate API call based on the selected tab
       switch (selectedTab) {
         case "dashboard":
-          response = await axios.get(`http://localhost:3001/orders?page=${currentPage}&search=${searchTerm}`);
+          response = await axios.get(`http://localhost:3001/orders?page=${currentPage}&search=${searchTerm}`)
           break;
         case "profile":
-          response = await axios.get(`http://localhost:3001/admin/allAdmins?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/admin/allAdmins?page=${currentPage}&search=${searchTerm}`);
           break;
         case "users":
-          response = await axios.get(`http://localhost:3001/all-users?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/all-users?page=${currentPage}&search=${searchTerm}`);
           break;
           ///////////////////////////////////////DRIVER TABLE///////////////////////////////////////////
         case "drivers": 
           response = await axios.get(`http://localhost:3001/drivers?page=${currentPage}&search=${searchTerm}`);
+
           break;
         case "services":
-          response = await axios.get(`http://localhost:3001/getAll/services?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/getAll/services?page=${currentPage}&search=${searchTerm}`);
           break;
         case "solutions":
-          response = await axios.get(`http://localhost:3001/getAll/solutions?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/getAll/solutions?page=${currentPage}&search=${searchTerm}`);
           break;
         case "faq":
-          response = await axios.get(`http://localhost:3001/getAll/faq?page=${currentPage}`);
-         
+          response = await axios.get(`http://localhost:3001/getAll/faq?page=${currentPage}&search=${searchTerm}`);
           break;
 
         default:
@@ -99,9 +99,7 @@ const Dashboard = () => {
       }
 
       setData(response.data);
-      console.log('data',data);
       setTotalItems(response.data[0].total_count);
-      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -260,7 +258,7 @@ const Dashboard = () => {
   const handleFaqEditSubmit = async (editedFaqData) => {
     try {
       // Make a PUT request to update the order data
-      await axios.put(`http://localhost:3001/update/faq/${editedFaqData.id}`, editedFaqData); // Replace with your API endpoint
+      await axios.put(`http://localhost:3001/update/faq/${editedFaqData.faq_id}`, editedFaqData); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditFaqPopupOpen(false);
       fetchData(); // Implement a function to fetch data from your API
@@ -1090,7 +1088,7 @@ const Dashboard = () => {
                       />
                       <button
                         type="submit"
-                       onClick={()=>fetchData()}
+                       onClick={()=>{fetchData(); setCurrentPage(1)}}
                         class="text-white absolute end-2.5 bottom-2.5 bg-my-green hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       >
                         Search
@@ -1198,9 +1196,9 @@ const Dashboard = () => {
                             >
                               Prev
                             </button>
-                            <span className="mr-4 font-semibold">
+                            {/* <span className="mr-4 font-semibold">
           Page {currentPage} of {totalPages}
-        </span>
+        </span> */}
                             {/* &nbsp; &nbsp; */}
                             <button
                               onClick={handleNextClick}
@@ -1395,9 +1393,9 @@ const Dashboard = () => {
                             >
                               Prev
                             </button>
-                            <span className="mr-4 font-semibold">
+                            {/* <span className="mr-4 font-semibold">
           Page {currentPage} of {totalPages}
-        </span>
+        </span> */}
                             {/* &nbsp; &nbsp; */}
                             <button
                               onClick={handleNextClick}
@@ -1465,7 +1463,7 @@ const Dashboard = () => {
                               </tr>
                             </thead>
                             <tbody>
-                              {data
+                              {data.sort((a, b) => a.user_id - b.user_id)
                                 // .slice(
                                 //   (currentPage - 1) * itemsPerPage,
                                 //   currentPage * itemsPerPage
@@ -1570,9 +1568,9 @@ const Dashboard = () => {
                             >
                               Prev
                             </button>
-                            <span className="mr-4 font-semibold">
+                            {/* <span className="mr-4 font-semibold">
           Page {currentPage} of {totalPages}
-        </span>
+        </span> */}
                             {/* &nbsp; &nbsp; */}
                             <button
                               onClick={handleNextClick}
@@ -1810,9 +1808,9 @@ const Dashboard = () => {
                             >
                               Prev
                             </button>
-                            <span className="mr-4 font-semibold">
+                            {/* <span className="mr-4 font-semibold">
           Page {currentPage} of {totalPages}
-        </span>
+        </span> */}
                             {/* &nbsp; &nbsp; */}
                             <button
                               onClick={handleNextClick}
@@ -2012,9 +2010,9 @@ const Dashboard = () => {
                             >
                               Prev
                             </button>
-                            <span className="mr-4 font-semibold">
+                            {/* <span className="mr-4 font-semibold">
           Page {currentPage} of {totalPages}
-        </span>
+        </span> */}
                             {/* &nbsp; &nbsp; */}
                             <button
                               onClick={handleNextClick}
@@ -2211,9 +2209,9 @@ const Dashboard = () => {
                             >
                               Prev
                             </button>
-                            <span className="mr-4 font-semibold">
+                            {/* <span className="mr-4 font-semibold">
           Page {currentPage} of {totalPages}
-        </span>
+        </span> */}
                             {/* &nbsp; &nbsp; */}
                             <button
                               onClick={handleNextClick}
@@ -2275,14 +2273,20 @@ const Dashboard = () => {
                               </tr>
                             </thead>
                             <tbody>
-                              
-                                
-                                      <tr key={data.faq_id}>
+                              {data.sort((a, b) => a.faq_id - b.faq_id)
+                                // .slice(
+                                //   (currentPage - 1) * itemsPerPage,
+                                //   currentPage * itemsPerPage
+                                // )
+                                .map(
+                                  (userData) =>
+                                    userData.isDeleted !== "true" && (
+                                      <tr key={userData.faq_id}>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex items-center">
                                             <div className="ml-3">
                                               <p className="text-gray-900 whitespace-no-wrap">
-                                                {data.question}
+                                                {userData.question}
                                               </p>
                                             </div>
                                           </div>
@@ -2290,7 +2294,7 @@ const Dashboard = () => {
 
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <p className="text-gray-900 whitespace-no-wrap">
-                                            {data.answer}
+                                            {userData.answer}
                                           </p>
                                         </td>
 
@@ -2298,7 +2302,7 @@ const Dashboard = () => {
                                           <div className="flex space-x-2">
                                             <button
                                               onClick={() =>
-                                                handleFaqEditClick(data.faq_id)
+                                                handleFaqEditClick(userData.faq_id)
                                               }
                                             >
                                               <svg
@@ -2332,10 +2336,9 @@ const Dashboard = () => {
 
                                             <button
                                               onClick={() =>
-                                                handleSoftDeleteFaq(data.faq_id)
+                                                handleSoftDeleteFaq(userData.faq_id)
                                               }
                                             >
-                                              {(data.isdeleted === false ) && (
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -2351,28 +2354,15 @@ const Dashboard = () => {
                                                   stroke-width="2"
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
-                                              </svg>)}
+                                              </svg>
                                             </button>
 
-                                            <button
-                                              onClick={() =>
-                                                SwitchDeleteToUnDeleteForFaq(
-                                                  data.faq_id
-                                                )
-                                              }
-                                            >
-                                        {(data.isdeleted === true ) && (
-                                            <div>
-                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
-                                            </div>
-                                          
-)}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
                                       </tr>
-                                    
-                                
+                                    )
+                                )}
                             </tbody>
                           </table>
                         </div>
@@ -2389,9 +2379,9 @@ const Dashboard = () => {
                             >
                               Prev
                             </button>
-                            <span className="mr-4 font-semibold">
+                            {/* <span className="mr-4 font-semibold">
           Page {currentPage} of {totalPages}
-        </span>
+        </span> */}
                             {/* &nbsp; &nbsp; */}
                             <button
                               onClick={handleNextClick}
@@ -2417,6 +2407,7 @@ const Dashboard = () => {
                       onSubmit={handleFaqEditSubmit}
                     />
                   )}
+
 
                
                 </div>

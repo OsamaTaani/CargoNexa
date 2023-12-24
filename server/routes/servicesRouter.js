@@ -11,6 +11,7 @@ const upload = multer({ storage: storage });
 router.get('/getAll/services', servicesController.getAllServices);
 router.post('/create/services', upload.single('image')   ,servicesController.createService );
 router.put('/update/services/:serviceId',upload.single('image') ,servicesController.updateServiceById);
-router.put('/softDelete/:serviceId', servicesController.deleteServiceById);
-router.get('/getService/:serviceId' , servicesController.getServiceById);
+router.put('/services/softDelete/:serviceId', servicesController.deleteServiceById);
+router.get('/services/getService/:serviceId' , servicesController.getServiceById);
+
 module.exports = router;

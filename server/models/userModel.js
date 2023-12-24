@@ -11,6 +11,30 @@ const createUser = async (user_username, user_password, user_email, user_phone_n
   return result.rows[0];
 };
 
+const googleAccount = async ({ user_username, user_email, picture }) => {
+  const role_id = "1";
+  // const created_at = new Date();
+  const user_password = "No Access";
+  const user_phone_number = "00000000";
+  const query = `
+  INSERT INTO users (user_username,user_email,user_password,user_phone_number,role_id,user_image) VALUES ($1, $2, $3, $4, $5, $6)
+  RETURNING *`;
+
+  const values = [
+    user_username,
+    user_email,
+    user_password,
+    user_phone_number,
+    role_id,
+    // created_at,
+    picture,
+  ];
+  const user = await pool.query(query, values);
+  return user.rows[0];
+};
+
+
+
 const getUserByEmail = async (user_email) => {
   const query = 'SELECT * FROM users WHERE user_email = $1';
   const result = await pool.query(query, [user_email]);
@@ -130,4 +154,5 @@ module.exports = {
     getOrderByUserId,
     getUserOrders,
     createOrder,
+    googleAccount
   };

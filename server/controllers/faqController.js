@@ -6,35 +6,36 @@ const saveFAQ = async (req, res) => {
 
   try {
     const savedFAQ = await faqModel.saveFAQ(question, answer);
-    res.json({ success: true, faq: savedFAQ });
+    res.status(200).json( savedFAQ );
   } catch (error) {
     console.error('Error in saveFAQ controller:', error);
-    res.status(500).json({ success: false, message: 'Failed to save FAQ' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 // Controller function to get all FAQs
 const getAllFAQs = async (req, res) => {
   try {
-    const {page = 1 , pageSize = 5} = req.query;
+    const {page = 1 , pageSize = 5 , search} = req.query;
     const offset = (page - 1) * pageSize;
-    const faqs = await faqModel.getAllFAQs(pageSize , offset);
-    res.json({ success: true, faqs });
+    const faqs = await faqModel.getAllFAQs(pageSize , offset , search);
+    res.status(200).json( faqs );
   } catch (error) {
     console.error('Error in getAllFAQs controller:', error);
-    res.status(500).json({ success: false, message: 'Failed to get FAQs' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 // Controller function to get a specific FAQ by ID
 const getFAQById = async (req, res) => {
   const { faqId } = req.params;
-
+ 
   try {
     const faq = await faqModel.getFAQById(faqId);
 
     if (faq) {
-      res.json({ success: true, faq });
+    res.status(200).json( faq );
+
     } else {
       res.status(404).json({ success: false, message: 'FAQ not found' });
     }
@@ -47,13 +48,15 @@ const getFAQById = async (req, res) => {
 // Controller function to update a FAQ
 const updateFAQ = async (req, res) => {
   const { faqId } = req.params;
+  console.log("faqId" ,faqId);
   const { question, answer } = req.body;
 
   try {
-    const updatedFAQ = await faqModel.updateFAQ(faqId, question, answer);
+    const updatedFAQ = await faqModel.updateFAQ( question, answer,faqId);
 
     if (updatedFAQ) {
-      res.json({ success: true, faq: updatedFAQ });
+      res.status(200).json( updatedFAQ );
+
     } else {
       res.status(404).json({ success: false, message: 'FAQ not found' });
     }
@@ -66,12 +69,12 @@ const updateFAQ = async (req, res) => {
 // Controller function to soft delete a FAQ
 const deleteFAQ = async (req, res) => {
   const { faqId } = req.params;
-
+console.log("faqId delete",faqId);
   try {
     const deletedFAQ = await faqModel.deleteFAQ(faqId);
 
     if (deletedFAQ) {
-      res.json({ success: true, faq: deletedFAQ });
+      res.status(200).json( deletedFAQ );
     } else {
       res.status(404).json({ success: false, message: 'FAQ not found' });
     }

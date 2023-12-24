@@ -49,9 +49,28 @@ const addDriver = async (
   return result.rows[0];
 };
 const getAllDrivers = async (pageSize , offset , searchTerm) => {
-  const drivers = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM drivers WHERE driver_username LIKE $3 ORDER BY driver_id LIMIT $1 OFFSET $2' , [pageSize , offset , `%${searchTerm}%`]);
-  return drivers.rows;           
+  try{
+    const query = `
+      SELECT * , COUNT (*) OVER () AS total_count
+      FROM drivers
+      WHERE
+        driver_username ILIKE $3 OR
+        driver_license ILIKE $3 OR
+        production_year::TEXT ILIKE $3 OR  
+        plate_number ILIKE $3 OR
+        driver_size_type ILIKE $3 OR
+        status ILIKE $3
+      ORDER BY driver_id
+      LIMIT $1 OFFSET $2`;
+              
+    const driver = await pool.query(query ,[pageSize , offset , `%${searchTerm}%`]);
+    return driver.rows;           
+  }catch  (error) {
+    console.error('Error in get all drivers:', error);
+    throw error;
+  }
 };
+  
 
 const getDriverById = async (driverId) => {
   const driver = await pool.query('SELECT * FROM drivers WHERE driver_id = $1', [driverId]);
@@ -69,6 +88,7 @@ const updateDriverById = async ( driver_username, driver_email,driver_license, t
 
   return updatedDriver.rows[0];
 };
+
 const deleteDriverById = async (driverId) => {
   const deletedDriver = await pool.query('UPDATE drivers SET isDeleted = true WHERE driver_id = $1 AND isDeleted = false RETURNING *', [driverId]);
   return deletedDriver.rows[0];

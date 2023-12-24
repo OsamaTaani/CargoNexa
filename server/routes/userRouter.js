@@ -13,6 +13,7 @@ router.get('/order/user/:orderId', authMiddleware.authorize([1]) ,UserController
 
 router.get('/userOrders', authMiddleware.authorize([1]), UserController.getUserOrders);
 
+router.post('/google' , UserController.googleLogin);
 
 // Protected route example
 // router.get('/profile', authenticateToken, (req, res) => {

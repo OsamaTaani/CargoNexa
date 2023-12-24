@@ -8,12 +8,23 @@ require('dotenv').config(); // Load environment variables from .env
 const registerUser = async (req, res) => {
   // Validation check
   const validationSchema = Joi.object({
-    user_username: Joi.string().trim().regex(/^\S*$/).required(), // No spaces allowed
-   
-    user_email: Joi.string().email().required().regex(/@/), // Must contain '@'
-    user_phone_number: Joi.string().pattern(/^(07\d{8})$/).required(),
-    user_password: Joi.string().min(8).max(16).required()
-    .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\w@$!%*?&]{8,16}$/), // At least one uppercase, one digit, and one special character
+    user_username: Joi.string().pattern(/^[^\s]+$/).required().messages({
+      'string.pattern.base': 'Username must not contain spaces.',
+    }), // No spaces allowed
+    user_password: Joi.string()
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
+    .required()
+    .messages({
+      'string.pattern.base':
+        'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+    }), // At least one uppercase, one digit, and one special character
+    user_email: Joi.string().pattern(/.*@.*/).required().messages({
+      'string.email': 'Email must be valid and contain @.',
+    }), // Must contain '@'
+    user_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
+      'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
+    }),
+
   });
 
   const { error } = validationSchema.validate(req.body);
@@ -46,11 +57,19 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   // Validation check
   const validationSchema = Joi.object({
-    user_email: Joi.string()
-    .email()
-    .regex(/@/) // Ensure the email contains '@'
-    .required(),
-    user_password: Joi.string().required(),
+
+    user_email: Joi.string().pattern(/.*@.*/).required().messages({
+      'string.email': 'Email must be valid and contain @.',
+    }), // Must contain '@'
+
+    user_password: Joi.string()
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
+    .required()
+    .messages({
+      'string.pattern.base':
+        'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
+    }), // At least one uppercase, one digit, and one special character
+
   });
 
   const { error } = validationSchema.validate(req.body);
@@ -126,11 +145,69 @@ const createOrder = async (req, res) => {
   }
 };
 
+const  googleLogin = async (req, res) => {
+  try {
+    // console.log("object");
+    const user_username = req.body.name;
+    const user_email = req.body.email;
+
+    const { picture } = req.body;
+    // console.log(user_email);
+
+    const existUser = await UserModel.getUserByEmail(user_email);
+    // console.log(`hhh`, existUser);
+
+    if (existUser) {
+      try {
+        const payload = {
+          user_username: existUser.user_username,
+          user_email: existUser.user_email,
+          role_id: existUser.role_id,
+          user_id: existUser.user_id,
+        };
+        const secretKey = process.env.SECRET_KEY;
+        const token = jwt.sign(payload, secretKey, { expiresIn: "6h" });
+
+        return res.status(200).json({
+          role_id: existUser.role_id,
+          logmessage: "User logged in successfully",
+          token: token,
+        });
+      } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+    } else {
+      const user = await UserModel.googleAccount({ user_username, user_email, picture });
+      console.log(user);
+      const payload = {
+        user_username: user.user_username,
+        user_email: user.user_email,
+        role_id: user.role_id,
+        user_id: user.user_id,
+      };
+      const secretKey = process.env.SECRET_KEY;
+      const token = jwt.sign(payload, secretKey, { expiresIn: "6h" });
+
+      return res.status(200).json({
+        role_id: user.role_id,
+        logmessage: "User added successfully",
+        token: token,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
 
 module.exports = {
    registerUser,
     loginUser,
     getOrderByUserId,
     getUserOrders,
-    createOrder
+    createOrder,
+    googleLogin
    };

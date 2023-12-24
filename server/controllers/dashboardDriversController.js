@@ -8,7 +8,9 @@ const addDriver = async (req, res) => {
     driver_username: Joi.string().pattern(/^[^\s]+$/).required().messages({
       'string.pattern.base': 'Username must not contain spaces.',
     }),
-    driver_email: Joi.string().email().required(),
+    driver_email: Joi.string().pattern(/.*@.*/).required().messages({
+      'string.email': 'Email must be valid and contain @.',
+    }),
     driver_password: Joi.string()
       .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
       .required()
@@ -25,8 +27,11 @@ const addDriver = async (req, res) => {
     }),
     plate_number: Joi.number().integer().required(),
     driver_size_type: Joi.string().required(),
+    driver_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
+      'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
+    }),
   });
-  
+    
   const { error } = driverValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ error: error.details[0].message });
@@ -101,25 +106,6 @@ const getDriverById = async (req, res) => {
 };
 
 // Update Driver by ID
-// const updateDriverById = async (req, res) => {
-//   const driverId = req.params.driver_id;
-//   console.log(driverId);
-//   const { driver_username, driver_email, driver_password, status } = req.body;
-
-//   try {
-//     const updatedDriver = await DriverModel.updateDriverById( driver_username, driver_email, driver_password,status,driverId);
-
-//     if (!updatedDriver) {
-//       return res.status(404).json({ error: 'Driver not found' });
-//     }
-
-//     res.status(200).json({ message: 'Driver updated successfully', driver: updatedDriver });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// };
-
 const updateDriverById = async (req, res) => {
   const driverId = req.params.driver_id;
   console.log(driverId);
@@ -138,6 +124,7 @@ const updateDriverById = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 // Delete Driver by ID
 const deleteDriverById = async (req, res) => {
   const driverId = req.params.driverId;

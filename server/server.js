@@ -1,4 +1,6 @@
 const express = require('express');
+const session = require('express-session');
+
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -14,9 +16,15 @@ const services = require('./routes/servicesRouter');
 const contact = require('./routes/contactRouter');
 const solutions = require('./routes/solutionRoutes');
 const faq = require('./routes/faqRouter');
+const forgetPwd = require('./routes/forgetPwdRouter');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+app.use(session({
+  secret: '065a06f702a2589d98d05d9e7650376371d84f5d3717ea8598293c85dfee85bc', // Replace with a strong secret key
+  resave: false,
+  saveUninitialized: true,
+}));
 
 // Middleware
 app.use(bodyParser.json());
@@ -35,6 +43,7 @@ app.use(services);
 app.use(contact);
 app.use(solutions);
 app.use(faq);
+app.use(forgetPwd);
 
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);

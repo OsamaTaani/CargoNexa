@@ -11,10 +11,10 @@ const getAllOrdersWithPaginationAndSearch = async (pageSize, offset, searchTerm)
       SELECT *, COUNT(*) OVER () as total_count 
       FROM orders 
       WHERE 
-        order_title LIKE $3 OR
-        shipping_location LIKE $3 OR
-        receiving_location LIKE $3 OR
-        status LIKE $3
+        order_title ILIKE $3 OR
+        shipping_location ILIKE $3 OR
+        receiving_location ILIKE $3 OR
+        status ILIKE $3
       ORDER BY order_id 
       LIMIT $1 OFFSET $2`;
 

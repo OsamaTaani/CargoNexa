@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 
 const EditPopupFaqData = ({ faq, isOpen, onClose, onSubmit }) => {
     const [editedFaq, setEditedFaq] = useState(faq);
+       console.log(editedFaq);
 
+       
   useEffect(() => {
     setEditedFaq(faq);
   }, [faq]);
