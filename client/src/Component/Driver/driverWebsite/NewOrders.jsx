@@ -36,7 +36,7 @@ const NewOrders = () => {
       try {
         const authToken = cookies['token'];
         console.log(authToken);
-        const response = await axios.get('http://localhost:3001/driver/orders' ,{
+        const response = await axios.get('http://localhost:3001/drivers/driverOrders' ,{
           headers: { 
             Authorization: `${authToken}`,
             
@@ -77,7 +77,7 @@ const NewOrders = () => {
       const authToken = cookies['token'];
       console.log(authToken);
       // const response = await axios.get(`http://localhost:3001/driver/${driverId}`);
-      const response = await axios.get('http://localhost:3001/driver',{
+      const response = await axios.get('http://localhost:3001/drivers/driver',{
         headers: { 
           Authorization: `${authToken}`,
           
@@ -108,7 +108,7 @@ const NewOrders = () => {
   const handleEditFormSubmit = async (updatedDriverInfo) => {
     try {
       // Make an Axios request to update driver information
-      await axios.put(`http://localhost:3001/update-drivers`, updatedDriverInfo);
+      await axios.put(`http://localhost:3001/drivers/updateDriver`, updatedDriverInfo);
   
       // Close the edit form and fetch updated driver information
       setIsEditFormOpen(false);

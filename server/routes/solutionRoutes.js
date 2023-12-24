@@ -9,7 +9,7 @@ const upload = multer({ storage: storage });
 
 
 // Get all solutions
-router.get('/solutions', solutionController.getAllSolutions);
+router.get('/getAll/solutions', solutionController.getAllSolutions);
 
 // Get solution by ID
 router.get('/solutions/:solutionId', solutionController.getSolutionById);
@@ -21,6 +21,6 @@ router.post('/solutions/create', upload.single('image')  ,solutionController.cre
 router.put('/solutions/update/:solutionId',upload.single('image')  ,solutionController.updateSolution);
 
 // Soft delete a solution by ID
-router.delete('/solutions/softDelete/:solutionId', solutionController.softDeleteSolution);
+router.put('/solutions/softDelete/:solutionId', solutionController.softDeleteSolution);
 
 module.exports = router;

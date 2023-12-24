@@ -15,7 +15,18 @@ const AddServicesForm = ({ onSubmit, onCancel }) => {
           [name]: value,
         }));
       };
-    
+
+      const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setFormData((prevData) => ({ ...prevData, image: file }));
+      };
+
+      const form = new FormData();
+      form.append("user_username",formData.services_title);
+      // form.append("user_email",editedUser.user_email);
+      form.append("user_phone_number",formData.services_description);
+      form.append("image", formData.services_image);
+
       const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(formData);
@@ -69,10 +80,10 @@ const AddServicesForm = ({ onSubmit, onCancel }) => {
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
           name="services_image"
           id="services_image"
-          type='text'
+          type='file'
           placeholder='+962'
           value={formData.services_image}
-          onChange={handleInputChange}
+          onChange={handleImageChange}
            required
         />
           </div>

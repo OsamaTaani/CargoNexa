@@ -13,13 +13,16 @@ const getUserById = async (userId) => {
 
 
 const updateUserProfile = async (userId, updatedInfo) => {
+    console.log("userinfo" , updatedInfo);
     try {
-      const { user_username, user_email, user_phone_number ,user_image } = updatedInfo;
+      const { user_username, user_email, user_phone_number ,user_image} = updatedInfo;
   
       const result = await pool.query(
         'UPDATE users SET user_username = $1, user_email = $2, user_phone_number = $3 , user_image = $4 WHERE user_id = $5  RETURNING *',
         [user_username, user_email, user_phone_number,user_image, userId]
       );
+      console.log("Query:", 'UPDATE users SET user_username = $1, user_email = $2, user_phone_number = $3 , user_image = $4 WHERE user_id = $5  RETURNING *', [user_username, user_email, user_phone_number, user_image, userId]);
+
       console.log("bbb",result.rows[0]);
       return result.rows[0];
     } catch (error) {
@@ -82,11 +85,18 @@ const updateUserProfile = async (userId, updatedInfo) => {
     }
   }
     
+
+  const deleteOrder = async (orderId) => {
+    const deletedOrder = await pool.query('UPDATE orders SET isDeleted = true WHERE order_id = $1 RETURNING *', [orderId]);
+    return deletedOrder.rows[0];
+  };
+  
   
     
   module.exports = { 
      updateUserProfile ,
       getUserById,
       updateOrder,
+      deleteOrder
      };
   

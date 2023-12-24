@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const EditUserForm = ({ userId, onClose, onUpdate ,onSubmit}) => {
   const [editedUser, setEditedUserData] = useState(
@@ -10,7 +11,6 @@ const EditUserForm = ({ userId, onClose, onUpdate ,onSubmit}) => {
       user_image: null,
     }
   );
-
 
   // console.log("editedUser", editedUser);
 useEffect(() => {
@@ -134,13 +134,16 @@ useEffect(() => {
                 className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
              
-
             </div>
-
-            <div className="flex justify-end">
+            <div className="mb-4">
+              <Link to={'/changePassword'} state={{userId:{userId}}}>
+             <button className="bg-orange-400 text-white py-2 px-4 rounded-xl hover:bg-orange-300 focus:outline-none focus:shadow-outline-blue" >  Change password</button>
+             </Link>
+            </div>
+<hr />            <div className="flex justify-end mt-10">
               <button
                 type="submit"
-                className="bg-my-green text-white py-2 px-4 rounded-full hover:bg-teal-400 focus:outline-none focus:shadow-outline-blue"
+                className="bg-my-green text-white py-2 px-4 rounded-xl hover:bg-teal-400 focus:outline-none focus:shadow-outline-blue"
               >
                 Save Changes
               </button>

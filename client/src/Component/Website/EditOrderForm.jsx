@@ -83,17 +83,7 @@ const EditForm = ({ onClose, orderDetails ,onSubmit}) => {
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-2">
-                <label className="block text-gray-700 text-sm font-bold mb-2"> Shipping Date</label>
-                <input
-                id='shipping_date'
-                  type="text"
-                  name="shipping_date"
-                  value={editedOrder.shipping_date}
-                  onChange={handleChange}
-                  className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
+             
               <div className="mb-2">
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Receiver Name</label>
                 <input

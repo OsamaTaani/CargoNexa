@@ -1,66 +1,58 @@
 import React, { useEffect, useState } from 'react'
 
-const EditPopupAdminData = ({ user, isOpen, onClose, onSubmit }) => {
-    const [editedUser, setEditedUser] = useState(user);
+const EditPopupAdminData = ( {admin, isOpen, onClose, onSubmit} ) => {
+    const [editedUser, setEditedUser] = useState(admin); 
 
   useEffect(() => {
-    setEditedUser(user);
-  }, [user]);
+    setEditedUser(admin);
+  }, [admin]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-
- 
   
   return (
     isOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
           <div className="bg-white w-96 p-6 rounded-lg z-10">
-            <h2 className="text-2xl font-semibold mb-4">Edit User</h2>
+            <h2 className="text-2xl font-semibold mb-4">Edit Admin</h2>
             <form onSubmit={(e) => { e.preventDefault(); onSubmit(editedUser); }}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">User Name</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">admin_username</label>
                 <input
                   type="text"
-                  name="user_username"
-                  value={editedUser.user_username}
+                  name="admin_username"
+                  value={editedUser.admin_username}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">User Email</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">admin_email</label>
                 <input
                   type="text"
-                  name="user_email"
-                  value={editedUser.user_email}
+                  name="admin_email"
+                  value={editedUser.admin_email}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">user_phone_number</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">admin_phone_number</label>
                 <input
                   type="text"
-                  name="user_phone_number"
-                  value={editedUser.user_phone_number}
+                  name="admin_phone_number"
+                  value={editedUser.admin_phone_number}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">User Password</label>
-                <input
-                  type="text"
-                  name="user_password"
-                  value={editedUser.user_password}
-                  onChange={handleChange}
-                  className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                />
-              </div>
+              {/* <div className="mb-4">
+                <button className="block bg-gray-700 text-sm font-bold mb-2">User Password</button>
+               
+              </div> */}
              
               <div className="flex justify-end">
                 <button

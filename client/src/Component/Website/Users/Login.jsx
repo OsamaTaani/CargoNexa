@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
-// import LogValidate from './LogValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../AuthContext';
@@ -115,12 +114,17 @@ const {login}=useAuth()
 </div>
 {(error !== null && error.includes("password"))&& <p className='text-red-500'>"password shouldn't be empty"</p>}
 
-<div>          {(error !== null && error.includes("Invalid credentials"))&& <p className='text-red-500'>"email or password not correct "</p>}
+<div>       
+     {(error !== null && error.includes("Invalid credentials"))&& <p className='text-red-500'>"email or password not correct "</p>}
 </div>
 
 <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">
   Login 
 </button>
+
+        <Link to={'/resetPassword'}>
+          <div className='text-center font-bold'>Forget Password ?</div>
+          </Link>
 </form></div>
 
 

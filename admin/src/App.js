@@ -14,6 +14,7 @@ import OrderDetailsPage from './Component/Admin/website/OrderDetailsPage';
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { AuthProvider } from './Component/Admin/AuthContext';
 // import { useCookies } from 'react-cookie';
 
 // Set the Authorization header globally
@@ -22,6 +23,8 @@ axios.defaults.headers.common['Authorization'] = `${Cookies.get('token')}`;
 
 function App() {
   return (
+    <AuthProvider>
+
     <Router>
     <div className="App">
        {/* Admin routs  */}
@@ -37,6 +40,8 @@ function App() {
 
       </div>
       </Router>
+    </AuthProvider>
+
   );
 }
 

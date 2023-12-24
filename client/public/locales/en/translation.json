@@ -13,12 +13,40 @@
         "Services":"Services" ,
         "Our Mission":" Our Mission",
         "My Order":"My Order",
-        "Login ":"Login",
-        "Logout ":"Logout",
-        "Driver ":"Driver",
-        "Shipper ":"Shipper",
-        "SignUp ":"SignUp"
+        "Login":"Login",
+        "Logout":"Logout",
+        "Driver":"Driver",
+        "Shipper":"Shipper",
+        "SignUp":"SignUp"
         
+
+    },
+    "solutions":{
+        "Logistic Solutions":" Logistic Solutions",
+        "LogisticDescription":"From the farm to your fridge, or from the warehouse to your wardrobe, CargoNexa develops solutions that meet customer needs from one end of the supply chain to the other.",     
+        "More Solutions":"More Solutions  "   
+
+    },
+  
+    "services":{
+        "Industry sectors":"Industry sectors",
+        "IndustryDescription":"No matter your industry, commodity or key markets, CargoNexa provides global and local logistics solutions that enable small and large businesses to grow.",     
+        "More services":"More services"   
+
+    },
+    "carousel":{
+        "carousel Description":" We make shipping large items less convenient by helping customers connect directly with service providers who have extra truck space. ",
+        "Quote Now":"Quote Now"   
+
+    },
+    "footer":{
+        "Website, For cargo Shipping !":"Website, For cargo Shipping !",
+        "ABOUT":"ABOUT"   ,
+        "Our Mission":"Our Mission "   ,
+        "PLATFORM":"PLATFORM"   ,
+        "FAQ":"FAQ "   ,
+        "CONTACT":" CONTACT "   ,
+        "Send a Message":"Send a Message" 
 
     }
 }

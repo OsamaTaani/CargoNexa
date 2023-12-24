@@ -70,6 +70,51 @@ const getDriverByEmail = async (driver_email) => {
     return passwordMatch ? driver : null;
   };
 
+
+  const getDriverInfo = async (driverId) => {
+    const driver = await pool.query('SELECT * FROM drivers WHERE driver_id = $1', [driverId]);
+    console.log(driverId);
+  
+    return driver.rows[0];
+  
+  };
+  
+  const updateDriver = async ( driver_username, driver_password,status,driverId) => {
+    const updatedDriver = await pool.query(
+      'UPDATE drivers SET driver_username = $1, driver_password = $2, status = $3 WHERE driver_id = $4  RETURNING *',
+      [driver_username,  driver_password,status, driverId]
+    );
+  
+    return updatedDriver.rows[0];
+  };
+
+  const getDriverOrders = async (driver_id) => {
+    try {
+      const result = await pool.query(
+        'SELECT o.* FROM orders o JOIN order_driver_association a ON o.order_id = a.order_id WHERE a.driver_id = $1',
+        [driver_id]
+      );
+        console.log(result.rows);
+      return result.rows;
+    } catch (error) {
+      console.error('Error in getDriverOrders:', error);
+      throw error;
+    }
+  };
+
+  const getDriverHistory = async (driverId) => {
+    try {
+        const result = await pool.query('SELECT * FROM orders WHERE driver_id = $1 AND isdeleted = false', [driverId]);
+        return result.rows;
+    } catch (error) {
+        console.error('Error in getUserOrders:', error);
+        throw error;
+    }
+  };
+
+  
+
+  
 //   const verifyDriverCredentials = async (email, password) => {
 //     const driver = await getDriverByEmail(email);
   
@@ -89,4 +134,4 @@ const getDriverByEmail = async (driver_email) => {
     
   
 
-module.exports = { createDriver, getDriverByEmail , verifyDriverCredentials };
+module.exports = { createDriver, getDriverByEmail , verifyDriverCredentials , getDriverInfo , updateDriver , getDriverOrders , getDriverHistory};

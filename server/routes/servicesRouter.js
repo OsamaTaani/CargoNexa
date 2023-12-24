@@ -8,9 +8,9 @@ const upload = multer({ storage: storage });
 
 
 // Define routes for fetching, adding, updating, and soft deleting services
-router.get('/services', servicesController.getAllServices);
-router.post('/services', upload.single('image')   ,servicesController.createService );
-router.put('/services/:serviceId',upload.single('image') ,servicesController.updateServiceById);
-router.delete('/services/:id', servicesController.deleteServiceById);
-
+router.get('/getAll/services', servicesController.getAllServices);
+router.post('/create/services', upload.single('image')   ,servicesController.createService );
+router.put('/update/services/:serviceId',upload.single('image') ,servicesController.updateServiceById);
+router.put('/softDelete/:serviceId', servicesController.deleteServiceById);
+router.get('/getService/:serviceId' , servicesController.getServiceById);
 module.exports = router;

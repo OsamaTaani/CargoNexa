@@ -76,22 +76,7 @@ const AddUserForm = ({ onSubmit, onCancel }) => {
         />
 
           </div>
-        <div className="flex flex-col ">
-            <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
-             Password
-            </label>
-                    <input
-          className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="user_password"
-          id="user_password"
-          type='text'
-          placeholder='Password'
-          value={formData.user_password}
-          onChange={handleInputChange}
-           required
-        />
-
-          </div>
+      
         
          
          

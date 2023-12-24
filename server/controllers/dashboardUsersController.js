@@ -2,6 +2,42 @@ const UserModel = require('../models/dashboardUsersModel');
 require('dotenv').config();
 
 
+
+const Joi = require('joi');
+
+const addUser = async (req, res) => {
+  // Validation check
+  const validationSchema = Joi.object({
+    user_username: Joi.string().trim().regex(/^\S*$/).required(), // No spaces allowed
+    user_password: Joi.string().min(8).max(16).required()
+      .regex(/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[\w@$!%*?&]{8,16}$/), // At least one uppercase, one digit, and one special character
+    user_email: Joi.string().email().required().regex(/@/), // Must contain '@'
+    user_phone_number: Joi.string().pattern(/^(07\d{8})$/).required(),
+  });
+
+  const { error } = validationSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
+
+  const { user_username, user_password, user_email, user_phone_number } = req.body;
+
+  try {
+    // Check if the email is already taken
+    const existingUser = await UserModel.getUserByEmail(user_email);
+    if (existingUser) {
+      return res.status(409).json({ error: "Email is already registered" });
+    }
+
+    const newUser = await UserModel.addUser(user_username, user_password, user_email, user_phone_number);
+
+    res.status(201).json({ message: 'User added successfully', user: newUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 // Get All Users
 const getAllUsers = async (req, res) => {
   try {
@@ -32,23 +68,6 @@ const getUserById = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-const getUserOrders = async (req, res) => {
-  const  userId  = req.user.userId
-  console.log(userId);
-
-  try {
-      const orders = await UserModel.getUserOrders(userId);
-
-      res.status(200).json({
-          message: 'User orders fetched successfully',
-          data: orders,
-      });
-  } catch (error) {
-      console.error('Error in getUserOrders controller:', error);
-      res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -95,5 +114,5 @@ module.exports = {
   getUserById,
   updateUserById,
   deleteUserById,
-  getUserOrders,
+  addUser,
 };

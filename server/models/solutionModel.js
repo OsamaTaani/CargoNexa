@@ -35,11 +35,11 @@ const createSolution = async (title, description, image) => {
   }
 };
 
-const updateSolution = async (solutionId, title, description, image) => {
+const updateSolution = async ( solution_title, solution_description, solution_image ,solutionId) => {
   try {
     const result = await pool.query(
-      'UPDATE solutions SET solution_title = $2, solution_description = $3, solution_image = $4 WHERE solution_id = $1 AND isdeleted = false RETURNING *',
-      [solutionId, title, description, image]
+      'UPDATE solutions SET solution_title = $1, solution_description = $2, solution_image = $3 WHERE solution_id = $4 RETURNING *',
+      [ solution_title, solution_description, solution_image , solutionId]
     );
 
     return result.rows[0];
@@ -52,7 +52,7 @@ const updateSolution = async (solutionId, title, description, image) => {
 const softDeleteSolution = async (solutionId) => {
   try {
     const result = await pool.query(
-      'UPDATE solutions SET is_deleted = true WHERE solution_id = $1 AND isdeleted = false RETURNING *',
+      'UPDATE solutions SET isdeleted = true WHERE solution_id = $1 AND isdeleted = false RETURNING *',
       [solutionId]
     );
 

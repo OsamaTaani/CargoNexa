@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import axios from 'axios'; // Import Axios
-import RegValidate from './RegValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../../Website/AuthContext';
@@ -57,7 +56,7 @@ const handleSubmit = async (e) => {
         navigate('/driverLogin')
     } catch (error) {
       // Handle network or other errors
-      console.error('Registration error:', error.response.data.error);
+      console.error('Registration error:', error);
       setError(error.response.data.error)
     }
   
@@ -98,7 +97,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("driver_username"))&& <p className='text-red-500'>"driver_username shouldn't be empty"</p>}
+    {(error !== null && error.includes("username\" is required"))&& <p className='text-red-500'>"username shouldn't be empty"</p>}
+    {(error !== null && error.includes("Username must not contain"))&& <p className='text-red-500'>"username shouldn't have any space"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Email</p>
     <div className="mb-2 flex flex-col">
@@ -112,7 +112,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("driver_email"))&& <p className='text-red-500'>"driver_email shouldn't be empty"</p>}
+    {(error !== null && error.includes("driver_email"))&& <p className='text-red-500'>" email shouldn't be empty"</p>}
     {(error !== null && error.includes("Email is already registered"))&& <p className='text-red-500'>"Email is already registered"</p>}
    
     <p className="mb-1 font-medium text-gray-500">Driver License</p>
@@ -127,7 +127,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("driver_license"))&& <p className='text-red-500'>"driver_license shouldn't be empty"</p>}
+    {(error !== null && error.includes("driver_license"))&& <p className='text-red-500'>"driver license shouldn't be empty"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Truck Type</p>
     <div className="mb-2 flex flex-col">
@@ -141,7 +141,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("truck_type"))&& <p className='text-red-500'>"truck_type shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"truck_type\" is required"))&& <p className='text-red-500'>"truck type shouldn't be empty"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Production Year</p>
     <div className="mb-2 flex flex-col">
@@ -155,8 +155,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("production_year"))&& <p className='text-red-500'>"production_year shouldn't be empty"</p>}
-    {(error !== null && error.includes('"production_year" must be a number'))&& <p className='text-red-500'>"production_year" must be a number</p>}
+    {(error !== null && error.includes("\"production_year\" is required"))&& <p className='text-red-500'>"production year shouldn't be empty"</p>}
+    {(error !== null && error.includes('Production year must be a number greater than or equal to 2010.'))&& <p className='text-red-500'>"production_year" must be a number greater than or equal to 2010</p>}
 
 
     <p className="mb-1 font-medium text-gray-500">Plate Number</p>
@@ -171,8 +171,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("plate_number"))&& <p className='text-red-500'>"plate_number shouldn't be empty"</p>}
-    {(error !== null && error.includes('"plate_number" must be a number'))&& <p className='text-red-500'>"plate_number" must be a number</p>}
+    {(error !== null && error.includes('"plate_number" is required'))&& <p className='text-red-500'>"plate number shouldn't be empty"</p>}
+    {(error !== null && error.includes('"plate_number" must be a number'))&& <p className='text-red-500'>"plate number" must be a number</p>}
 
     <p className="mb-1 font-medium text-gray-500">Truck Size</p>
     <div className="mb-2 flex flex-col">
@@ -207,7 +207,12 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("driver_password"))&& <p className='text-red-500'>"driver_password shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"driver_password\" is required"))&& <p className='text-red-500'>"password shouldn't be empty"</p>} 
+    {(error !== null && error.includes("Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character."))&& <p className='text-red-500'> password should have at least :
+    <div> - 8 characters</div>
+      <div>- 1 special symbol </div>
+      <div>  - 1 num </div>
+        </p>}
 
    
 

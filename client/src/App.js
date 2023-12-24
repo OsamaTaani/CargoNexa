@@ -28,8 +28,7 @@ import OrderDetailsDriver from './Component/Driver/driverWebsite/OrderDetailsDri
 import ConfirmedOrder from './Component/Driver/driverWebsite/ConfirmedOrder';
 import ProfilePage from './Component/Website/UserProfile';
 import UserProfile from './Component/Website/UserProfile';
-import Dashboard from './Component/Admin/Dashboard';
-import Dashboard2 from './Component/Admin/Dashboard2';
+
 
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -38,6 +37,8 @@ import LanguageSwitcher from './LanguageSwitcher';
 import NotFoundPage from './Component/Website/NotFoundPage';
 import DriverHistoryPage from './Component/Driver/driverWebsite/DriverHistoryPage';
 import { AuthProvider, useAuth } from './Component/Website/AuthContext';
+import ChangePasswordForUser from './Component/Website/ChangePasswordForUser';
+import ResetPassword from './Component/Website/ResetPassword';
 // import { useCookies } from 'react-cookie';
 
 // Set the Authorization header globally
@@ -45,10 +46,6 @@ axios.defaults.headers.common['Authorization'] = `${Cookies.get('token')}`;
 
 
 function App() {
-  const role = Cookies.get("role");
-  // const role = sessionStorage.getItem("role");
-  console.log("role",role)
-
   
 
   return (
@@ -78,6 +75,8 @@ function App() {
         <Route path="/orderDetails/:orderId" element={<OrderDetailsPage/>} />
         <Route path='/payment' element={<Payment/>}/>
         <Route path='/userProfile' element={<UserProfile/>}/>
+        <Route path='/changePassword' element={<ChangePasswordForUser/>}/>
+        <Route path='/resetPassword' element={<ResetPassword/>}/>
         <Route path='/*' element={<NotFoundPage/>}/>
         
         

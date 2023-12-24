@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
-import RegValidate from './RegValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useAuth } from '../AuthContext';
@@ -97,7 +96,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("user_username"))&& <p className='text-red-500'>"username shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"user_username\" is not allowed to be empty"))&& <p className='text-red-500'>"username shouldn't be empty"</p>}
+    {(error !== null && error.includes("fails to match the required pattern: /^\\S*$/"))&& <p className='text-red-500'>"username shouldn't have any space"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Email</p>
     <div className="mb-4 flex flex-col">
@@ -126,7 +126,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("phone"))&& <p className='text-red-500'>"phone number shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"user_phone_number\" is not allowed to be empty"))&& <p className='text-red-500'>"phone number shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"user_phone_number\" with value \"55\" fails to match the required pattern: /^(07\\d{8})$/"))&& <p className='text-red-500'>"phone number should start with (07) have 10 digits"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Password</p>
     <div className="mb-4 flex flex-col">
@@ -140,7 +141,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("password"))&& <p className='text-red-500'>"password shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"user_password\" is not allowed to be empty"))&& <p className='text-red-500'>"password shouldn't be empty"</p>} 
+    {(error !== null && error.includes("\"user_password\" length must be at least 8 characters long"))&& <p className='text-red-500'>"password should have at least 8 characters 1 special character , 1 num "</p>}
 
     {/* <p className="mb-1 font-medium text-gray-500">Confirm Password</p> */}
     {/* <div className="mb-4 flex flex-col">

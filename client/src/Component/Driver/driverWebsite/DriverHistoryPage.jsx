@@ -14,6 +14,7 @@ const DriverHistoryPage = () => {
       
       // State to store the fetched data
       const [orders, setOrders] = useState([]);
+      const [sortedOrders, setSortedOrders] = useState([]);
       const [searchTerm, setSearchTerm] = useState('');
       const [currentPage, setCurrentPage] = useState(1);
       const itemsPerPage = 3; // Adjust as needed
@@ -33,7 +34,7 @@ const DriverHistoryPage = () => {
         console.log(authToken);
     
         // Fetch data using Axios
-        axios.get(`http://localhost:3001/user/` ,{
+        axios.get(`http://localhost:3001/drivers/driverHistory` ,{
           headers: { 
             Authorization: `${authToken}`,
             
@@ -49,14 +50,18 @@ const DriverHistoryPage = () => {
                 return new Date(a.shipping_timestamp) - new Date(b.shipping_timestamp);
               }
             });
+
+            
+
             // Set the fetched data to the state
             setOrders(sortedOrders);
-            console.log(response.data.data)
+            console.log("ds" , response.data.data)
+            console.log("ds" , sortedOrders)
           })
           .catch(error => {
             console.error('Error fetching data:', error);
           });
-      }, [sortOrder]); // The empty dependency array ensures that this effect runs only once when the component mounts
+      }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
     
     
      const handlePrevClick = () => {
@@ -161,7 +166,7 @@ const DriverHistoryPage = () => {
               <tbody>
               {filteredOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map(order => (
                 <tr key={order.order_id}>
-                   {(order.status) === "accepted" && ( 
+                   { ( 
 <>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <div className="flex items-center">

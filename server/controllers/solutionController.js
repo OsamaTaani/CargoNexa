@@ -54,11 +54,23 @@ const createSolution = async (req, res) => {
 };
 
 const updateSolution = async (req, res) => {
-  const { solutionId } = req.params;
-  const { title, description, image } = req.body;
+  const  solutionId  = req.params.solutionId;
+  console.log(solutionId);
 
   try {
-    const updatedSolution = await solutionModel.updateSolution(solutionId, title, description, image);
+
+    const file = req.file;
+
+            if (file) {
+                const fileName = `${Date.now()}_${file.originalname}`;
+                const fileUrl = await Firebase.uploadFileToFirebase(file, fileName);
+    
+                req.body.solution_image = fileUrl;
+            }
+
+            const { solution_title, solution_description, solution_image  } = req.body;
+          
+    const updatedSolution = await solutionModel.updateSolution( solution_title, solution_description, solution_image ,solutionId);
 
     if (updatedSolution) {
       res.json({ success: true, solution: updatedSolution, message: 'Solution updated successfully' });
@@ -72,7 +84,7 @@ const updateSolution = async (req, res) => {
 };
 
 const softDeleteSolution = async (req, res) => {
-  const { solutionId } = req.params;
+  const  solutionId  = req.params.solutionId;
 
   try {
     const deletedSolution = await solutionModel.softDeleteSolution(solutionId);

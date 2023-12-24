@@ -14,7 +14,7 @@ const ServicesPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/services'); // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
+        const response = await axios.get('http://localhost:3001/getAll/services'); // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
         setServicesData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

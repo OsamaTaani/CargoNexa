@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 
 const AddAdminForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
-    user_username: '',
-    user_email: '',
-    user_phone_number:''
+    admin_username: '',
+    admin_email: '',
+    admin_phone_number:''
   });
 
   const handleInputChange = (e) => {
@@ -35,11 +35,11 @@ const AddAdminForm = ({ onSubmit, onCancel }) => {
             </label>
                       <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="user_username"
-            id="fullName"
+            name="admin_username"
+            id="admin_username"
             type='text'
             placeholder='Name'
-            value={formData.user_username}
+            value={formData.admin_username}
             onChange={handleInputChange}
             required
           />
@@ -50,11 +50,11 @@ const AddAdminForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="user_email"
-          id="user_email"
+          name="admin_email"
+          id="admin_email"
           type='text'
           placeholder='email'
-          value={formData.user_email}
+          value={formData.admin_email}
           onChange={handleInputChange}
            required
         />
@@ -66,11 +66,11 @@ const AddAdminForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="user_phone_number"
-          id="phoneNumber"
+          name="admin_phone_number"
+          id="admin_phone_number"
           type='text'
           placeholder='+962'
-          value={formData.user_phone_number}
+          value={formData.admin_phone_number}
           onChange={handleInputChange}
            required
         />
@@ -82,11 +82,11 @@ const AddAdminForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="user_password"
-          id="user_password"
+          name="admin_password"
+          id="admin_password"
           type='text'
           placeholder='Password'
-          value={formData.user_password}
+          value={formData.admin_password}
           onChange={handleInputChange}
            required
         />

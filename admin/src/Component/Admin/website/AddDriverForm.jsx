@@ -7,12 +7,11 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
         driver_username: '',
         driver_email: '',
         driver_license: '',
-        truck_size: '',
+        driver_size_type: '',
         plate_number: '',
         production_year: '',
         truck_type: '',
         driver_password: '',
-       status:'available'
       
     });
 
@@ -77,7 +76,7 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
           name="driver_license"
           id="driver_license"
           type='text'
-          placeholder='+962'
+          placeholder='driver_license'
           value={formData.driver_license}
           onChange={handleInputChange}
            required
@@ -90,11 +89,11 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="truck_size"
-          id="truck_size"
+          name="driver_size_type"
+          id="driver_size_type"
           type='text'
-          placeholder='truck_size'
-          value={formData.truck_size}
+          placeholder='driver_size_type'
+          value={formData.driver_size_type}
           onChange={handleInputChange}
            required
         />
@@ -146,7 +145,7 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
           </div>
         <div className="flex flex-col ">
             <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
-            Driver Password
+            Password
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
@@ -159,7 +158,7 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
            required
         />
           </div>
-        
+       
          
          
         </div>

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import logo4 from "../../Image/logo4-transformed.png";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import EditPopupUserData from "./EditPopupUserData";
 import EditPopupDriverData from "./EditPopupDriverData";
 import EditPopupServicesData from "./EditPopupServicesData";
 import EditPopupSolutionsData from "./EditPopupSolutionsData";
 import EditPopupFaqData from "./EditPopupFaqData";
-import AddOrderForm from "./AddOrderForm";
 import AddAdminForm from "./AddAdminForm";
 import AddUserForm from "./AddUserForm";
 import AddDriverForm from "./AddDriverForm";
@@ -15,7 +14,15 @@ import AddServicesForm from "./AddServicesForm";
 import AddSolutionsForm from "./AddSolutionsForm";
 import AddFaqForm from "./AddFaqForm";
 import EditPopupAdminData from "./EditPopupAdminData";
+import { useAuth } from "../AuthContext";
+import Cookies from "js-cookie";
 const Dashboard = () => {
+  const {logout } = useAuth();
+
+  const {isUserRole} = useAuth()
+  const role = isUserRole() || Cookies.get('role')
+  console.log(role);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -25,8 +32,7 @@ const Dashboard = () => {
   // add useState clicked to change the bg to white when the btn clicked
   const [clicked, setClicked] = useState(false);
 
-  const [searchQuery, setSearchQuery] = useState("");
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [editUser, setEditUser] = useState(null);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
 
@@ -53,9 +59,10 @@ const Dashboard = () => {
   const [totalItems, setTotalItems] = useState("");
   const itemsPerPage = 5; // Adjust as needed
 
+ 
   useEffect(() => {
     // Fetch initial data when the component mounts
-    fetchData();
+    fetchData();   
   }, [selectedTab,currentPage]);
 
   const fetchData = async () => {
@@ -64,27 +71,27 @@ const Dashboard = () => {
       // Make the appropriate API call based on the selected tab
       switch (selectedTab) {
         case "dashboard":
-          response = await axios.get(`http://localhost:3001/orders?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/orders?page=${currentPage}&search=${searchTerm}`);
           break;
         case "profile":
-          response = await axios.get(`http://localhost:3001/admin?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/admin/allAdmins?page=${currentPage}`);
           break;
         case "users":
           response = await axios.get(`http://localhost:3001/all-users?page=${currentPage}`);
           break;
           ///////////////////////////////////////DRIVER TABLE///////////////////////////////////////////
         case "drivers": 
-          response = await axios.get(`http://localhost:3001/drivers?page=${currentPage}`);
-        
+          response = await axios.get(`http://localhost:3001/drivers?page=${currentPage}&search=${searchTerm}`);
           break;
         case "services":
-          response = await axios.get(`http://localhost:3001/services?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/getAll/services?page=${currentPage}`);
           break;
         case "solutions":
-          response = await axios.get(`http://localhost:3001/solutions?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/getAll/solutions?page=${currentPage}`);
           break;
         case "faq":
-          response = await axios.get(`http://localhost:3001/faq?page=${currentPage}`);
+          response = await axios.get(`http://localhost:3001/getAll/faq?page=${currentPage}`);
+         
           break;
 
         default:
@@ -92,6 +99,7 @@ const Dashboard = () => {
       }
 
       setData(response.data);
+      console.log('data',data);
       setTotalItems(response.data[0].total_count);
       console.log(response.data);
     } catch (error) {
@@ -110,19 +118,7 @@ const Dashboard = () => {
     console.log("Signing out...");
   };
 
-  // Effect to fetch data using Axios when the component mounts
-  // useEffect(() => {
-  //   // Fetch data using Axios
-  //   axios
-  //     .get("http://localhost:3001/order")
-  //     .then((response) => {
-  //       // Set the fetched data to the state
-  //       setOrders(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // }, []); // The empty dependency array ensures that this effect runs only once when the component mounts
+ 
 
   const handlePrevClick = () => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
@@ -135,13 +131,14 @@ const Dashboard = () => {
   /////////////////////////////////////   EDIT  ///////////////////////////////////////////////////////
 
 
-  //edit handle for users data**********************************************************************************************
+  //edit handle for admin data**********************************************************************************************
   const handleEditAdminClick = async (admin_id) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/register/${admin_id}`
+        `http://localhost:3001/admin/${admin_id}`
       ); // Replace with your API endpoint
-      setEditAdmin(response.data);
+      setEditAdmin(response.data.admin);
+      console.log(response.data.admin);
 
       setIsEditAdminPopupOpen(true);
     } catch (error) {
@@ -153,7 +150,7 @@ const Dashboard = () => {
     try {
       // Make a PUT request to update the order data
       await axios.put(
-        `http://localhost:3001/register/${editedAdminData.admin_id}`,
+        `http://localhost:3001/admin/update/${editedAdminData.admin_id}`,
         editedAdminData
       ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
@@ -168,7 +165,7 @@ const Dashboard = () => {
   const handleDriverEditClick = async (driverId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/drivers/${driverId}`
+        `http://localhost:3001/driver/${driverId}`
       ); // Replace with your API endpoint
       setEditDriver(response.data);
       console.log(response.data);
@@ -199,7 +196,7 @@ const Dashboard = () => {
   const handleServicesEditClick = async (ServicesId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/services/${ServicesId}`
+        `http://localhost:3001/getService/${ServicesId}`
       ); // Replace with your API endpoint
       setEditServices(response.data);
       setIsEditServicesPopupOpen(true);
@@ -212,7 +209,7 @@ const Dashboard = () => {
     try {
       // Make a PUT request to update the order data
       await axios.put(
-        `http://localhost:3001/services/${editedServicesData.services_id}`,
+        `http://localhost:3001/update/services/${editedServicesData.services_id}`,
         editedServicesData
       ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
@@ -239,7 +236,7 @@ const Dashboard = () => {
     try {
       // Make a PUT request to update the order data
       await axios.put(
-        `http://localhost:3001/solutions/${editedSolutionsData.solution_id}`,
+        `http://localhost:3001/solutions/update/${editedSolutionsData.solution_id}`,
         editedSolutionsData
       ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
@@ -263,7 +260,7 @@ const Dashboard = () => {
   const handleFaqEditSubmit = async (editedFaqData) => {
     try {
       // Make a PUT request to update the order data
-      await axios.put(`http://localhost:3001/faq/${editedFaqData.id}`, editedFaqData); // Replace with your API endpoint
+      await axios.put(`http://localhost:3001/update/faq/${editedFaqData.id}`, editedFaqData); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditFaqPopupOpen(false);
       fetchData(); // Implement a function to fetch data from your API
@@ -272,14 +269,49 @@ const Dashboard = () => {
     }
   };
 
+
   /////////////////////////////////////   DELETE  ///////////////////////////////////////////////////////
 
+
+  //handle soft delete for admins  **********************************************************************************************
+  const handleSoftDeleteAdmin = async (admin_id) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.put(`http://localhost:3001/admin/softDelete/${admin_id}`, {
+        isdeleted: "true",
+      });
+
+
+      // Refresh the data or handle the removal of the soft-deleted user from your local state
+      fetchData();
+      setIsEditAdminPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error("Error soft deleting admin:", error);
+    }
+  };
+  //handle Switch Delete To UnDelete for admin  **********************************************************************************************
+  const SwitchDeleteToUnDeleteForAdmin = async (admin_id) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.put(`http://localhost:3001/admin/softDelete/${admin_id}`, {
+        isdeleted: "false",
+      });
+
+
+      // Refresh the data or handle the removal of the soft-deleted user from your local state
+      fetchData();
+      setIsEditAdminPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error("Error soft deleting admin:", error);
+    }
+  };
+  
   //handle soft delete for users  **********************************************************************************************
   const handleSoftDeleteUser = async (userId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/register/${userId}`, {
-        isDeleted: "true",
+      await axios.put(`http://localhost:3001/delete-users/${userId}`, {
+        isdeleted: "true",
       });
 
       // Refresh the data or handle the removal of the soft-deleted user from your local state
@@ -289,22 +321,23 @@ const Dashboard = () => {
       console.error("Error soft deleting user:", error);
     }
   };
-
-  //handle soft delete for admins  **********************************************************************************************
-  const handleSoftDeleteAdmin = async (admin_id) => {
+  //handle Switch Delete To UnDelete for users  **********************************************************************************************
+  const SwitchDeleteToUnDeleteForUser = async (userId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/register/${admin_id}`, {
-        isDeleted: "true",
+      await axios.put(`http://localhost:3001/delete-users/${userId}`, {
+        isdeleted: "false",
       });
 
       // Refresh the data or handle the removal of the soft-deleted user from your local state
       fetchData();
-      setIsEditAdminPopupOpen(false); // Close the edit popup
+      setIsEditPopupOpen(false); // Close the edit popup
     } catch (error) {
-      console.error("Error soft deleting admin:", error);
+      console.error("Error switch deleting user:", error);
     }
   };
+
+
 
   //handle soft delete for drivers  **********************************************************************************************
 
@@ -312,8 +345,8 @@ const Dashboard = () => {
   const handleSoftDeleteDriver = async (driverId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/driver/${driverId}`, {
-        isDeleted: "true",
+      await axios.put(`http://localhost:3001/delete-drivers/${driverId}`, {
+        isdeleted: "true",
       });
 
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
@@ -323,14 +356,43 @@ const Dashboard = () => {
       console.error("Error soft deleting driver:", error);
     }
   };
-  //handle soft delete for drivers  **********************************************************************************************
 
-  // Soft delete function for driver data
+  //handle Switch Delete To UnDelete for users **********************************************************************************************
+  const SwitchDeleteToUnDeleteForDriver = async (driverId) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.put(`http://localhost:3001/delete-drivers/${driverId}`, {
+        isdeleted: "false",
+      });
+
+      // Refresh the data or handle the removal of the soft-deleted driver from your local state
+      fetchData();
+      setIsEditDriverPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error("Error soft deleting driver:", error);
+    }
+  };
+  //handle soft delete for services  **********************************************************************************************
   const handleSoftDeleteServices = async (servicesId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/services/${servicesId}`, {
-        isDeleted: "true",
+      await axios.put(`http://localhost:3001/softDelete/${servicesId}`, {
+        isdeleted: "true",
+      });
+
+      // Refresh the data or handle the removal of the soft-deleted driver from your local state
+      fetchData();
+      setIsEditServicesPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error("Error soft deleting services:", error);
+    }
+  };
+  //handle Switch Delete To UnDelete for services **********************************************************************************************
+  const SwitchDeleteToUnDeleteForServices = async (servicesId) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.put(`http://localhost:3001/softDelete/${servicesId}`, {
+        isdeleted: "false",
       });
 
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
@@ -341,13 +403,11 @@ const Dashboard = () => {
     }
   };
   //handle soft delete for drivers  **********************************************************************************************
-
-  // Soft delete function for driver data
   const handleSoftDeleteSolutions = async (solutionsId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/solutions/${solutionsId}`, {
-        isDeleted: "true",
+      await axios.put(`http://localhost:3001/solutions/softDelete/${solutionsId}`, {
+        isdeleted: "true",
       });
 
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
@@ -357,14 +417,42 @@ const Dashboard = () => {
       console.error("Error soft deleting solutions:", error);
     }
   };
-  //handle soft delete for drivers  **********************************************************************************************
+  //handle Switch Delete To UnDelete for Solutions  **********************************************************************************************
+  const SwitchDeleteToUnDeleteForSolutions = async (solutionsId) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.put(`http://localhost:3001/solutions/softDelete/${solutionsId}`, {
+        isdeleted: "false",
+      });
 
-  // Soft delete function for driver data
+      // Refresh the data or handle the removal of the soft-deleted driver from your local state
+      fetchData();
+      setIsEditSolutionsPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error("Error soft deleting solutions:", error);
+    }
+  };
+  //handle soft delete for faq  **********************************************************************************************
   const handleSoftDeleteFaq = async (faqId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.patch(`http://localhost:3001/faq/${faqId}`, {
-        isDeleted: "true",
+      await axios.put(`http://localhost:3001/soft-delete/faq/${faqId}`, {
+        isdeleted: "true",
+      });
+
+      // Refresh the data or handle the removal of the soft-deleted driver from your local state
+      fetchData();
+      setIsEditFaqPopupOpen(false); // Close the edit popup
+    } catch (error) {
+      console.error("Error soft deleting faq:", error);
+    }
+  };
+  //handle Switch Delete To UnDelete for faq **********************************************************************************************
+  const SwitchDeleteToUnDeleteForFaq = async (faqId) => {
+    try {
+      // Send a PATCH request to update the status for soft delete
+      await axios.put(`http://localhost:3001/soft-delete/faq/${faqId}`, {
+        isdeleted: "false",
       });
 
       // Refresh the data or handle the removal of the soft-deleted driver from your local state
@@ -377,28 +465,7 @@ const Dashboard = () => {
 
   /////////////////////////////////////   ADD  //////////////////////////////////////////////
 
-  //handle Add order   **********************************************************************************************
-  const [showAddOrderPopup, setShowAddOrderPopup] = useState(false);
-
-  const openAddOrderPopup = () => {
-    setShowAddOrderPopup(true);
-  };
-
-  const closeAddOrderPopup = () => {
-    setShowAddOrderPopup(false);
-  };
-
-  const handleAddOrderSubmit = async (newOrder) => {
-    try {
-      // Make a POST request to add a new order
-      await axios.post("http://localhost:3001/createAdmin", newOrder);
-      // Close the popup and fetch the updated data
-      closeAddOrderPopup();
-      fetchData(); // Assuming fetchData is a function that fetches the updated order data
-    } catch (error) {
-      console.error("Error adding new order:", error);
-    }
-  };
+ 
   //handle Add admin   **********************************************************************************************
   const [showAddAdminPopup, setShowAddAdminPopup] = useState(false);
 
@@ -413,7 +480,7 @@ const Dashboard = () => {
   const handleAddAdminSubmit = async (newAdmin) => {
     try {
       // Make a POST request to add a new order
-      await axios.post("http://localhost:3001/register", newAdmin);
+      await axios.post("http://localhost:3001/admin/createAdmin", newAdmin);
       // Close the popup and fetch the updated data
       closeAddAdminPopup();
       fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -435,7 +502,7 @@ const Dashboard = () => {
   const handleAddUserSubmit = async (newUser) => {
     try {
       // Make a POST request to add a new order
-      await axios.post("http://localhost:3001/register", newUser);
+      await axios.post("http://localhost:3001/add-user", newUser);
       // Close the popup and fetch the updated data
       closeAddUserPopup();
       fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -457,7 +524,7 @@ const Dashboard = () => {
   const handleAddDriverSubmit = async (newDriver) => {
     try {
       // Make a POST request to add a new order
-      await axios.post("http://localhost:3001/driver", newDriver);
+      await axios.post("http://localhost:3001/addDriver", newDriver);
       // Close the popup and fetch the updated data
       closeAddDriverPopup();
       fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -479,7 +546,7 @@ const Dashboard = () => {
   const handleAddServicesSubmit = async (newServices) => {
     try {
       // Make a POST request to add a new order
-      await axios.post("http://localhost:3001/services", newServices);
+      await axios.post("http://localhost:3001/create/services", newServices);
       // Close the popup and fetch the updated data
       closeAddServicesPopup();
       fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -501,7 +568,7 @@ const Dashboard = () => {
   const handleAddSolutionsSubmit = async (newSolutions) => {
     try {
       // Make a POST request to add a new order
-      await axios.post("http://localhost:3001/solutions", newSolutions);
+      await axios.post("http://localhost:3001/solutions/create", newSolutions);
       // Close the popup and fetch the updated data
       closeAddSolutionsPopup();
       fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -523,7 +590,7 @@ const Dashboard = () => {
   const handleAddFaqSubmit = async (newFaq) => {
     try {
       // Make a POST request to add a new order
-      await axios.post("http://localhost:3001/faq", newFaq);
+      await axios.post("http://localhost:3001/create/faq/", newFaq);
       // Close the popup and fetch the updated data
       closeAddFaqPopup();
       fetchData(); // Assuming fetchData is a function that fetches the updated order data
@@ -542,10 +609,13 @@ const Dashboard = () => {
     setIsSideBarOpen(false);
   };
 
-  const handleSearch = (e)=>{
-    e.preventDefult();
-    axios.post(`http://localhost:3001/`, searchQuery).then((response)=>{}).catch((err)=>{})
-  }
+  // const handleSearch = ()=>{
+  //   // e.preventDefult();
+  //   // axios.post(`http://localhost:3001/`, searchQuery).then((response)=>{}).catch((err)=>{})
+  //   // setCurrentPage(1);
+  //   // setSearchQuery(sss);
+  //   fetchData(); 
+  // }
 
   return (
     <>
@@ -828,7 +898,7 @@ const Dashboard = () => {
                     />
                   </svg>
                   <p
-                    onClick={handleSignOut}
+                    onClick={logout}
                     className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize"
                   >
                     sign out
@@ -984,7 +1054,7 @@ const Dashboard = () => {
                 <div>
 
                   {/* search */}
-                  <form>
+                  {/* <form onSubmit={(e)=> setSearchTerm(e.target.value)}> */}
                     <label
                       for="default-search"
                       class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -1014,18 +1084,19 @@ const Dashboard = () => {
                         id="default-search"
                         class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search Mockups, Logos..."
-                        onChange={(e)=>setSearchQuery(e.target.value)}
+                        value={searchTerm}
+                        onChange={(e)=>setSearchTerm(e.target.value)}
                         required
                       />
                       <button
                         type="submit"
-                        onClick={(e)=>handleSearch(e)}
-                        class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                       onClick={()=>fetchData()}
+                        class="text-white absolute end-2.5 bottom-2.5 bg-my-green hover:bg-teal-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                       >
                         Search
                       </button>
                     </div>
-                  </form>
+                  {/* </form> */}
 
                   {/* Conditional rendering based on selected tab */}
 
@@ -1037,21 +1108,6 @@ const Dashboard = () => {
                           {" "}
                           Order{" "}
                         </div>
-
-                        <button
-                          onClick={openAddOrderPopup}
-                          className="bg-my-green rounded-md px-5 py-2 text-white font-bold mb-3"
-                        >
-                          Add Order
-                        </button>
-
-                        {/* Add Order Popup */}
-                        {showAddOrderPopup && (
-                          <AddOrderForm
-                            onSubmit={handleAddOrderSubmit}
-                            onCancel={closeAddOrderPopup}
-                          />
-                        )}
 
                         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
                           <table className="min-w-full leading-normal">
@@ -1084,7 +1140,7 @@ const Dashboard = () => {
                                   <tr key={order.order_id}>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                       <div className="flex items-center">
-                                        <Link to={`/OrderDetails/${order.id}`}>
+                                        <Link to={`/OrderDetails/${order.order_id}`}>
                                           <div className="ml-3">
                                             <p className="text-gray-900 whitespace-no-wrap">
                                               {order.order_title}
@@ -1200,9 +1256,7 @@ const Dashboard = () => {
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   User Email
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                  User Password
-                                </th>
+                            
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   Action
                                 </th>
@@ -1216,7 +1270,6 @@ const Dashboard = () => {
                                 // )
                                 .map(
                                   (userData) =>
-                                    userData.isDeleted !== "true" && (
                                       <tr key={userData.admin_id}>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex items-center">
@@ -1242,11 +1295,7 @@ const Dashboard = () => {
                                             {userData.admin_email}
                                           </p>
                                         </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                          <p className="text-gray-900 whitespace-no-wrap">
-                                            {userData.admin_password}
-                                          </p>
-                                        </td>
+                                      
 
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex space-x-2">
@@ -1293,6 +1342,7 @@ const Dashboard = () => {
                                                 )
                                               }
                                             >
+                                              {(userData.isdeleted === false ) && (
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -1308,14 +1358,26 @@ const Dashboard = () => {
                                                   stroke-width="2"
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
-                                              </svg>
+                                              </svg>)}
                                             </button>
-
+                                                <button
+                                              onClick={() =>
+                                                SwitchDeleteToUnDeleteForAdmin(
+                                                  userData.user_id
+                                                )
+                                              }
+                                            >
+                                        {(userData.isdeleted === true ) && (
+                                            <div>
+                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
+                                            </div>
+                                          
+)}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
                                       </tr>
-                                    )
+                                    
                                 )}
                             </tbody>
                           </table>
@@ -1396,9 +1458,7 @@ const Dashboard = () => {
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   User Email
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                  User Password
-                                </th>
+                              
                                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   Action
                                 </th>
@@ -1412,18 +1472,24 @@ const Dashboard = () => {
                                 // )
                                 .map(
                                   (userData) =>
-                                    userData.isDeleted !== "true" && (
+                                  
                                       <tr key={userData.user_id}>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex items-center">
                                             <Link
                                               to={`/OrderDetails/${userData.user_username}`}
                                             >
+                                
+
                                               <div className="ml-3">
                                                 <p className="text-gray-900 whitespace-no-wrap">
                                                   {userData.user_username}
+                                                  
+                                                  
+
                                                 </p>
                                               </div>
+                                              
                                             </Link>
                                           </div>
                                         </td>
@@ -1438,11 +1504,7 @@ const Dashboard = () => {
                                             {userData.user_email}
                                           </p>
                                         </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                          <p className="text-gray-900 whitespace-no-wrap">
-                                            {userData.user_password}
-                                          </p>
-                                        </td>
+                                     
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex space-x-2">
                                             <button
@@ -1452,6 +1514,8 @@ const Dashboard = () => {
                                                 )
                                               }
                                             >
+                                        {(userData.isdeleted === false ) && (
+                                          
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -1468,13 +1532,27 @@ const Dashboard = () => {
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
                                               </svg>
+                                              )}
                                             </button>
 
+                                            <button
+                                              onClick={() =>
+                                                SwitchDeleteToUnDeleteForUser(
+                                                  userData.user_id
+                                                )
+                                              }
+                                            >
+                                        {(userData.isdeleted === true ) && (
+                                            <div>
+                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
+                                            </div>
+                                          
+)}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
                                       </tr>
-                                    )
+                                  
                                 )}
                             </tbody>
                           </table>
@@ -1539,34 +1617,31 @@ const Dashboard = () => {
                           <table className="min-w-full leading-normal">
                             <thead>
                               <tr>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   driver_username
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   driver_email
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   driver_license
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   truck_size
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   plate_number
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                  production_year
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                  year
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   truck_type
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                  driver_password
-                                </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   status
                                 </th>
-                                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                   Action
                                 </th>
                               </tr>
@@ -1579,7 +1654,6 @@ const Dashboard = () => {
                                 // )  
                                 .map(
                                   (driverData,id) =>
-                                    driverData.isDeleted !== "true" && (
                                       <tr key={id}>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex items-center">
@@ -1607,7 +1681,7 @@ const Dashboard = () => {
                                         </td>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <p className="text-gray-900 whitespace-no-wrap">
-                                            {driverData.truck_size}
+                                            {driverData.driver_size_type}
                                           </p>
                                         </td>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -1625,23 +1699,17 @@ const Dashboard = () => {
                                             {driverData.truck_type}
                                           </p>
                                         </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                          <p className="text-gray-900 whitespace-no-wrap">
-                                            {driverData.driver_password}
-                                          </p>
-                                        </td>
+                                      
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <p className="text-gray-900 whitespace-no-wrap">
                                             {driverData.status}
                                           </p>
                                         </td>
-                                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                        {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <p className="text-gray-900 whitespace-no-wrap">
                                             {driverData.driver_id}
                                           </p>
-                                        </td>
-                                       
-
+                                        </td> */}
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex space-x-2">
                                             <button
@@ -1651,6 +1719,8 @@ const Dashboard = () => {
                                                 )
                                               }
                                             >
+                                             
+
                                               <svg
                                                 class="text-teal-600 w-5 h-5 "
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -1679,7 +1749,6 @@ const Dashboard = () => {
                                               </svg>
                                               {/* ... SVG path for edit */}
                                             </button>
-
                                             <button
                                               onClick={() =>
                                                 handleSoftDeleteDriver(
@@ -1687,6 +1756,8 @@ const Dashboard = () => {
                                                 )
                                               }
                                             >
+                                            {(driverData.isdeleted === false ) && (
+
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -1702,14 +1773,26 @@ const Dashboard = () => {
                                                   stroke-width="2"
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
-                                              </svg>
+                                              </svg>)}
                                             </button>
-
+                                            <button
+                                              onClick={() =>
+                                                SwitchDeleteToUnDeleteForDriver(
+                                                  driverData.driver_id
+                                                )
+                                              }
+                                            >
+                                        {(driverData.isdeleted === true ) && (
+                                            <div>
+                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
+                                            </div>
+                                          
+)}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
                                       </tr>
-                                    )
+                                    
                                 )}
                             </tbody>
                           </table>
@@ -1804,7 +1887,6 @@ const Dashboard = () => {
                                 // )
                                 .map(
                                   (userData) =>
-                                    userData.isDeleted !== "true" && (
                                       <tr key={userData.services_id}>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex items-center">
@@ -1838,6 +1920,7 @@ const Dashboard = () => {
                                                 )
                                               }
                                             >
+
                                               <svg
                                                 class="text-teal-600 w-5 h-5 "
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -1874,6 +1957,8 @@ const Dashboard = () => {
                                                 )
                                               }
                                             >
+                                            {(userData.isdeleted === false ) && (
+
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -1890,13 +1975,26 @@ const Dashboard = () => {
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
                                               </svg>
+                                            )}
                                             </button>
-
+                                            <button
+                                              onClick={() =>
+                                                SwitchDeleteToUnDeleteForServices(
+                                                  userData.services_id
+                                                )
+                                              }
+                                            >
+                                        {(userData.isdeleted === true ) && (
+                                            <div>
+                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
+                                            </div>
+                                          
+)}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
                                       </tr>
-                                    )
+                                    
                                 )}
                             </tbody>
                           </table>
@@ -1992,7 +2090,6 @@ const Dashboard = () => {
                                 // )
                                 .map(
                                   (userData) =>
-                                    userData.isDeleted !== "true" && (
                                       <tr key={userData.solution_id}>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex items-center">
@@ -2060,6 +2157,8 @@ const Dashboard = () => {
                                                 )
                                               }
                                             >
+                                           {(userData.isdeleted === false ) && (
+
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -2075,14 +2174,26 @@ const Dashboard = () => {
                                                   stroke-width="2"
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
-                                              </svg>
+                                              </svg>)}
                                             </button>
 
+                                            <button
+                                              onClick={() =>
+                                                SwitchDeleteToUnDeleteForSolutions(
+                                                  userData.solution_id
+                                                )
+                                              }
+                                            >
+                                        {(userData.isdeleted === true ) && (
+                                            <div>
+                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
+                                            </div>      
+                                              )}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
                                       </tr>
-                                    )
+                                    
                                 )}
                             </tbody>
                           </table>
@@ -2164,20 +2275,14 @@ const Dashboard = () => {
                               </tr>
                             </thead>
                             <tbody>
-                              {data.sort((a, b) => a.faq_id - b.faq_id)
-                                // .slice(
-                                //   (currentPage - 1) * itemsPerPage,
-                                //   currentPage * itemsPerPage
-                                // )
-                                .map(
-                                  (userData) =>
-                                    userData.isDeleted !== "true" && (
-                                      <tr key={userData.faq_id}>
+                              
+                                
+                                      <tr key={data.faq_id}>
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <div className="flex items-center">
                                             <div className="ml-3">
                                               <p className="text-gray-900 whitespace-no-wrap">
-                                                {userData.question}
+                                                {data.question}
                                               </p>
                                             </div>
                                           </div>
@@ -2185,7 +2290,7 @@ const Dashboard = () => {
 
                                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                           <p className="text-gray-900 whitespace-no-wrap">
-                                            {userData.answer}
+                                            {data.answer}
                                           </p>
                                         </td>
 
@@ -2193,7 +2298,7 @@ const Dashboard = () => {
                                           <div className="flex space-x-2">
                                             <button
                                               onClick={() =>
-                                                handleFaqEditClick(userData.faq_id)
+                                                handleFaqEditClick(data.faq_id)
                                               }
                                             >
                                               <svg
@@ -2227,9 +2332,10 @@ const Dashboard = () => {
 
                                             <button
                                               onClick={() =>
-                                                handleSoftDeleteFaq(userData.faq_id)
+                                                handleSoftDeleteFaq(data.faq_id)
                                               }
                                             >
+                                              {(data.isdeleted === false ) && (
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -2245,15 +2351,28 @@ const Dashboard = () => {
                                                   stroke-width="2"
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
-                                              </svg>
+                                              </svg>)}
                                             </button>
 
+                                            <button
+                                              onClick={() =>
+                                                SwitchDeleteToUnDeleteForFaq(
+                                                  data.faq_id
+                                                )
+                                              }
+                                            >
+                                        {(data.isdeleted === true ) && (
+                                            <div>
+                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
+                                            </div>
+                                          
+)}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
                                       </tr>
-                                    )
-                                )}
+                                    
+                                
                             </tbody>
                           </table>
                         </div>
@@ -2299,9 +2418,7 @@ const Dashboard = () => {
                     />
                   )}
 
-                  {selectedTab === "signout" && (
-                    <div>Render sign-out logic</div>
-                  )}
+               
                 </div>
               </div>
             </div>
@@ -2327,6 +2444,10 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {role != 3 &&
+   (<Navigate to="/" replace/>)
+  }
     </>
   );
 };

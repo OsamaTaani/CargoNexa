@@ -26,46 +26,49 @@ const getUserProfile = async (req, res) => {
 
 
 const updateUserProfile = async (req, res) => {
-    try {
+  try {
+    const file = req.file;
 
-      const file = req.file;
+    if (file) {
+      const fileName = `${Date.now()}_${file.originalname}`;
+      const fileUrl = await Firebase.uploadFileToFirebase(file, fileName);
+      console.log(fileUrl);
 
-      if (file) {
-          const fileName = `${Date.now()}_${file.originalname}`;
-          const fileUrl = await Firebase.uploadFileToFirebase(file, fileName);
-          console.log(fileUrl);
-
-          req.body.user_image = fileUrl;
-      }
-
-      const userId = req.user.userId;
-      console.log(userId);
-
-      const updatedInfo = req.body;
-      console.log(updatedInfo);
-  
-      const updatedUser = await UserModel.updateUserProfile(userId, updatedInfo);
-  
-      res.status(200).json({ message: 'User profile updated successfully', user: updatedUser });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      req.body.user_image = fileUrl;
     }
-  };
-  
-  const getUserOrders = async (req, res) => {
-    try {
-      const userId = req.user.user_id;
-  
-      // Assuming you have a function in your model to retrieve user orders
-      const userOrders = await OrderModel.getUserOrders(userId);
-  
-      res.status(200).json({ userOrders });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+
+    const userId = req.user.userId;
+    console.log(userId);
+
+    const updatedInfo = req.body;
+
+    // Conditionally add user_image only if it exists in updatedInfo
+    if (updatedInfo.image) {
+      updatedInfo.user_image = updatedInfo.image;
     }
-  };
+
+    const updatedUser = await UserModel.updateUserProfile(userId, updatedInfo);
+
+    res.status(200).json({ message: 'User profile updated successfully', user: updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+  
+  // const getUserOrders = async (req, res) => {
+  //   try {
+  //     const userId = req.user.user_id;
+  
+  //     // Assuming you have a function in your model to retrieve user orders
+  //     const userOrders = await OrderModel.getUserOrders(userId);
+  
+  //     res.status(200).json({ userOrders });
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).json({ error: 'Internal Server Error' });
+  //   }
+  // };
 
 
 // Update order for a specific user
@@ -85,7 +88,25 @@ const updateOrder = async (req, res) => {
   }
 };
 
+const deleteOrder = async (req, res) => {
+  const orderId = req.params.orderId;
+
+  try {
+    const deletedOrder = await UserModel.deleteOrder(orderId);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    res.status(200).json({ message: 'Order soft deleted successfully', order: deletedOrder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
   
-  module.exports = { updateUserProfile, getUserOrders , getUserProfile,updateOrder };
+  module.exports = { updateUserProfile , getUserProfile,updateOrder , deleteOrder };
   

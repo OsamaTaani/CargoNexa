@@ -53,16 +53,19 @@ console.log('driverInfo',driverInfo);
             />
           </label>
 
-          <label className="block mb-4">
-            Driver Status:
-            <input
-              type="text"
-              name="status"
-              value={formState.status}
-              onChange={handleChange}
-              className="border p-2"
-            />
-          </label>
+          <div className="mb-2">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Status</label>
+              <select
+                name="status"
+                value={formState.status}
+                onChange={handleChange}
+                className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              >
+                <option value="Busy">Busy</option>
+                <option value="Available">Available</option>
+              </select>
+            </div>
+
 
           <button type="submit" className="bg-my-green text-white p-2 rounded mr-5">
             Update 

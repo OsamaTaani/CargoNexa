@@ -111,7 +111,7 @@ const handleBuyClick = async(price,formData) => {
   try {
     // Make a POST request using Axios
     // const authToken = cookies['token'];
-    const response = await axios.post('http://localhost:3001/create', formDataWithPriceAndType, {
+    const response = await axios.post('http://localhost:3001/users/create', formDataWithPriceAndType, {
       // headers: { 
       //   Authorization: `${authToken}`,
       // },

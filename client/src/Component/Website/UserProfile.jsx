@@ -63,7 +63,7 @@ const UserProfile = () => {
    console.log(authToken);
 
    // Fetch data using Axios
-     axios.get(`http://localhost:3001/user/` ,{
+     axios.get(`http://localhost:3001/users/userOrders` ,{
      headers: { 
        Authorization: `${authToken}`,
        
@@ -339,6 +339,7 @@ xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 20 20"
            onSubmit={handleUpdateUser}
         />
       )}
+
 
              {/* ... SVG path for delete */}
           

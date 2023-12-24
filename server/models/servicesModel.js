@@ -6,7 +6,7 @@ const getAllServices = async (pageSize , offset) => {
 };
 
 const getServiceById = async (serviceId) => {
-  const service = await pool.query('SELECT * FROM services WHERE service_id = $1', [serviceId]);
+  const service = await pool.query('SELECT * FROM services WHERE services_id = $1', [serviceId]);
   return service.rows[0];
 };
 
@@ -29,7 +29,7 @@ const updateServiceById = async (serviceId, services_title, services_description
 };
 
 const deleteServiceById = async (serviceId) => {
-  const deletedService = await pool.query('DELETE FROM services WHERE service_id = $1 RETURNING *', [serviceId]);
+  const deletedService = await pool.query('UPDATE services SET isdeleted = true WHERE services_id = $1 RETURNING *', [serviceId]);
   return deletedService.rows[0];
 };
 

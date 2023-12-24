@@ -11,9 +11,9 @@ const FAQ = () => {
   const [questions, setQuestions] = useState([]);
 
 
-  const toggleAnswer = (id) => {
+  const toggleAnswer = (faq_id) => {
     setQuestions((prevQuestions) => prevQuestions.map((q) => {
-      if (q.id === id) {
+      if (q.faq_id === faq_id) {
         return { ...q, isOpen: !q.isOpen };
       }
       return q;
@@ -23,8 +23,9 @@ const FAQ = () => {
     // Fetch all questions and answers using Axios
     const fetchQAFromDB = async () => {
       try {
-        const response = await axios.get(' http://localhost:3001/faq'); // Replace 'your_all_qa_api_endpoint' with your actual API endpoint
-        const data = response.data;
+        const response = await axios.get('http://localhost:3001/getAll/faq'); // Replace 'your_all_qa_api_endpoint' with your actual API endpoint
+        const data = response.data.faqs;
+        console.log(data);
 
         // Update state with questions and answers
         setQuestions(data.map((item) => ({ ...item, isOpen: false })));
@@ -47,15 +48,16 @@ const FAQ = () => {
         <div className="max-w-3xl mx-auto mt-8 space-y-4 md:mt-16">
           {questions.map((q) => (
             <div
-              key={q.id}
+              key={q.faq_id}
               className={`transition-all duration-200 bg-white border border-gray-200 shadow-lg cursor-pointer hover:bg-gray-50 ${q.isOpen ? 'bg-gray-50' : ''}`}
             >
+              
               <button
                 type="button"
-                onClick={() => toggleAnswer(q.id)}
+                onClick={() => toggleAnswer(q.faq_id)}
                 className="flex items-center justify-between w-full px-4 py-5 sm:p-6"
               >
-                <span className="flex text-lg font-semibold text-black">{q.question}</span>
+                <span className="flex text-lg font-semibold text-black">{q.question} </span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -72,6 +74,7 @@ const FAQ = () => {
                 </div>
               )}
             </div>
+            
           ))}
         </div>
         <p className="text-center text-gray-600 textbase mt-9">

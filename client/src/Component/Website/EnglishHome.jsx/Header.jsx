@@ -231,9 +231,7 @@ const role = isUserRole() || Cookies.get('role')
 
   
   <div className="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0 text-sm md:text-xl">
-        <div>
-          <LanguageSwitcher />
-        </div>
+       
 
         {!isAuthenticated() ? (
            <div>
@@ -263,7 +261,7 @@ const role = isUserRole() || Cookies.get('role')
           
           
             <span  className=" menu-hover inline-flex lg:mx-1 items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"  >
-                Login
+            {t('header.Login')}  
             </span>
           
               <span>
@@ -286,10 +284,11 @@ const role = isUserRole() || Cookies.get('role')
             <div className="invisible absolute z-50 flex text-center w-full flex-col bg-my-green rounded-xl py-1 px-4 text-white shadow-xl group-hover:visible">
               < Link to={'/login'} className=" my-1 block border-b border-gray-300 py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
              
-               <p>Shipper</p> 
+           
+               <p>    {t('header.Shipper')}  </p> 
               </Link>
               <Link to={'/driverLogin'} className=" block py-1 font-semibold text-white hover:text-gray-200 md:mx-2">
-               <p>Driver</p> 
+               <p>  {t('header.Driver')} </p> 
               </Link>
               
           
@@ -303,7 +302,7 @@ const role = isUserRole() || Cookies.get('role')
             to={'/start'}
                 className="  inline-flex items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
               >
-                SignUp
+                  {t('header.SignUp')} 
               </Link>
             </span>
           
@@ -320,7 +319,7 @@ const role = isUserRole() || Cookies.get('role')
             onClick={logout}
             className="inline-flex items-center px-2 py-2 border border-transparent leading-6 font-medium text-[#219C90] hover:text-[#54beb3] focus:outline-none transition duration-150 ease-in-out"
           >
-            Logout
+              {t('header.Logout')} 
           </button>
          {role == 1 &&(
           <Link to={'/userProfile'}>

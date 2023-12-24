@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import EditForm from './EditOrderForm'; 
 import Cookies from 'js-cookie';
@@ -7,7 +7,7 @@ import { useAuth } from './AuthContext';
 import { useCookies } from 'react-cookie';
 const OrderDetailsPage = () => {
 
-
+const navigate = useNavigate()
     useEffect(() => {
         window.scrollTo(0, 0);
       }, []);
@@ -17,7 +17,6 @@ const OrderDetailsPage = () => {
       console.log(orderId);
       const [orderDetails, setOrderDetails] = useState([]);
       console.log(orderDetails);
-      // const [driverData, setdriverData] = useState([]);
       
       
       const {isUserRole} = useAuth()
@@ -74,12 +73,13 @@ try {
 const handleSoftDeleteOrder = async () => {
   try {
     // Send a PATCH request to update the status for soft delete
-    await axios.put(`http://localhost:3001/user/order/${orderId}`, {
+    await axios.put(`http://localhost:3001/deleteOrder/${orderId}`, {
       isdeleted: "true",
     });
 
     // Refresh the data or handle the removal of the soft-deleted drciver from your local state
     fetchOrderData()
+    navigate('/')
   } catch (error) {
     console.error("Error soft deleting order:", error);
   }
@@ -147,7 +147,7 @@ console.log(orderDetails.isdeleted);
           )}
 
           <div className="flex flex-col-reverse ml-0 sm:ml-6">
-            <dt className="text-sm font-medium text-slate-600">{orderDetails.shipping_date}</dt>
+            <dt className="text-sm font-medium text-slate-600">{orderDetails.shipping_timestamp}</dt>
             <dd className="text-xs text-slate-500">Shipping Date</dd>
           </div>
         </dl>

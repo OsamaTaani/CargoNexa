@@ -5,15 +5,27 @@ const {pool} = require('../db');
 //   return orders.rows;
 // };
 
-const getAllOrdersWithPagination = async (pageSize, offset) => {
+const getAllOrdersWithPaginationAndSearch = async (pageSize, offset, searchTerm) => {
   try {
-    const orders = await pool.query('SELECT *, COUNT(*) OVER () as total_count FROM orders ORDER BY order_id LIMIT $1 OFFSET $2', [pageSize, offset]);
+    const query = `
+      SELECT *, COUNT(*) OVER () as total_count 
+      FROM orders 
+      WHERE 
+        order_title LIKE $3 OR
+        shipping_location LIKE $3 OR
+        receiving_location LIKE $3 OR
+        status LIKE $3
+      ORDER BY order_id 
+      LIMIT $1 OFFSET $2`;
+
+    const orders = await pool.query(query, [pageSize, offset, `%${searchTerm}%`]);
     return orders.rows;
   } catch (error) {
-    console.error('Error in getAllOrdersWithPagination:', error);
+    console.error('Error in getAllOrdersWithPaginationAndSearch:', error);
     throw error;
   }
 };
+
 
 const getOrderById = async (orderId) => {
   const order = await pool.query('SELECT * FROM orders WHERE order_id = $1', [orderId]);
@@ -42,8 +54,7 @@ const deleteOrderById = async (orderId) => {
 
 
 module.exports = {
-  // getAllOrders,
-  getAllOrdersWithPagination,
+  getAllOrdersWithPaginationAndSearch,
   getOrderById,
   updateOrderById,
   deleteOrderById,

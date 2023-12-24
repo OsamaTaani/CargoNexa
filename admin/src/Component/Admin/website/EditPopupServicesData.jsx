@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-const EditPopupServicesData = ({ services, isOpen, onClose, onSubmit }) => {
+const EditPopupServicesData = ({services, isOpen, onClose, onSubmit} ) => {
     const [editedServices, setEditedServices] = useState(services);
+console.log(services);
 
   useEffect(() => {
     setEditedServices(services);
@@ -19,7 +20,7 @@ const EditPopupServicesData = ({ services, isOpen, onClose, onSubmit }) => {
         <div className="fixed inset-0 flex items-center justify-center z-50 ">
           <div className="bg-gray-800 bg-opacity-75 absolute inset-0"></div>
           <div className="bg-white w-96 p-6 rounded-lg z-10 my-6">
-            <h2 className="text-2xl font-semibold mb-4">Edit Solutions</h2>
+            <h2 className="text-2xl font-semibold mb-4">Edit Services</h2>
             <form onSubmit={(e) => { e.preventDefault(); onSubmit(editedServices); }}>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>
@@ -43,11 +44,11 @@ const EditPopupServicesData = ({ services, isOpen, onClose, onSubmit }) => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2"> Image</label>
+                <label className="block text-gray-700 text-sm font-bold mb-2">Image</label>
                 <input
-                  type="text"
+                  type="file"
                   name="services_image"
-                  value={editedServices.services_image}
+                  // value={editedServices.services_image}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />

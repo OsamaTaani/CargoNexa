@@ -99,7 +99,8 @@ const Login = () => {
               />
             </div>
           </div>
-          {(error !== null && error.includes("driver_email"))&& <p className='text-red-500'>"driver_email shouldn't be empty"</p>}
+          {(error !== null && error.includes("\"driver_email\" is not allowed to be empty"))&& <p className='text-red-500'>"email shouldn't be empty"</p>}
+          {(error !== null && error.includes("\"driver_email\" must be a valid email"))&& <p className='text-red-500'>" email must be a valid email"</p>}
 
           <p className="mb-1 font-medium text-gray-500">Password</p>
           <div className="mb-4 flex flex-col">
@@ -113,14 +114,19 @@ const Login = () => {
               />
             </div>
           </div>
-          {(error !== null && error.includes("driver_password"))&& <p className='text-red-500'>"driver_password shouldn't be empty"</p>}
+          {(error !== null && error.includes("driver_password"))&& <p className='text-red-500'>"password shouldn't be empty"</p>}
        
-       <div>          {(error !== null && error.includes("Invalid credentials"))&& <p className='text-red-500'>"driver_email or driver_password not correct "</p>}
-</div>
+       <div>        
+          {(error !== null && error.includes("Invalid credentials"))&& <p className='text-red-500'>"email or password not correct "</p>}
+        </div>
 
           <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">
             Login
           </button>
+          <Link to={'/resetPassword'}>
+          <div className='text-center font-bold'>Forget Password ?</div>
+          
+          </Link>
         </form></div>
 
 

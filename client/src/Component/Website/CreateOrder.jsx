@@ -3,6 +3,9 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import Cookies from 'js-cookie';
+import { useAuth } from './AuthContext';
+
 // import { useCookies } from 'react-cookie';
 
 
@@ -10,6 +13,10 @@ const CreateOrder = () => {
 
   const navigate = useNavigate();
   const location = useLocation(); // Get the location object
+
+  const {isUserRole} = useAuth()
+  const role = isUserRole() || Cookies.get('role')
+  
 
   const [showForm, setShowForm] = useState(true); // State to manage form visibility
   const [step, setStep] = useState(1); // Add state for tracking the step
@@ -34,7 +41,7 @@ const CreateOrder = () => {
     receiver_phone_number: '',
     shipping_location: '',
     receiving_location: '',
-    shipping_date: '',
+    // shipping_date: '',
     order_truck_size: '',
     reciving_timestamp: '',
     shipping_timestamp: '',
@@ -43,7 +50,17 @@ const CreateOrder = () => {
   });
 
   // const [cookies] = useCookies(['token']); // Replace with your actual token cookie name
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState({
+    name: '',
+    receiver_name: '',
+    order_phone_number: '',
+    receiver_phone_number: '',
+    shipping_location: '',
+    receiving_location: '',
+    order_truck_size: '',
+    reciving_timestamp: '',
+    shipping_timestamp: '',
+  });
 
 
   // Handle form input changes
@@ -75,10 +92,13 @@ const CreateOrder = () => {
       payment_method: 'cash', // Change this based on your logic for payment type
     };
     console.log("formDataWithPriceAndType",formDataWithPriceAndType);
+    
     try {
+      if(role == 1){
+
       // Make a POST request using Axios
       // const authToken = cookies['token'];
-      const response = await axios.post('http://localhost:3001/create', formDataWithPriceAndType, {
+      const response = await axios.post('http://localhost:3001/users/create', formDataWithPriceAndType, {
         // headers: { 
         //   Authorization: `${authToken}`,
         // },
@@ -97,6 +117,8 @@ const CreateOrder = () => {
           }).then((confirmResult) => {
             // Check if the user clicked the confirm button
             if (confirmResult.isConfirmed) {
+
+              
               // Show success message using Swal
               Swal.fire({
                 icon: 'success',
@@ -127,6 +149,14 @@ const CreateOrder = () => {
 
           }) } })
     
+
+        }else{
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'You should Login before create order',
+          });
+        }
     } catch (error) {
       // Handle errors (e.g., show error message)
       console.error('Error:', error);
@@ -140,6 +170,41 @@ const CreateOrder = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const inputErrors = {};
+    if (!formData.name) {
+      inputErrors.name = 'Name is required';
+    }
+    if (!formData.receiver_name) {
+      inputErrors.receiver_name = 'receiver name is required';
+    }
+    if (!formData.order_phone_number) {
+      inputErrors.order_phone_number = 'order phone number is required';
+    }
+    if (!formData.receiver_phone_number) {
+      inputErrors.receiver_phone_number = 'receiver phone number is required';
+    }
+    if (!formData.shipping_location) {
+      inputErrors.shipping_location = 'shipping location is required';
+    }
+    if (!formData.receiving_location) {
+      inputErrors.receiving_location = 'receiving location is required';
+    }
+    if (!formData.order_truck_size) {
+      inputErrors.order_truck_size = 'order truck size is required';
+    }
+   
+    if (!formData.shipping_timestamp) {
+      inputErrors.shipping_timestamp = 'shipping timestamp is required';
+    }
+  
+    // Set errors and prevent form submission if any field is empty
+    if (Object.keys(inputErrors).length > 0) {
+      setErrors(inputErrors);
+      return;
+    }
+
+    
     // Validate phone numbers
     const orderPhoneNumberValid = validatePhoneNumber(formData.order_phone_number);
     const receiverPhoneNumberValid = validatePhoneNumber(formData.receiver_phone_number);
@@ -154,6 +219,7 @@ const CreateOrder = () => {
  if (!orderPhoneNumberValid || !receiverPhoneNumberValid) {
    return; // Prevent form submission
  }
+
     // Continue with form submission if all validations pass
    // Check if the containsDangerousMaterials checkbox is checked
    if (!formData.contains_dangerous_materials) {
@@ -183,7 +249,7 @@ const CreateOrder = () => {
       receiver_phone_number: '',
       shipping_location: '',
       receiving_location: '',
-      shipping_date: '',
+      // shipping_date: '',
       order_truck_size: '',
       shipping_timestamp: '',
       receiving_timestamp: '',
@@ -238,51 +304,6 @@ const CreateOrder = () => {
     calculateShippingPrice(formData.shipping_location, formData.receiving_location, formData.order_truck_size);
   }, [formData.shipping_location, formData.receiving_location, formData.order_truck_size]);
 
-  // const handleCashClicked = () => {
-  //   // Display a confirmation dialog using SweetAlert
-  //   Swal.fire({
-  //     icon: 'question',
-  //     title: 'Confirm',
-  //     text: `Are you sure you want to proceed to payment? Total amount: ${shippingPrice}`,
-  //     showCancelButton: true,
-  //     confirmButtonColor: '#4CAF50',
-  //     cancelButtonColor: '#d33',
-  //     confirmButtonText: 'Yes, proceed!',
-  //     cancelButtonText: 'No, cancel',
-  //   }).then((confirmResult) => {
-  //     // Check if the user clicked the confirm button
-  //     if (confirmResult.isConfirmed) {
-  //       // Show success message using Swal
-  //       Swal.fire({
-  //         icon: 'success',
-  //         title: 'Order Successful!',
-  //         text: 'Thank you for your order.',
-  //         timer: 1000,
-  //       }).then(() => {
-  //         navigate('/');
-
-  //         // Uncomment the axios.post request to send cash payment information
-  //         axios.post("http://localhost:3002/payment", {
-  //           amount: shippingPrice,
-  //           payment_type: "cash"
-  //         })
-  //         .then(response => {
-  //           // Handle the response if needed
-  //           console.log(response);
-  
-  //           // Navigate after successful payment
-  //         })
-  //         .catch(error => {
-  //           // Handle errors if needed
-  //           console.error(error);
-  
-  //           // Still navigate even if there's an error (adjust as needed)
-  //           navigate('/');
-  //         });
-  //       });
-  //     }
-  //   });
-  // };
 
   return (
     <>
@@ -300,7 +321,7 @@ const CreateOrder = () => {
       <section className="mx-auto max-w-screen-lg rounded-xl bg-white border-gray-400 text-gray-600 shadow-lg sm:my-10 sm:border">
         <div className="container mx-auto flex flex-col flex-wrap px-5 pb-12">
           <div className="bg-white mx-auto mt-4 mb-10 flex w-full flex-wrap items-center space-x-4 py-4 md:mb-20 md:justify-center md:px-10">
-            <span className={`h-8 w-8 items-center justify-center rounded-full ${step === 1 ? 'bg-my-green' : 'bg-my-green'} text-white shadow md:inline-flex`}>
+            <span className={`h-8 w-8 p-2 items-center justify-center rounded-full ${step === 1 ? 'bg-my-green' : 'bg-my-green'} text-white shadow md:inline-flex`}>
               1
             </span>
             <span className={`${step === 1 ? 'text-teal-500' : 'text-my-green'} md:inline`}>shipment details</span>
@@ -337,6 +358,8 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     />
+                      {errors.name && <p className="text-red-500 text-sm ml-3">{errors.name}</p>}
+
                   </div>
                   <div className="col-span-1 flex flex-col">
                     <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
@@ -352,6 +375,7 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     />
+                      {errors.receiver_name && <p className="text-red-500 text-sm ml-3">{errors.receiver_name}</p>}
 
                   </div>
                   <div className="flex flex-col ">
@@ -403,6 +427,7 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     >
+
                       <option value="">Select Governorate</option>
                       <option value="Irbid">Irbid</option>
                       <option value="Ajloun">Ajloun</option>
@@ -417,6 +442,8 @@ const CreateOrder = () => {
                       <option value="Ma'an">Ma'an</option>
                       <option value="Aqaba">Aqaba</option>
                     </select>
+                    {errors.shipping_location && <p className="text-red-500 text-sm ml-3">{errors.shipping_location}</p>}
+
                   </div>
 
                   <div className="col-span-1 flex flex-col">
@@ -431,6 +458,7 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     >
+
                       <option value="">Select Governorate</option>
                       <option value="Irbid">Irbid</option>
                       <option value="Ajloun">Ajloun</option>
@@ -445,8 +473,10 @@ const CreateOrder = () => {
                       <option value="Ma'an">Ma'an</option>
                       <option value="Aqaba">Aqaba</option>
                     </select>
+                    {errors.receiving_location && <p className="text-red-500 text-sm ml-3">{errors.receiving_location}</p>}
+
                   </div>
-                  <div className="flex flex-col ">
+                  {/* <div className="flex flex-col ">
                     <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
                       Shipping Date
                     </label>
@@ -459,7 +489,7 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     />
-                  </div>
+                  </div> */}
                   <div className="col-span-1 flex flex-col">
                     <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
                       Truck Size
@@ -472,11 +502,14 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     >
+
                       <option value="">Select Size</option>
                       <option value="Small">Small Truck (1 ton)</option>
                       <option value="Medium">Medium Truck (3-5 ton)</option>
                       <option value="Large">Large Truck (8-12 ton)</option>
                     </select>
+                    {errors.order_truck_size && <p className="text-red-500 text-sm ml-3">{errors.order_truck_size}</p>}
+
                   </div>
 
                   <div className="flex flex-col ">
@@ -491,6 +524,8 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     />
+                      {errors.shipping_timestamp && <p className="text-red-500 text-sm ml-3">{errors.shipping_timestamp}</p>}
+
                   </div>
                   <div className="col-span-1 flex flex-col">
                     <label
@@ -508,7 +543,10 @@ const CreateOrder = () => {
                       onChange={handleInputChange}
                       required
                     />
+                   {errors.receiving_timestamp && <p className="text-red-500 text-sm ml-3">{errors.receiving_timestamp}</p>}
+
                   </div>
+                
                   {/* <div className="col-span-1 flex flex-col">
             <label
               className="text-md font-semibold  text-gray-500"
@@ -527,6 +565,7 @@ const CreateOrder = () => {
               />
           </div>
         */}
+
                   <div className="col-span-1 flex flex-col">
                     <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
                       Message
@@ -541,7 +580,20 @@ const CreateOrder = () => {
                     />
                   </div>
 
+                  <div className="col-span-1 flex flex-col">
+                    <div className='flex items-center '>
+                    <label
+                      className=" text-xl font-bold  text-gray-900 mr-5"
+                      htmlFor=""
+                    >
+                      Order Amount 
+                    </label>
+                    <div className='bg-my-green p-2 font-bold rounded-lg text-white px-10'>  
+                    {shippingPrice}
 
+                    </div>
+                    </div>
+                  </div>
                 </div>
                 <br />
 
@@ -558,7 +610,6 @@ const CreateOrder = () => {
                   The shipment does not contain any dangerous materials or foodstuffs!
                 </label>
 
-                <div> hiiii {shippingPrice}</div>
                 <div className="flex flex-col justify-between sm:flex-row">
 
                   {/* <Link to={'/NewOrders'}> */}

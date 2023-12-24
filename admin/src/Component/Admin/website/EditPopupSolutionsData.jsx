@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 const EditPopupSolutionsData = ({ solutions, isOpen, onClose, onSubmit }) => {
     const [editedSolutions, setEditedSolutions] = useState(solutions);
-
+console.log(solutions);
   useEffect(() => {
     setEditedSolutions(solutions);
   }, [solutions]);
@@ -25,8 +25,8 @@ const EditPopupSolutionsData = ({ solutions, isOpen, onClose, onSubmit }) => {
                 <label className="block text-gray-700 text-sm font-bold mb-2">Title</label>
                 <input
                   type="text"
-                  name="services_title"
-                  value={editedSolutions.solutions_title}
+                  name="solution_title"
+                  value={editedSolutions.solution_title}
                   onChange={handleChange}
                   
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -36,8 +36,8 @@ const EditPopupSolutionsData = ({ solutions, isOpen, onClose, onSubmit }) => {
                 <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
                 <input
                   type="text"
-                  name="solutions_description"
-                  value={editedSolutions.solutions_description}
+                  name="solution_description"
+                  value={editedSolutions.solution_description}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
@@ -46,8 +46,8 @@ const EditPopupSolutionsData = ({ solutions, isOpen, onClose, onSubmit }) => {
                 <label className="block text-gray-700 text-sm font-bold mb-2"> Image</label>
                 <input
                   type="text"
-                  name="services_image"
-                  value={editedSolutions.solutions_image}
+                  name="solution_image"
+                  value={editedSolutions.solution_image}
                   onChange={handleChange}
                   className="w-full border rounded-md py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />

@@ -3,19 +3,22 @@ import axios from 'axios'; // Import Axios
 // import LogValidate from './LogValidate';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { useAuth } from '../AuthContext';
+import Cookies from 'js-cookie';
 
 const Login = () => {
+  const {login} = useAuth()
 
   useEffect(() => {
 
     window.scrollTo(0, 0);
   }, []);
 
-  const [cookies, setCookie] = useCookies(['token']);
 
   const navigate=useNavigate();
     const [values,setValues]=useState({ admin_email:'', admin_password:''});
     // const [error,setError]=useState({});
+    const [cookies, setCookie] = useCookies(['token']);
     const [error, setError] = useState({ admin_email: '', admin_password: '' });
 
     
@@ -36,8 +39,12 @@ const Login = () => {
       const token = response.data.token;
 
       // Set the token in a cookie
-      setCookie('token', token, { path: '/' });
+      // setCookie('token', token, { path: '/' });
+      Cookies.set("role", 3)
+      login(token)
+
           navigate("/dashboard");
+          // window.location.href('/dashboard')
   
       // Check the response status code and handle it accordingly
       // Login was successful
@@ -89,7 +96,6 @@ const Login = () => {
     />
   </div>
 </div>
-{error.admin_email && <p style={{color:"red"}}>{error.admin_email}</p>}
 
 <p className="mb-1 font-medium text-gray-500">Password</p>
 <div className="mb-4 flex flex-col">
@@ -103,7 +109,6 @@ const Login = () => {
     />
   </div>
 </div>
-{error.admin_password && <p style={{color:"red"}} >{error.admin_password}</p>}
 
 
 <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">

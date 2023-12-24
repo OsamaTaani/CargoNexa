@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react'
 import heroImage from '../../Images/heroImage.jpg';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 
 const Services = () => {
+    const { t } = useTranslation();
+
     const [servicesData, setServicesData] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(' http://localhost:3001/services');
+                const response = await axios.get(' http://localhost:3001/getAll/services');
                 setServicesData(response.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -28,20 +31,19 @@ const Services = () => {
             <div>
                 <span className="group font-extrabold text-xl md:text-2xl xl:text-3xl flex justify-start">
                     <Link to="/contact" className=" ml-20 block py-2 pl-3 pr-4 text-black rounded md:bg-transparent md:p-0 relative" aria-current="page">
-                        Industry sectors
-
+                           {t('services.Industry sectors')}
                         <div className="w-32 md:w-[17rem] h-1  bg-my-green"></div>
                     </Link>
                 </span>
                 <br />
                 <span className="group text-sm md:text-xl xl:text-xl">
                     <Link to="/contact" className=" ml-10 md:ml-20 mb-5 block py-2 pl-3 pr-4 text-black rounded md:bg-transparent md:p-0 relative" aria-current="page">
-                        No matter your industry, commodity, or key markets, Maersk provides global and local logistics solutions that enable small and large businesses to grow                    </Link>
+                    {t('services.IndustryDescription')}                                   </Link>
                 </span>
                 <div>
                     <Link to={'/services'}>
                         <button type="button" className="ml-20 bg-my-green text-white border  hover:shadow-sm  mb-5 font-bold rounded-lg text-xl px-5 py-2 text-center mr-3 md:mr-0 ">
-                            More Services
+                        {t('services.More services')} 
                         </button>
                     </Link>
                 </div>

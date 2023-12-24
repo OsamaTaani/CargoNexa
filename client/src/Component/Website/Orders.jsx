@@ -33,7 +33,7 @@ const Orders = () => {
     console.log(authToken);
 
     // Fetch data using Axios
-    axios.get(`http://localhost:3001/user/` ,{
+    axios.get(`http://localhost:3001/users/userOrders` ,{
       headers: { 
         Authorization: `${authToken}`,        
       },

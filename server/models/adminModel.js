@@ -2,7 +2,27 @@
 
 const {pool} = require('../db');
 
+const bcrypt = require('bcrypt');
 
+const createAdmin = async (admin_username , admin_password , admin_email , admin_phone_number) => {
+  try{
+    const role_id = 3;
+    const hashedPassword = await bcrypt.hash(admin_password, 10); // Hash the password before storing
+
+
+    const admin = await pool.query(
+      'INSERT INTO admins (admin_username , admin_password , admin_email , admin_phone_number , role_id ) VALUES ($1, $2 , $3 , $4 , $5) RETURNING *' ,
+      [admin_username , hashedPassword , admin_email , admin_phone_number , role_id]
+    );
+    return admin.rows[0];
+    
+  }catch(error) {
+    console.error("Error in creating an admin",error);
+    throw error;
+  }
+ 
+
+}
 const getAdminByEmail = async (admin_email) => {
     const admin = await pool.query(
         'SELECT * FROM admins WHERE admin_email = $1',
@@ -41,7 +61,7 @@ const getAllAdmins = async (pageSize, offset) => {
 //Soft delete
   const deleteAdminById = async (adminId) => {
     const deletedAdmin = await pool.query(
-      'UPDATE admins SET isDeleted = true WHERE admin_id = $1 RETURNING *',
+      'UPDATE admins SET isdeleted = true WHERE admin_id = $1 RETURNING *',
       [adminId]
     );
   
@@ -60,7 +80,8 @@ const getAllAdmins = async (pageSize, offset) => {
     getAdminById,
     updateAdminById,
     deleteAdminById,
-    verifyCredentials
+    verifyCredentials,
+    createAdmin
   };
   
 

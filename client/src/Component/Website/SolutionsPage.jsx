@@ -15,7 +15,7 @@ const SolutionsPage = () => {
       const [data, setData] = useState([]);
 
       useEffect(() => {
-        axios.get('http://localhost:3001/solutions') // Replace with your API endpoint
+        axios.get('http://localhost:3001/getAll/solutions') // Replace with your API endpoint
           .then(response => {
             setData(response.data);
           })
@@ -43,12 +43,12 @@ const SolutionsPage = () => {
       {data.map((item) => (
         <div key={item.id} className="grid grid-cols-1 md:grid-cols-2 items-center gap-8 mb-10 ">
           <div className="max-w-lg">
-            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">{item.solutions_title}</h2>
-            <p className="mt-4 text-gray-600 text-lg">{item.solutions_description}</p>
+            <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">{item.solution_title}</h2>
+            <p className="mt-4 text-gray-600 text-lg">{item.solution_description}</p>
             <div className="mt-8">{/* Additional content here */}</div>
           </div>
           <div className="mt-12 md:mt-0 ">
-            <img src={item.solutions_image} alt={item.solutions_title} className="object-cover rounded-lg shadow-md" />
+            <img src={item.solution_image} alt={item.solution_title} className="object-cover rounded-lg shadow-md" />
           </div>
         </div>
       ))}

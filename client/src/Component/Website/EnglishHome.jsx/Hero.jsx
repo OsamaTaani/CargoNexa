@@ -23,7 +23,7 @@ const Hero = () => {
   
     try {
       // Use the trackingId entered by the user
-      const response = await axios.get(`http://localhost:3001/orders/user/${trackingId}`, {
+      const response = await axios.get(`http://localhost:3001/users/order/user/${trackingId}`, {
         headers: {
           Authorization: `${Cookies.get('token')}`, // Include the user's authentication token
         },

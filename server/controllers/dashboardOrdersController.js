@@ -14,16 +14,34 @@ const OrderModel = require('../models/dashboardOrdersModel');
 
 // controllers/orderController.js
 
-const getAllOrders = async (req, res) => {
+const createOrderForUserController = async (req, res) => {
   try {
-    const { page = 1, pageSize = 5 } = req.query;
+      const { userId } = req.params;
+      const orderData = req.body;
+
+      // Set createdByAdmin to true since it's an admin creating the order
+      const createdByAdmin = true;
+
+      const newOrder = await createOrderForUser(userId, orderData, createdByAdmin);
+
+      res.status(201).json(newOrder);
+  } catch (error) {
+      console.error('Error in createOrderForUserController:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+const getAllOrdersWithPaginationAndSearch = async (req, res) => {
+  try {
+    const { page = 1, pageSize = 5, search } = req.query;
     const offset = (page - 1) * pageSize;
 
-    const orders = await OrderModel.getAllOrdersWithPagination(pageSize, offset);
+    const orders = await OrderModel.getAllOrdersWithPaginationAndSearch(pageSize, offset, search);
     
     res.status(200).json(orders);
   } catch (error) {
-    console.error('Error in getAllOrders:', error);
+    console.error('Error in getAllOrdersWithPaginationAndSearch:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -85,8 +103,9 @@ const deleteOrderById = async (req, res) => {
 };
 
 module.exports = {
-  getAllOrders,
+  getAllOrdersWithPaginationAndSearch,
   getOrderById,
   updateOrderById,
   deleteOrderById,
+  createOrderForUserController,
 };

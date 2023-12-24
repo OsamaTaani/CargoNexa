@@ -12,11 +12,14 @@ const LanguageSwitcher = () => {
 
   return (
     <div className="relative inline-block" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <img
-        src="https://cdn-icons-png.flaticon.com/128/3898/3898082.png"
-        alt="Language"
-        className="h-10 w-10 cursor-pointer"
-      />
+     <svg class="text-teal-600 w-10 h-10"
+xmlns="http://www.w3.org/2000/svg" width="24"  height="24"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> 
+ <path stroke="none" d="M0 0h24v24H0z"/> 
+  <circle cx="12" cy="12" r="9" />  
+  <line x1="3.6" y1="9" x2="20.4" y2="9" /> 
+   <line x1="3.6" y1="15" x2="20.4" y2="15" /> 
+    <path d="M11.5 3a17 17 0 0 0 0 18" /> 
+     <path d="M12.5 3a17 17 0 0 1 0 18" /></svg>
 
       {isHovered && (
         <div className="absolute top-10 right-0  bg-my-green rounded-xl py-2 px-4 text-white shadow-lg  p-2 z-10">

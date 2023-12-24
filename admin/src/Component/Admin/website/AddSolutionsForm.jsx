@@ -3,9 +3,9 @@ import { useState } from 'react';
 
 const AddSolutionsForm = ({ onSubmit, onCancel }) => {
     const [formData, setFormData] = useState({
-        solutions_title: '',
-        solutions_description: '',
-        solutions_image:''
+        solution_title: '',
+        solution_description: '',
+        solution_image:''
       });
     
       const handleInputChange = (e) => {
@@ -35,11 +35,11 @@ const AddSolutionsForm = ({ onSubmit, onCancel }) => {
             </label>
                       <input
             className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-            name="solutions_title"
-            id="solutions_title"
+            name="solution_title"
+            id="solution_title"
             type='text'
-            placeholder='solutions_title'
-            value={formData.solutions_title}
+            placeholder='solution_title'
+            value={formData.solution_title}
             onChange={handleInputChange}
             required
           />
@@ -51,11 +51,11 @@ const AddSolutionsForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="solutions_description"
-          id="solutions_description"
+          name="solution_description"
+          id="solution_description"
           type='text'
-          placeholder='solutions_description'
-          value={formData.solutions_description}
+          placeholder='solution_description'
+          value={formData.solution_description}
           onChange={handleInputChange}
            required
         />
@@ -67,11 +67,11 @@ const AddSolutionsForm = ({ onSubmit, onCancel }) => {
             </label>
                     <input
           className="rounded-lg border px-2 py-2 shadow-sm outline-none focus:ring"
-          name="solutions_image"
-          id="solutions_image"
-          type='text'
-          placeholder='solutions_image'
-          value={formData.solutions_image}
+          name="solution_image"
+          id="solution_image"
+          type='file'
+          placeholder='solution_image'
+          value={formData.solution_image}
           onChange={handleInputChange}
            required
         />

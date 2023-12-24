@@ -1,10 +1,15 @@
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Contact() {
+
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
-    email: '',
+    contact_name:'',
+    contact_email: '',
     subject: '',
     message: '',
   });
@@ -24,17 +29,19 @@ function Contact() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('YOUR_API_ENDPOINT', formData);
+      const response = await axios.post('http://localhost:3001/send-message', formData);
 
       // Handle the response if needed
       console.log('Response:', response.data);
 
       // You can also reset the form or show a success message
       setFormData({
-        email: '',
+        contact_name: '',
+        contact_email: '',
         subject: '',
         message: '',
       });
+      navigate('/')
     } catch (error) {
       // Handle errors
       console.error('Error:', error);
@@ -67,14 +74,27 @@ function Contact() {
 
       <div className="mb-4">
         <label className="text mb-2 block font-medium" htmlFor="email">
+          Your Name:
+        </label>
+        <input
+          className="w-full rounded border border-gray-300 px-3 py-2 outline-none ring-[#219C90] focus:ring"
+          id="contact_name"
+          type="text"
+          required=""
+          value={formData.contact_name}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-4">
+        <label className="text mb-2 block font-medium" htmlFor="email">
           Your e-mail:
         </label>
         <input
           className="w-full rounded border border-gray-300 px-3 py-2 outline-none ring-[#219C90] focus:ring"
-          id="email"
+          id="contact_email"
           type="email"
           required=""
-          value={formData.email}
+          value={formData.contact_email}
           onChange={handleChange}
         />
       </div>
@@ -123,7 +143,7 @@ function Contact() {
         <p className="mb-4">
           Email:
           <a href="#" className="font-semibold underline">
-            support@apps.io
+            CargoNexa@gmail.com
           </a>
         </p>
         <p className="mb-4">
@@ -134,7 +154,6 @@ function Contact() {
         </p>
         <hr className="my-2 h-0 border-t border-r-0 border-b-0 border-l-0 border-gray-300" />
         <p className="mb-4">Org.no: 63452-2832</p>
-        <p className="mb-4">VAT no: 32353</p>
       </div>
     </div>
   </div>

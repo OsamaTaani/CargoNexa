@@ -4,9 +4,11 @@ import img2 from '../../Images/box2.webp';
 import img3 from '../../Images/box3.jpeg';
 import img4 from '../../Images/truck2.jpeg';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 
 const Carousel = () => {
+    const {t} =useTranslation()
     const [currentSlide, setCurrentSlide] = useState(1);
 
     useEffect(() => {
@@ -47,10 +49,14 @@ const Carousel = () => {
                                 ❮
                             </a>
                             <div className='flex  flex-wrap  justify-center'>
-                                <div className='text-white  sm:text-1xl  md:text-3xl  lg:text-4xl  text-center font-bold  mt-10 mb-2 md:mx-20' >We make shipping big stuff cheap and easy by helping customers directly connect with providers  who have extra truck space.</div>
+                                <div className='text-white  sm:text-1xl  md:text-3xl  lg:text-4xl  text-center font-bold  mt-10 mb-2 md:mx-20' >
+                                {t('carousel.carousel Description')}
+                                    </div>
 
                                 <div>
-                                 <Link to={'/services '}>  <button type="button" class="ml-2 text-white bg-my-green hover:bg-[#54beb3] font-bold rounded-lg md:text-xl md:px-5 md:py-3 px-2 py-1  text-center mr-3 md:mr-0 ">Quote Now </button></Link> 
+                                 <Link to={'/services '}>  <button type="button" class="ml-2 text-white bg-my-green hover:bg-[#54beb3] font-bold rounded-lg md:text-xl md:px-5 md:py-3 px-2 py-1  text-center mr-3 md:mr-0 ">
+                                   {t('carousel.Quote Now')}
+                                     </button></Link> 
                                 </div>
                             </div>
                             <a

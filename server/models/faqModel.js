@@ -1,4 +1,4 @@
-const pool = require('../db');
+const {pool} = require('../db');
 
 // Function to save a new FAQ
 const saveFAQ = async (question, answer) => {

@@ -2,8 +2,10 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebook, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+  const {t} =useTranslation()
   return (
 //     <footer class=" footer bg-[#272829] dark:bg-gray-900 py-20  ">
 //     <div class="w-full mx-auto max-w-screen-xl p-4 flex flex-wrap items-center justify-between ">
@@ -57,7 +59,9 @@ const Footer = () => {
           CargoNexa
           </div>
           </Link>
-          <p className="mt-2 text-sm text-white">Website, For cargo Shipping !</p>
+          <p className="mt-2 text-sm text-white">    
+             {t('footer.Website, For cargo Shipping !')}
+</p>
           <div className="mt-4">
             <span className="inline-flex justify-center mt-2 sm:ml-auto sm:mt-0 sm:justify-start">
               <a className="text-white cursor-pointer hover:text-gray-700">
@@ -121,13 +125,15 @@ const Footer = () => {
         <div className="flex flex-wrap flex-grow mt-10 -mb-10 text-center md:pl-20 md:mt-0 md:text-left">
           <div className="w-full px-4 lg:w-1/3 md:w-1/2">
             <h2 className="mb-3 text-sm font-medium tracking-widest text-white uppercase title-font">
-              About
+            {t('footer.ABOUT')}
+
             </h2>
             <nav className="mb-10 list-none">
               <Link to={'/about'}>
               <li className="mt-3">
                 <a className="text-white cursor-pointer hover:text-white">
-                  Our Mission
+                {t('footer.Our Mission')}
+
                 </a>
               </li>
               </Link>
@@ -136,14 +142,16 @@ const Footer = () => {
        
           <div className="w-full px-4 lg:w-1/3 md:w-1/2">
             <h2 className="mb-3 text-sm font-medium tracking-widest text-white uppercase title-font">
-              Platform
+            {t('footer.PLATFORM')}
+
             </h2>
             <nav className="mb-10 list-none">
             
               <li className="mt-3">
                 <Link to={'/faq'}>
                 <a className="text-white cursor-pointer hover:text-white">
-                  FAQ
+                {t('footer.FAQ')}
+
                 </a>
                 </Link>
               </li>
@@ -152,13 +160,15 @@ const Footer = () => {
 
           <div className="w-full px-4 lg:w-1/3 md:w-1/2">
             <h2 className="mb-3 text-sm font-medium tracking-widest text-white uppercase title-font">
-              Contact
+            {t('footer.CONTACT')}
+
             </h2>
             <nav className="mb-10 list-none">
               <Link to={'/contact'}>
               <li className="mt-3">
                 <a className="text-white cursor-pointer hover:text-gray-900">
-                  Send a Message
+                {t('footer.Send a Message')}
+
                 </a>
               </li>
               </Link>
