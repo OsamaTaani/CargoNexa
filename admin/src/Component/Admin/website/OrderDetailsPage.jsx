@@ -85,18 +85,15 @@ const handleSoftDeleteOrder = async () => {
 
     // Refresh the data or handle the removal of the soft-deleted drciver from your local state
     fetchOrderData()
-    navigate('/dashboard')
   } catch (error) {
     console.error("Error soft deleting order:", error);
   }
 };
 
-console.log(orderDetails.isdeleted);
 
   return (
 <>
   {/* component */}
- {orderDetails.isdeleted == false && (
   <div className="my-8 mx-4 sm:mx-8 p-4 border border-gray-300 shadow-lg shadow-gray-300 rounded-lg">
     <h2 className="md:text-xl font-bold mb-4 ml-2 sm:ml-16">Tracking ID : {orderId}</h2>
     <div className="relative block p-3 overflow-hidden rounded-lg ml-2 mr-2 sm:ml-0 sm:mr-0">
@@ -120,7 +117,6 @@ console.log(orderDetails.isdeleted);
             />
           </div> */}
         </div>
-
         
         <dl className="flex flex-col sm:flex-row mt-3 text-center">
           <div className="flex flex-col-reverse mb-2 sm:mb-0">
@@ -214,7 +210,7 @@ console.log(orderDetails.isdeleted);
       </a>
     </div>
   </div>
-)} 
+
    {/* The Edit Component With the props */}
    {showEditForm && (
         <EditForm onClose={handleCloseEditForm} orderDetails={orderDetails} onSubmit={handleEditFormSubmit}/>

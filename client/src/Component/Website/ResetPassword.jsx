@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 const ResetPassword = () => {
    
-const ResetPassword = () => {
-    // const [email, setEmail] = useState('');
+
+    const [email, setEmail] = useState('');
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [code, setCode] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -14,55 +14,49 @@ const ResetPassword = () => {
       window.scrollTo(0, 0);
     }, []);
   
-    // const sendEmail = async (e) => {
-    //     e.preventDefault()
-    //   try {
-    //     // Replace 'YOUR_EMAIL_API_ENDPOINT' with your actual API endpoint
-    //     const response = await axios.post('YOUR_EMAIL_API_ENDPOINT', { email });
-    
-  
-    //     console.log('Email sent successfully:', response.data);
-  
-    //     // Show the update password modal
-    //     setShowUpdateModal(true);
+    const sendEmail = async (e) => {
+        e.preventDefault()
+      try {
 
-    //   } catch (error) {
-    //     // Handle errors, e.g., show an error message
-    //     console.error('Email sending failed:', error.message);
-    //   }
-    // };
+        const response = await axios.post('YOUR_EMAIL_API_ENDPOINT', { email });
+    
+        console.log('Email sent successfully:', response.data);
   
-    // const updatePassword = async () => {
-    //   try {
-    //     // Replace 'YOUR_UPDATE_PASSWORD_ENDPOINT' with your actual API endpoint
-    //     const response = await axios.post('YOUR_UPDATE_PASSWORD_ENDPOINT', {
-    //       email,
-    //       code,
-    //       newPassword,
-    //     });
+        // Show the update password modal
+        setShowUpdateModal(true);
+
+      } catch (error) {
+        console.error('Email sending failed:', error.message);
+      }
+
+    };
   
-    //     // Handle the response, e.g., show a success message
-    //     console.log('Password updated successfully:', response.data);
+    const updatePassword = async () => {
+      try {
+        // Replace 'YOUR_UPDATE_PASSWORD_ENDPOINT' with your actual API endpoint
+        const response = await axios.post('YOUR_UPDATE_PASSWORD_ENDPOINT', {
+          code,
+          newPassword,
+        });
   
-    //     // Hide the update password modal
-    //     setShowUpdateModal(false);
-    //   } catch (error) {
-    //     // Handle errors, e.g., show an error message
-    //     console.error('Password update failed:', error.message);
-    //   }
-    // };
+        console.log('Password updated successfully:', response.data);
   
-}
+        // Hide the update password modal
+        setShowUpdateModal(false);
+      } catch (error) {
+        // Handle errors, e.g., show an error message
+        console.error('Password update failed:', error.message);
+      }
+    };
+  
+
   return (
     <>
     <div className="max-w-lg mx-auto my-10 bg-white p-8 rounded-xl shadow shadow-slate-300">
       <h1 className="text-4xl font-medium">Reset password</h1>
       <p className="text-slate-500">Fill up the form to reset the password</p>
-      <form action="" 
-        //    onSubmit={(e) => {
-        //     e.preventDefault();
-        //     sendEmail
-        //   }}
+      <form  
+           onSubmit={sendEmail}
            className="my-10">
         <div className="flex flex-col space-y-5">
           <label htmlFor="email">
@@ -71,8 +65,8 @@ const ResetPassword = () => {
               id="email"
               name="email"
               type="email"
-            //   value={email}
-            //   onChange={(e) => setEmail(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
               placeholder="Enter email address"
             />
@@ -121,6 +115,43 @@ const ResetPassword = () => {
         </div>
       </form>
     </div>
+
+    {showUpdateModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="bg-white p-8 rounded-xl shadow shadow-slate-300">
+                        <h1 className="text-2xl font-medium">Update Password</h1>
+                        <form onSubmit={updatePassword} className="my-4">
+                            <label htmlFor="code">
+                                <p className="font-medium text-slate-700 pb-2">Verification Code</p>
+                                <input
+                                    id="code"
+                                    name="code"
+                                    type="text"
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
+                                    className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                                    placeholder="Enter verification code"
+                                />
+                            </label>
+                            <label htmlFor="newPassword">
+                                <p className="font-medium text-slate-700 pb-2">New Password</p>
+                                <input
+                                    id="newPassword"
+                                    name="newPassword"
+                                    type="password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
+                                    placeholder="Enter new password"
+                                />
+                            </label>
+                            <button type="submit" className="w-full py-3 my-5 font-medium text-white bg-my-green hover:bg-teal-500 rounded-lg  hover:shadow inline-flex space-x-2 items-center justify-center">
+                                <span>Update Password</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
   </>
   
   )

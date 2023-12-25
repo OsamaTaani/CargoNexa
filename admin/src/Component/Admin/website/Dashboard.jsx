@@ -1368,9 +1368,8 @@ const Dashboard = () => {
                                         {(userData.isdeleted === true ) && (
                                             <div>
                                               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
-                                            </div>
-                                          
-)}  </button>
+                                            </div>                                        
+                                            )}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
@@ -1477,14 +1476,9 @@ const Dashboard = () => {
                                             <Link
                                               to={`/OrderDetails/${userData.user_username}`}
                                             >
-                                
-
                                               <div className="ml-3">
                                                 <p className="text-gray-900 whitespace-no-wrap">
                                                   {userData.user_username}
-                                                  
-                                                  
-
                                                 </p>
                                               </div>
                                               
@@ -1544,8 +1538,8 @@ const Dashboard = () => {
                                             <div>
                                               <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
                                             </div>
-                                          
-)}  </button>
+                                                                                      
+                                            )}  </button>
                                             {/* ... SVG path for delete */}
                                           </div>
                                         </td>
@@ -2339,6 +2333,8 @@ const Dashboard = () => {
                                                 handleSoftDeleteFaq(userData.faq_id)
                                               }
                                             >
+                                               {(userData.isdeleted === false ) && (
+
                                               <svg
                                                 class="text-orange-600 w-5 h-5"
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -2354,8 +2350,22 @@ const Dashboard = () => {
                                                   stroke-width="2"
                                                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                                                 />
-                                              </svg>
+                                              </svg>)}
                                             </button>
+
+                                            <button
+                                              onClick={() =>
+                                                SwitchDeleteToUnDeleteForFaq(
+                                                  userData.faq_id
+                                                )
+                                              }
+                                            >
+                                        {(userData.isdeleted === true ) && (
+                                            <div>
+                                              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/OOjs_UI_icon_unTrash-ltr_apex.svg/1024px-OOjs_UI_icon_unTrash-ltr_apex.svg.png" alt="unTrash" width={30} height={30} className="cursor-pointer"/>
+                                            </div>      
+                                              )} 
+                                               </button>
 
                                             {/* ... SVG path for delete */}
                                           </div>
