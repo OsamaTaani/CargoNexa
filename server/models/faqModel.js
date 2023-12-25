@@ -26,6 +26,16 @@ const getAllFAQs = async (pageSize , offset , searchTerm) => {
     throw error;
   }
 };
+const getAllFAQsHome = async () => {
+  try {
+    const result = await pool.query('SELECT * FROM faq WHERE isdeleted =false');
+    return result.rows;
+  } catch (error) {
+    console.error('Error in getAllFAQs model:', error);
+    throw error;
+  }
+};
+
 
 // Function to get a specific FAQ by ID
 const getFAQById = async (faqId) => {
@@ -60,7 +70,7 @@ const updateFAQ = async (question, answer,faqId) => {
 const deleteFAQ = async (faqId) => {
   try {
     const result = await pool.query(
-      'UPDATE faq SET isdeleted = true WHERE faq_id = $1 AND isdeleted = false RETURNING *',
+      'UPDATE faq SET isdeleted = true WHERE faq_id = $1 RETURNING *',
       [faqId]
     );
 
@@ -71,10 +81,27 @@ const deleteFAQ = async (faqId) => {
   }
 };
 
+const undeleteFAQ = async (faqId) => {
+  try {
+    const result = await pool.query(
+      'UPDATE faq SET isdeleted = false WHERE faq_id = $1 RETURNING *',
+      [faqId]
+    );
+
+    return result.rows[0];
+  } catch (error) {
+    console.error('Error in deleteFAQ model:', error);
+    throw error;
+  }
+};
+
+
 module.exports = {
   saveFAQ,
   getAllFAQs,
   getFAQById,
   updateFAQ,
   deleteFAQ,
+  getAllFAQsHome,
+  undeleteFAQ,
 };

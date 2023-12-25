@@ -21,7 +21,6 @@ const Dashboard = () => {
 
   const {isUserRole} = useAuth()
   const role = isUserRole() || Cookies.get('role')
-  console.log(role);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -113,7 +112,6 @@ const Dashboard = () => {
 
   const handleSignOut = () => {
     // Implement sign-out logic, e.g., delete token
-    console.log("Signing out...");
   };
 
  
@@ -136,7 +134,6 @@ const Dashboard = () => {
         `http://localhost:3001/admin/${admin_id}`
       ); // Replace with your API endpoint
       setEditAdmin(response.data.admin);
-      console.log(response.data.admin);
 
       setIsEditAdminPopupOpen(true);
     } catch (error) {
@@ -166,7 +163,6 @@ const Dashboard = () => {
         `http://localhost:3001/driver/${driverId}`
       ); // Replace with your API endpoint
       setEditDriver(response.data);
-      console.log(response.data);
       setIsEditDriverPopupOpen(true);
     } catch (error) {
       console.error("Error fetching driver data:", error);
@@ -174,7 +170,7 @@ const Dashboard = () => {
   };
 
   const handleDriverEditSubmit = async (editedDriverData) => {
-    console.log(editedDriverData.driver_id);
+
     try {
       // Make a PUT request to update the driver data
       await axios.put(
@@ -183,7 +179,6 @@ const Dashboard = () => {
       ); // Replace with your API endpoint
       // Close the edit popup and fetch the updated data
       setIsEditDriverPopupOpen(false);
-      console.log(editedDriverData);
       fetchData(); // Implement a function to fetch data from your API
     } catch (error) {
       console.error("Error updating driver data:", error);
@@ -194,7 +189,7 @@ const Dashboard = () => {
   const handleServicesEditClick = async (ServicesId) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/getService/${ServicesId}`
+        `http://localhost:3001/services/getService/${ServicesId}`
       ); // Replace with your API endpoint
       setEditServices(response.data);
       setIsEditServicesPopupOpen(true);
@@ -291,7 +286,7 @@ const Dashboard = () => {
   const SwitchDeleteToUnDeleteForAdmin = async (admin_id) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.put(`http://localhost:3001/admin/softDelete/${admin_id}`, {
+      await axios.put(`http://localhost:3001/admin/unDelete/${admin_id}`, {
         isdeleted: "false",
       });
 
@@ -323,7 +318,7 @@ const Dashboard = () => {
   const SwitchDeleteToUnDeleteForUser = async (userId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.put(`http://localhost:3001/delete-users/${userId}`, {
+      await axios.put(`http://localhost:3001/undelete-users/${userId}`, {
         isdeleted: "false",
       });
 
@@ -359,7 +354,7 @@ const Dashboard = () => {
   const SwitchDeleteToUnDeleteForDriver = async (driverId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.put(`http://localhost:3001/delete-drivers/${driverId}`, {
+      await axios.put(`http://localhost:3001/unDelete/${driverId}`, {
         isdeleted: "false",
       });
 
@@ -374,7 +369,7 @@ const Dashboard = () => {
   const handleSoftDeleteServices = async (servicesId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.put(`http://localhost:3001/softDelete/${servicesId}`, {
+      await axios.put(`http://localhost:3001/services/softDelete/${servicesId}`, {
         isdeleted: "true",
       });
 
@@ -389,7 +384,7 @@ const Dashboard = () => {
   const SwitchDeleteToUnDeleteForServices = async (servicesId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.put(`http://localhost:3001/softDelete/${servicesId}`, {
+      await axios.put(`http://localhost:3001/services/unDelete/${servicesId}`, {
         isdeleted: "false",
       });
 
@@ -419,7 +414,7 @@ const Dashboard = () => {
   const SwitchDeleteToUnDeleteForSolutions = async (solutionsId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.put(`http://localhost:3001/solutions/softDelete/${solutionsId}`, {
+      await axios.put(`http://localhost:3001/solutions/undelete/${solutionsId}`, {
         isdeleted: "false",
       });
 
@@ -449,7 +444,7 @@ const Dashboard = () => {
   const SwitchDeleteToUnDeleteForFaq = async (faqId) => {
     try {
       // Send a PATCH request to update the status for soft delete
-      await axios.put(`http://localhost:3001/soft-delete/faq/${faqId}`, {
+      await axios.put(`http://localhost:3001/undelete/faq/${faqId}`, {
         isdeleted: "false",
       });
 
@@ -1361,7 +1356,7 @@ const Dashboard = () => {
                                                 <button
                                               onClick={() =>
                                                 SwitchDeleteToUnDeleteForAdmin(
-                                                  userData.user_id
+                                                  userData.admin_id
                                                 )
                                               }
                                             >

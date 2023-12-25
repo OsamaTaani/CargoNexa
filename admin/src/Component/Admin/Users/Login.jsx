@@ -68,21 +68,17 @@ const Login = () => {
 <div className=" mx-auto flex justify-center h-[45rem] max-w-lg flex-col md:max-w-none md:flex-row  md:pr-10 md:my-10 lg:my-10 my-96 ">
 
 <div className=" max-w-md rounded-3xl bg-gradient-to-t from-[#219C90] via-[#219C90] to-[#42a399] px-4 py-20 text-white sm:px-10 md:m-6 md:mr-8 ">
-<p className="mb-28 font-bold tracking-wider">CargoNexa</p>
-<p className="mb-4 text-3xl font-bold md:text-4xl md:leading-snug ">
-  Welcome Back to <br /> CargoNexa
+<p className="mb-28 font-bold md:text-4xl tracking-wider">CargoNexa</p>
+<p className="mb-4 text-3xl font-bold md:text-3xl md:leading-snug ">
+  Welcome to Dashboard <br />  
 </p>
 <p className="mb-28 leading-relaxed text-gray-200">
-  Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere nisi
-  voluptas a officia. Omnis.
+Please sign in to access your shipping dashboard and manage your cargo effortlessly.
 </p>
 
 </div>
 <form onSubmit={handleSubmit} className=" px-4 py-20 ">
-<h2 className="mb-2 text-3xl font-bold">Sign In</h2>
-<Link to="/registration" className="mb-10 block font-bold text-gray-600">
-  Create an account
-</Link>
+<h2 className="mb-20 text-3xl font-bold">Sign In</h2>
 
 <p className="mb-1 font-medium text-gray-500">Email</p>
 <div className="mb-4 flex flex-col">

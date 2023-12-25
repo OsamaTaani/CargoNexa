@@ -15,11 +15,27 @@ const AddSolutionsForm = ({ onSubmit, onCancel }) => {
           [name]: value,
         }));
       };
+
+      const handleImageChange = (e) => {
+        const fileInput = document.getElementById("solution_image");
+        const newProfileImage = fileInput.files[0];
+        const updatedFormData = {
+            ...formData,
+            solution_image: newProfileImage
+        };
+        setFormData(updatedFormData);
+    };
+
     
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        onSubmit(formData);
-      };
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      const form = new FormData();
+      form.append("solution_title", formData.solution_title);
+      form.append("solution_description", formData.solution_description);
+      form.append("image", formData.solution_image);
+      onSubmit(form);
+  };
+
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-md">
@@ -71,8 +87,8 @@ const AddSolutionsForm = ({ onSubmit, onCancel }) => {
           id="solution_image"
           type='file'
           placeholder='solution_image'
-          value={formData.solution_image}
-          onChange={handleInputChange}
+          // value={formData.solution_image}
+          onChange={handleImageChange}
            required
         />
           </div>

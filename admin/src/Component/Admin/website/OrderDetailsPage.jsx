@@ -18,15 +18,12 @@ const OrderDetailsPage = () => {
 
       
       const { orderId } = useParams();
-      console.log(orderId);
       const [orderDetails, setOrderDetails] = useState([]);
-      console.log(orderDetails);
       // const [driverData, setdriverData] = useState([]);
       
       
       const {isUserRole} = useAuth()
       const role = isUserRole() || Cookies.get('role')
-      console.log("role in user ",role )
 
 
        
@@ -38,7 +35,6 @@ const OrderDetailsPage = () => {
           .then(response => {
             // Set the fetched order details to the state
             setOrderDetails(response.data.order);
-            console.log(response.data.order);
           })
           .catch(error => {
             console.error('Error fetching order details:', error);

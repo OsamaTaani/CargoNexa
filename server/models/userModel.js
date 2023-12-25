@@ -92,15 +92,11 @@ const createOrder = async (userId, orderData) => {
       message,
       order_title,
       contains_dangerous_materials,
-      shipping_date,
       payment_method,
       amount,
   } = orderData;
 
   try {
-      // Log timestamp values before conversion
-      console.log('Raw receiving_timestamp:', receiving_timestamp);
-      console.log('Raw shipping_timestamp:', shipping_timestamp);
 
       // Format timestamps
       const extractTime = (timeString) => {
@@ -119,8 +115,8 @@ const createOrder = async (userId, orderData) => {
 
       // Insert the order into the orders table
       const newOrder = await pool.query(
-          'INSERT INTO orders (user_id, name, receiver_name, shipping_location, receiving_location, receiving_timestamp, shipping_timestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials, shipping_date , payment_method , amount) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15 , $16 , $17) RETURNING *',
-          [userId, name, receiver_name, shipping_location, receiving_location, formattedReceivingTimestamp, formattedShippingTimestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials, shipping_date , payment_method , amount]
+          'INSERT INTO orders (user_id, name, receiver_name, shipping_location, receiving_location, receiving_timestamp, shipping_timestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials , payment_method , amount) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15 , $16 ) RETURNING *',
+          [userId, name, receiver_name, shipping_location, receiving_location, formattedReceivingTimestamp, formattedShippingTimestamp, order_truck_size, order_description, order_phone_number, receiver_phone_number, message, order_title, contains_dangerous_materials , payment_method , amount]
       );
 
       // Associate the order with available drivers

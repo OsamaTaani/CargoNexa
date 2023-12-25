@@ -67,15 +67,14 @@ const handleSubmit = async (e) => {
     >
 
   <div className=" max-w-md rounded-3xl bg-gradient-to-t from-[#219C90] via-[#219C90] to-[#42a399] px-4 py-20 text-white sm:px-10 md:m-6 md:mr-8 ">
-    <p className="mb-28 font-bold tracking-wider">CargoNexa</p>
+  <p className="mb-28 font-bold md:text-4xl tracking-wider">CargoNexa</p>
     <p className="mb-4 text-3xl font-bold md:text-4xl md:leading-snug ">
       Start your 
       shipping<br /> with us
     </p>
     <p className="mb-28 leading-relaxed text-gray-200">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere nisi
-      voluptas a officia. Omnis.
-    </p>
+    Embark on a journey with us! Sign up to create your account and unlock a world of efficient shipping. 
+    Stay informed, track your cargo, and enjoy hassle-free deliveries.    </p>
   
   </div>
   <form onSubmit={handleSubmit} className=" px-4 py-20 ">

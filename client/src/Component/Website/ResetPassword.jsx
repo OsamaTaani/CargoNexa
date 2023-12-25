@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom'
 const ResetPassword = () => {
    
 
-    const [email, setEmail] = useState('');
+    const [user_email, setEmail] = useState('');
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [code, setCode] = useState('');
-    const [newPassword, setNewPassword] = useState('');
+    const [user_password, setNewPassword] = useState('');
   
     useEffect(() => {
       window.scrollTo(0, 0);
@@ -18,7 +18,7 @@ const ResetPassword = () => {
         e.preventDefault()
       try {
 
-        const response = await axios.post('YOUR_EMAIL_API_ENDPOINT', { email });
+        const response = await axios.post('http://localhost:3001/reset-password', { user_email });
     
         console.log('Email sent successfully:', response.data);
   
@@ -34,9 +34,9 @@ const ResetPassword = () => {
     const updatePassword = async () => {
       try {
         // Replace 'YOUR_UPDATE_PASSWORD_ENDPOINT' with your actual API endpoint
-        const response = await axios.post('YOUR_UPDATE_PASSWORD_ENDPOINT', {
+        const response = await axios.post('http://localhost:3001/change-password', {
           code,
-          newPassword,
+          user_password,
         });
   
         console.log('Password updated successfully:', response.data);
@@ -62,10 +62,10 @@ const ResetPassword = () => {
           <label htmlFor="email">
             <p className="font-medium text-slate-700 pb-2">Email address</p>
             <input
-              id="email"
-              name="email"
+              id="user_email"
+              name="user_email"
               type="email"
-              value={email}
+              value={user_email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
               placeholder="Enter email address"
@@ -136,10 +136,10 @@ const ResetPassword = () => {
                             <label htmlFor="newPassword">
                                 <p className="font-medium text-slate-700 pb-2">New Password</p>
                                 <input
-                                    id="newPassword"
-                                    name="newPassword"
+                                    id="user_password"
+                                    name="user_password"
                                     type="password"
-                                    value={newPassword}
+                                    value={user_password}
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                                     placeholder="Enter new password"

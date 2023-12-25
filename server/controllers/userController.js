@@ -132,7 +132,6 @@ const getUserOrders = async (req, res) => {
 const createOrder = async (req, res) => {
   try {
       const userId = req.user.userId;
-      console.log(userId);
       const orderData = req.body;
 
       const newOrder = await UserModel.createOrder(userId, orderData);

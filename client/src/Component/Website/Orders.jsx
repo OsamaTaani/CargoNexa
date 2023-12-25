@@ -172,7 +172,7 @@ const Orders = () => {
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <span className={`relative inline-block px-5 py-2 font-semibold leading-tight  text-white
                 ${order.status === 'Pending' ? 'bg-gray-500' : ''}
-                ${order.status === 'accepted' ? 'bg-yellow-500' : ''}
+                ${order.status === 'Accepted' ? 'bg-yellow-500' : ''}
                 ${order.status === 'OutForDelivery' ? 'bg-orange-500' : ''}
                 ${order.status === 'Delivered' ? 'bg-green-500' : ''}
               rounded-full

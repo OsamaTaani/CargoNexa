@@ -9,5 +9,6 @@ router.get('/driver/:driver_id', authMiddleware.authorize([3]) ,driverController
 
 router.put('/update-drivers/:driver_id', authMiddleware.authorize([3]) ,driverController.updateDriverById);
 router.put('/delete-drivers/:driverId', authMiddleware.authorize([3]) , driverController.deleteDriverById);
+router.put('/unDelete/:driverId', authMiddleware.authorize([3]) , driverController.undeleteDriverById);
 
 module.exports = router;

@@ -29,9 +29,6 @@ const registerDriver = async (req, res) => {
     }),
     plate_number: Joi.number().integer().required(),
     driver_size_type: Joi.string().required(),
-    driver_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
-      'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
-    }),
   });
 
   const { error } = validationSchema.validate(req.body);

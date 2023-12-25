@@ -15,7 +15,7 @@ const SolutionsPage = () => {
       const [data, setData] = useState([]);
 
       useEffect(() => {
-        axios.get('http://localhost:3001/getAll/solutions') // Replace with your API endpoint
+        axios.get('http://localhost:3001/home/solutions') // Replace with your API endpoint
           .then(response => {
             setData(response.data);
           })

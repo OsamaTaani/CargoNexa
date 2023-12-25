@@ -27,9 +27,9 @@ const addDriver = async (req, res) => {
     }),
     plate_number: Joi.number().integer().required(),
     driver_size_type: Joi.string().required(),
-    driver_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
-      'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
-    }),
+    // driver_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
+    //   'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
+    // }),
   });
     
   const { error } = driverValidationSchema.validate(req.body);
@@ -143,10 +143,29 @@ const deleteDriverById = async (req, res) => {
   }
 };
 
+const undeleteDriverById = async (req, res) => {
+  const driverId = req.params.driverId;
+
+  try {
+    const deletedDriver = await DriverModel.undeleteDriverById(driverId);
+
+    if (!deletedDriver) {
+      return res.status(404).json({ error: 'Driver not found' });
+    }
+
+    res.status(200).json({ message: 'Driver undeleted successfully', driver: deletedDriver });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 module.exports = {
   getAllDrivers,
   getDriverById,
   updateDriverById,
   deleteDriverById,
   addDriver,
+  undeleteDriverById,
 };

@@ -68,11 +68,16 @@ const getAllAdmins = async (pageSize, offset , searchTerm) => {
     return deletedAdmin.rows[0];
   };
 
-  //delete 
-  // const deleteAdminById = async (adminId) => {
-  //   const deletedAdmin = await pool.query('DELETE FROM admins WHERE admin_id = $1 RETURNING *', [adminId]);
-  //   return deletedAdmin.rows[0];
-  // };
+  const undeleteAdminById = async (adminId) => {
+    const deletedAdmin = await pool.query(
+      'UPDATE admins SET isDeleted = false WHERE admin_id = $1 RETURNING *',
+      [adminId]
+    );
+  
+    return deletedAdmin.rows[0];
+  };
+
+
   
   module.exports = {
     getAdminByEmail,
@@ -81,7 +86,8 @@ const getAllAdmins = async (pageSize, offset , searchTerm) => {
     updateAdminById,
     deleteAdminById,
     verifyCredentials,
-    createAdmin
+    createAdmin,
+    undeleteAdminById,
   };
   
 

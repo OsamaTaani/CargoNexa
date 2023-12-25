@@ -13,7 +13,7 @@ const Solutions = () => {
     const [solutionsData, setSolutionsData] = useState([]);
 
     useEffect(() => {
-      axios.get('http://localhost:3001/getAll/solutions')
+      axios.get('http://localhost:3001/home/solutions')
         .then(response => {
           setSolutionsData(response.data);
         })

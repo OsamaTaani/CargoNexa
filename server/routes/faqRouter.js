@@ -1,21 +1,20 @@
 const express = require('express');
 const faqController = require('../controllers/faqController');
-
+const authMiddleware = require('../middleware/authMiddleware')
 const router = express.Router();
 
-// Route to save a new FAQ
-router.post('/create/faq', faqController.saveFAQ);
+router.post('/create/faq', authMiddleware.authorize([3]) ,faqController.saveFAQ);
 
-// Route to get all FAQs
-router.get('/getAll/faq', faqController.getAllFAQs);
+router.get('/getAll/faq', authMiddleware.authorize([3]) ,faqController.getAllFAQs);
 
-// Route to get a specific FAQ by ID
-router.get('/faq/:faqId', faqController.getFAQById);
+router.get('/faq/:faqId', authMiddleware.authorize([3]) ,faqController.getFAQById);
 
-// Route to update a FAQ
-router.put('/update/faq/:faqId', faqController.updateFAQ);
+router.put('/update/faq/:faqId', authMiddleware.authorize([3]) ,faqController.updateFAQ);
 
-// Route to soft delete a FAQ
-router.put('/soft-delete/faq/:faqId', faqController.deleteFAQ);
+router.put('/soft-delete/faq/:faqId', authMiddleware.authorize([3]) ,faqController.deleteFAQ);
+
+router.put('/undelete/faq/:faqId',authMiddleware.authorize([3]) , faqController.undeleteFAQ);
+
+router.get('/faqHome',faqController.getAllFAQsHome)
 
 module.exports = router;

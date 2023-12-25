@@ -2,17 +2,28 @@
 const solutionModel = require('../models/solutionModel');
 const Firebase = require('../middleware/firebaseMiddleware')
 
-const getAllSolutions = async (req, res) => {
+const getAllSolutionsDashboard = async (req, res) => {
   try {
     const {page =1 , pageSize = 5 , search } = req.query;
     const offset = (page - 1) * pageSize
-    const solutions = await solutionModel.getAllSolutions(pageSize , offset , search);
+    const solutions = await solutionModel.getAllSolutionsDashboard(pageSize , offset , search);
     res.status(200).json( solutions );
   } catch (error) {
     console.error('Error in getAllSolutions controller:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+const getAllSolutions = async (req, res) => {
+  try {
+    const solutions = await solutionModel.getAllSolutions();
+    res.status(200).json( solutions );
+  } catch (error) {
+    console.error('Error in getAllSolutions controller:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 const getSolutionById = async (req, res) => {
   const  solutionId  = req.params.solutionId;
@@ -101,10 +112,30 @@ const softDeleteSolution = async (req, res) => {
   }
 };
 
+const undeleteSolution = async (req, res) => {
+  const solutionId  = req.params.solutionId;
+
+  try {
+    const deletedSolution = await solutionModel.undeleteSolution(solutionId);
+
+    if (deletedSolution) {
+      res.json({ success: true, solution: deletedSolution, message: 'Solution soft-deleted successfully' });
+    } else {
+      res.status(404).json({ success: false, message: 'Solution not found' });
+    }
+  } catch (error) {
+    console.error('Error in unDeleteSolution controller:', error);
+    res.status(500).json({ success: false, message: 'An error occurred while processing the request' });
+  }
+};
+
+
 module.exports = {
-  getAllSolutions,
+  getAllSolutionsDashboard,
   getSolutionById,
   createSolution,
   updateSolution,
   softDeleteSolution,
+  getAllSolutions,
+  undeleteSolution,
 };

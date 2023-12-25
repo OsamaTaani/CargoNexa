@@ -90,14 +90,22 @@ const updateDriverById = async ( driver_username, driver_email,driver_license, t
 };
 
 const deleteDriverById = async (driverId) => {
-  const deletedDriver = await pool.query('UPDATE drivers SET isDeleted = true WHERE driver_id = $1 AND isDeleted = false RETURNING *', [driverId]);
+  const deletedDriver = await pool.query('UPDATE drivers SET isdeleted = true WHERE driver_id = $1 RETURNING *', [driverId]);
   return deletedDriver.rows[0];
 };
+
+const undeleteDriverById = async (driverId) => {
+  const deletedDriver = await pool.query('UPDATE drivers SET isDeleted = false WHERE driver_id = $1 RETURNING *', [driverId]);
+  return deletedDriver.rows[0];
+};
+
 
 module.exports = {
   getAllDrivers,
   getDriverById,
   updateDriverById,
   deleteDriverById,
-  addDriver
+  addDriver,
+  undeleteDriverById
 };
+

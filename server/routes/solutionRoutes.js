@@ -2,25 +2,24 @@
 const express = require('express');
 const router = express.Router();
 const solutionController = require('../controllers/solutionController');
-
+const authMiddleware = require('../middleware/authMiddleware')
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
-// Get all solutions
-router.get('/getAll/solutions', solutionController.getAllSolutions);
+router.get('/getAll/solutions', authMiddleware.authorize([3]) ,solutionController.getAllSolutionsDashboard);
 
-// Get solution by ID
-router.get('/solutions/:solutionId', solutionController.getSolutionById);
+router.get('/home/solutions', solutionController.getAllSolutions);
 
-// Create a new solution
-router.post('/solutions/create', upload.single('image')  ,solutionController.createSolution);
+router.get('/solutions/:solutionId', authMiddleware.authorize([3]),solutionController.getSolutionById);
 
-// Update a solution by ID
-router.put('/solutions/update/:solutionId',upload.single('image')  ,solutionController.updateSolution);
+router.post('/solutions/create', upload.single('image') ,authMiddleware.authorize([3]),solutionController.createSolution);
 
-// Soft delete a solution by ID
-router.put('/solutions/softDelete/:solutionId', solutionController.softDeleteSolution);
+router.put('/solutions/update/:solutionId',upload.single('image') ,authMiddleware.authorize([3]),solutionController.updateSolution);
+
+router.put('/solutions/softDelete/:solutionId', authMiddleware.authorize([3]),solutionController.softDeleteSolution);
+
+router.put('/solutions/undelete/:solutionId', solutionController.undeleteSolution);
 
 module.exports = router;

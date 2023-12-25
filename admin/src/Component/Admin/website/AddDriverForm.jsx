@@ -67,6 +67,8 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
         />
        
           </div>
+
+          
         <div className="flex flex-col ">
             <label className="mb-1 ml-3 font-semibold text-gray-500" htmlFor="">
             Driver License
@@ -158,6 +160,7 @@ const AddDriverForm = ({ onSubmit, onCancel }) => {
            required
         />
           </div>
+          
        
          
          

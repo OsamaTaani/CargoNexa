@@ -26,6 +26,17 @@ const getAllFAQs = async (req, res) => {
   }
 };
 
+const getAllFAQsHome = async (req, res) => {
+  try {
+    const faqs = await faqModel.getAllFAQsHome();
+    res.status(200).json(faqs);
+  } catch (error) {
+    console.error('Error in getAllFAQs controller:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 // Controller function to get a specific FAQ by ID
 const getFAQById = async (req, res) => {
   const { faqId } = req.params;
@@ -69,7 +80,6 @@ const updateFAQ = async (req, res) => {
 // Controller function to soft delete a FAQ
 const deleteFAQ = async (req, res) => {
   const { faqId } = req.params;
-console.log("faqId delete",faqId);
   try {
     const deletedFAQ = await faqModel.deleteFAQ(faqId);
 
@@ -84,10 +94,29 @@ console.log("faqId delete",faqId);
   }
 };
 
+const undeleteFAQ = async (req, res) => {
+  const { faqId } = req.params;
+  try {
+    const deletedFAQ = await faqModel.undeleteFAQ(faqId);
+
+    if (deletedFAQ) {
+      res.status(200).json( deletedFAQ );
+    } else {
+      res.status(404).json({ success: false, message: 'FAQ not found' });
+    }
+  } catch (error) {
+    console.error('Error in deleteFAQ controller:', error);
+    res.status(500).json({ success: false, message: 'Failed to delete FAQ' });
+  }
+};
+
+
 module.exports = {
   saveFAQ,
   getAllFAQs,
   getFAQById,
   updateFAQ,
   deleteFAQ,
+  getAllFAQsHome,
+  undeleteFAQ,
 };

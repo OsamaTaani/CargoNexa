@@ -1,7 +1,7 @@
 // models/solutionModel.js
 const {pool} = require('../db');
 
-const getAllSolutions = async (pageSize , offset , searchTerm) => {
+const getAllSolutionsDashboard = async (pageSize , offset , searchTerm) => {
   try {
     const result = await pool.query('SELECT * , COUNT (*) OVER () AS total_count FROM solutions WHERE solution_title ILIKE $3 ORDER BY solution_id LIMIT $1 OFFSET $2',[pageSize , offset , `%${searchTerm}%`]);
     return result.rows;
@@ -10,6 +10,17 @@ const getAllSolutions = async (pageSize , offset , searchTerm) => {
     throw error;
   }
 };
+
+const getAllSolutions = async () => {
+  try {
+    const result = await pool.query('SELECT * FROM solutions WHERE isdeleted = false');
+    return result.rows;
+  } catch (error) {
+    console.error('Error in getAllSolutions:', error);
+    throw error;
+  }
+};
+
 
 const getSolutionById = async (solutionId) => {
   try {
@@ -52,7 +63,7 @@ const updateSolution = async ( solution_title, solution_description, solution_im
 const softDeleteSolution = async (solutionId) => {
   try {
     const result = await pool.query(
-      'UPDATE solutions SET isdeleted = true WHERE solution_id = $1 AND isdeleted = false RETURNING *',
+      'UPDATE solutions SET isdeleted = true WHERE solution_id = $1 RETURNING *',
       [solutionId]
     );
 
@@ -63,10 +74,27 @@ const softDeleteSolution = async (solutionId) => {
   }
 };
 
+const undeleteSolution = async (solutionId) => {
+  try {
+    const result = await pool.query(
+      'UPDATE solutions SET isdeleted = false WHERE solution_id = $1 RETURNING *',
+      [solutionId]
+    );
+
+    return result.rows[0];
+  } catch (error) {
+    console.error('Error in softDeleteSolution:', error);
+    throw error;
+  }
+};
+
+
 module.exports = {
+  getAllSolutionsDashboard,
   getAllSolutions,
   getSolutionById,
   createSolution,
   updateSolution,
   softDeleteSolution,
+  undeleteSolution,
 };

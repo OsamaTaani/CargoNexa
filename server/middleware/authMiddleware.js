@@ -12,7 +12,7 @@ function authorize(allowedRoles) {
     try {
       const secretKey = process.env.SECRET_KEY;
       const decodedToken = jwt.verify(token, secretKey);
-      // console.log("sdsa",decodedToken);
+      console.log("sdsa",decodedToken);
       const role_id = decodedToken.role_id;
       req.user = decodedToken
       if (allowedRoles.includes(role_id)) {

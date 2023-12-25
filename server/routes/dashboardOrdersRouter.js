@@ -13,6 +13,8 @@ router.put('/update-orders/:orderId', authMiddleware.authorize([3]), orderContro
 
 router.put('/delete-orders/:orderId', authMiddleware.authorize([3]), orderController.deleteOrderById);
 
+router.put('/undelete-orders/:orderId', authMiddleware.authorize([3]), orderController.undeleteOrderById);
+
 router.get('/user/order/:orderId', authMiddleware.authorize([1]), orderController.getOrderById);
 
 module.exports = router;

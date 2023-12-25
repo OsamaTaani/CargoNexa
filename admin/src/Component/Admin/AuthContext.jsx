@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setAuthToken(null);
-    console.log(authToken);
     Cookies.remove("token");
     Cookies.remove("role");
     sessionStorage.removeItem("role");
@@ -28,7 +27,6 @@ export const AuthProvider = ({ children }) => {
   }
 
   const isUserRole = () => {
-    console.log(userRole);
 
     return userRole;
   }

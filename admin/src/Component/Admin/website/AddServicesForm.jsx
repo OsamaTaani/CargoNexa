@@ -17,21 +17,31 @@ const AddServicesForm = ({ onSubmit, onCancel }) => {
       };
 
       const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setFormData((prevData) => ({ ...prevData, image: file }));
-      };
+        const fileInput = document.getElementById("services_image");
+        const newProfileImage = fileInput.files[0];
+        const updatedFormData = {
+            ...formData,
+            services_image: newProfileImage
+        };
+        setFormData(updatedFormData);
+    };
+    
 
-      const form = new FormData();
-      form.append("user_username",formData.services_title);
-      // form.append("user_email",editedUser.user_email);
-      form.append("user_phone_number",formData.services_description);
-      form.append("image", formData.services_image);
+      // const form = new FormData();
+      // form.append("services_title",formData.services_title);
+      // // form.append("user_email",editedUser.user_email);
+      // form.append("services_description",formData.services_description);
+      // form.append("image", formData.services_image);
 
       const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(formData);
-      };
-  return (
+        const form = new FormData();
+        form.append("services_title", formData.services_title);
+        form.append("services_description", formData.services_description);
+        form.append("image", formData.services_image);
+        onSubmit(form);
+    };
+      return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-md">
 
@@ -81,8 +91,7 @@ const AddServicesForm = ({ onSubmit, onCancel }) => {
           name="services_image"
           id="services_image"
           type='file'
-          placeholder='+962'
-          value={formData.services_image}
+          // value={formData.services_image}
           onChange={handleImageChange}
            required
         />

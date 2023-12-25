@@ -24,6 +24,9 @@ router.put('/update/:adminId', authMiddleware.authorize([3]), adminAuthControlle
 // Delete admin by ID
 router.put('/softDelete/:adminId', authMiddleware.authorize([3]), adminAuthController.deleteAdminById);
 
+router.put('/unDelete/:adminId', authMiddleware.authorize([3]), adminAuthController.undeleteAdminById);
+
+
 module.exports = router;
 
 

@@ -32,25 +32,25 @@ const getOrderById = async (orderId) => {
   return order.rows[0];
 };
 
-const updateOrderById = async (orderId, name, receiver_name, shipping_location, receiving_location, shipping_timestamp, order_truck_size, order_description, status) => {
+const updateOrderById = async (orderId, name, receiver_name, shipping_location, order_phone_number,receiver_phone_number  , receiving_location, shipping_timestamp, order_truck_size, message, status) => {
   const updatedOrder = await pool.query(
-    'UPDATE orders SET name = $1, receiver_name = $2, shipping_location = $3, receiving_location = $4, shipping_timestamp = $5, order_truck_size = $6, order_description = $7, status = $8 WHERE order_id = $9 RETURNING *',
-    [name, receiver_name, shipping_location, receiving_location, shipping_timestamp, order_truck_size, order_description, status, orderId]
+    'UPDATE orders SET name = $1, receiver_name = $2, shipping_location = $3, order_phone_number = $4 , receiver_phone_number = $5  ,receiving_location = $6, shipping_timestamp = $7, order_truck_size = $8, message = $9, status = $10 WHERE order_id = $11 RETURNING *',
+    [name, receiver_name, shipping_location,order_phone_number, receiver_phone_number,receiving_location, shipping_timestamp, order_truck_size, message, status, orderId]
   );
 
   return updatedOrder.rows[0];
 };
 
-//Soft Delete
-// const deleteOrderById = async (orderId) => {
-//   const deletedOrder = await pool.query('UPDATE orders SET isDelete = true WHERE order_id = $1 RETURNING *', [orderId]);
-//   return deletedOrder.rows[0];
-// };
-
 const deleteOrderById = async (orderId) => {
-  const deletedOrder = await pool.query('UPDATE orders SET isDeleted = true WHERE order_id = $1 RETURNING *', [orderId]);
+  const deletedOrder = await pool.query('UPDATE orders SET isdeleted = true WHERE order_id = $1 RETURNING *', [orderId]);
   return deletedOrder.rows[0];
 };
+
+const undeleteOrderById = async (orderId) => {
+  const deletedOrder = await pool.query('UPDATE orders SET isdeleted = false WHERE order_id = $1 RETURNING *', [orderId]);
+  return deletedOrder.rows[0];
+};
+
 
 
 module.exports = {
@@ -58,4 +58,5 @@ module.exports = {
   getOrderById,
   updateOrderById,
   deleteOrderById,
+  undeleteOrderById,
 };

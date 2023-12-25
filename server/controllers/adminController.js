@@ -60,6 +60,9 @@ const loginAdmin = async (req, res) => {
 const registerAdmin = async (req, res) => {
   // Validation check
   const validationSchema = Joi.object({
+    admin_username : Joi.string().pattern(/^[^\s]+$/).required().messages({
+      'string.pattern.base': 'Username must not contain spaces.',
+    }), 
     admin_email: Joi.string().pattern(/.*@.*/).required().messages({
       'string.email': 'Email must be valid and contain @.',
     }),
@@ -108,7 +111,7 @@ const registerAdmin = async (req, res) => {
         roleId: newAdmin.role_id,
       },
       process.env.SECRET_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "24h" }
     );
 
     res.status(201).json({ admin: newAdmin, token });
@@ -181,6 +184,7 @@ const updateAdminById = async (req, res) => {
 //soft delete
 const deleteAdminById = async (req, res) => {
   const adminId = req.params.adminId;
+  console.log(adminId);
 
   try {
     const deletedAdmin = await AdminModel.deleteAdminById(adminId);
@@ -199,23 +203,28 @@ const deleteAdminById = async (req, res) => {
   }
 };
 
-// // Delete admin by ID
-// const deleteAdminById = async (req, res) => {
-//   const adminId = req.params.adminId;
+const undeleteAdminById = async (req, res) => {
+  const adminId = req.params.adminId;
+  console.log(adminId);
 
-//   try {
-//     const deletedAdmin = await AdminModel.deleteAdminById(adminId);
+  try {
+    const deletedAdmin = await AdminModel.undeleteAdminById(adminId);
 
-//     if (!deletedAdmin) {
-//       return res.status(404).json({ error: 'Admin not found' });
-//     }
+    if (!deletedAdmin) {
+      return res.status(404).json({ error: "Admin not found" });
+    }
 
-//     res.status(200).json({ message: 'Admin deleted successfully' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// };
+    res.status(200).json({
+      message: "Admin  undeleted successfully",
+      admin: deletedAdmin,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
 
 module.exports = {
   loginAdmin,
@@ -224,4 +233,5 @@ module.exports = {
   updateAdminById,
   deleteAdminById,
   registerAdmin,
+  undeleteAdminById,
 };

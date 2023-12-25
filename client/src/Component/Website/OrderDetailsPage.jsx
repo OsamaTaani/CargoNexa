@@ -255,7 +255,7 @@ console.log(orderDetails.isdeleted);
           className="absolute left-[18px] top-14 h-[calc(100%_-_32px)] w-px bg-gray-300 lg:right-0 lg:left-auto lg:top-[18px] lg:h-px lg:w-[calc(100%_-_72px)]"
           aria-hidden="true"
         />
-        <div  className={`inline-flex h-10 w-10 text-gray-500  shrink-0 items-center justify-center rounded-xl border border-gray-300 bg-gray-50 transition-all duration-200  ${orderDetails.status === 'accepted' || orderDetails.status === 'OutForDelivery' || orderDetails.status === 'Delivered' ? 'bg-my-green text-white ' : ''}`}>
+        <div  className={`inline-flex h-10 w-10 text-gray-500  shrink-0 items-center justify-center rounded-xl border border-gray-300 bg-gray-50 transition-all duration-200  ${orderDetails.status === 'Accepted' || orderDetails.status === 'OutForDelivery' || orderDetails.status === 'Delivered' ? 'bg-my-green text-white ' : ''}`}>
           <svg
             viewBox="0 0 24 24"
             fill="none"

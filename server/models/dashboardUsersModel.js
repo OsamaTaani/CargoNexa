@@ -48,11 +48,17 @@ const deleteUserById = async (userId) => {
   return deletedUser.rows[0];
 };
 
+const undeleteUserById = async (userId) => {
+  const deletedUser = await pool.query('UPDATE users SET isdeleted = false WHERE user_id = $1  RETURNING *', [userId]);
+  return deletedUser.rows[0];
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   updateUserById,
   deleteUserById,
   addUser,
-  getUserByEmail
+  getUserByEmail,
+  undeleteUserById,
 };

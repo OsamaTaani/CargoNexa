@@ -28,6 +28,7 @@ const getUserProfile = async (req, res) => {
 const updateUserProfile = async (req, res) => {
   try {
     const file = req.file;
+    
 
     if (file) {
       const fileName = `${Date.now()}_${file.originalname}`;
@@ -38,7 +39,6 @@ const updateUserProfile = async (req, res) => {
     }
 
     const userId = req.user.userId;
-    console.log(userId);
 
     const updatedInfo = req.body;
 

@@ -628,7 +628,7 @@ const OrderDetailsDriver = () => {
 
       <div>
   {console.log(orderDetails.status)}
-  {orderDetails.status === 'accepted' ? (
+  {orderDetails.status === 'Accepted' ? (
     <button onClick={() => handleStatusChange()} className="py-2.5 px-6 rounded-lg text-sm font-medium text-white bg-teal-600">
       Shipped
     </button>
