@@ -16,10 +16,11 @@ const Login = () => {
 
 
   const navigate=useNavigate();
+  const [error,setError]=useState(null);
+
     const [values,setValues]=useState({ admin_email:'', admin_password:''});
     // const [error,setError]=useState({});
     const [cookies, setCookie] = useCookies(['token']);
-    const [error, setError] = useState({ admin_email: '', admin_password: '' });
 
     
     // Handle the change in inputs
@@ -55,7 +56,8 @@ const Login = () => {
       console.error('Login error:', error.response.data);
   
       // Update the state to reflect the errors
-      setError(error.response.data.errors);
+      setError(error.response.data.error);
+      console.log(error.response);
     }
   };
   
@@ -93,6 +95,9 @@ Please sign in to access your shipping dashboard and manage your cargo effortles
   </div>
 </div>
 
+{(error !== null && error.includes('\"admin_email\" is not allowed to be empty'))&& <p className='text-red-500'>"email shouldn't be empty"</p>}
+{(error !== null && error.includes("\"driver_email\" must be a valid email"))&& <p className='text-red-500'>" email must be a valid email"</p>}
+
 <p className="mb-1 font-medium text-gray-500">Password</p>
 <div className="mb-4 flex flex-col">
   <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -105,6 +110,13 @@ Please sign in to access your shipping dashboard and manage your cargo effortles
     />
   </div>
 </div>
+ 
+          {(error !== null && error.includes("\"admin_password\" is not allowed to be empty"))&& <p className='text-red-500'>"password shouldn't be empty"</p>}
+          {(error !== null && error.includes("Password must be 8-16 characters "))&& <p className='text-red-500'>"Password must be 8-16 characters long and include one number, and one special character."</p>}
+       
+          <div>        
+          {(error !== null && error.includes("Internal Server Error"))&& <p className='text-red-500'>"email or password not correct "</p>}
+        </div>
 
 
 <button type='submit' className="hover:shadow-blue-600/40 rounded-xl bg-gradient-to-r from-[#219C90] to-[#219C90] px-8 py-3 font-bold text-white transition-all hover:opacity-90 hover:shadow-lg">

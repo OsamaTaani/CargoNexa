@@ -1,5 +1,5 @@
 const {pool} = require('../db');
-
+const bcrypt = require('bcrypt');
 const getUserById = async (userId) => {
   try {
     const result = await pool.query('SELECT * FROM users WHERE user_id = $1', [userId]);
@@ -90,6 +90,20 @@ const updateUserProfile = async (userId, updatedInfo) => {
     const deletedOrder = await pool.query('UPDATE orders SET isDeleted = true WHERE order_id = $1 RETURNING *', [orderId]);
     return deletedOrder.rows[0];
   };
+
+  
+  const validatePassword = async (userId, currentPassword) => {
+    const result = await pool.query('SELECT user_password FROM users WHERE user_id = $1', [userId]);
+    const storedPassword = result.rows[0].user_password;
+
+    return await bcrypt.compare(currentPassword, storedPassword);
+  };
+  
+  const changePassword = async (userId, newPassword) => {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+    await pool.query('UPDATE users SET user_password = $1 WHERE user_id = $2', [hashedPassword, userId]);
+  };
   
   
     
@@ -97,6 +111,8 @@ const updateUserProfile = async (userId, updatedInfo) => {
      updateUserProfile ,
       getUserById,
       updateOrder,
-      deleteOrder
+      deleteOrder,
+      validatePassword,
+      changePassword
      };
   

@@ -69,6 +69,7 @@ const ResetPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
               placeholder="Enter email address"
+              required
             />
           </label>
           <button className="w-full py-3 font-medium text-white bg-my-green hover:bg-teal-500 rounded-lg  hover:shadow inline-flex space-x-2 items-center justify-center">
@@ -131,6 +132,7 @@ const ResetPassword = () => {
                                     onChange={(e) => setCode(e.target.value)}
                                     className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                                     placeholder="Enter verification code"
+                                    required
                                 />
                             </label>
                             <label htmlFor="newPassword">
@@ -143,6 +145,7 @@ const ResetPassword = () => {
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow"
                                     placeholder="Enter new password"
+                                    required 
                                 />
                             </label>
                             <button type="submit" className="w-full py-3 my-5 font-medium text-white bg-my-green hover:bg-teal-500 rounded-lg  hover:shadow inline-flex space-x-2 items-center justify-center">

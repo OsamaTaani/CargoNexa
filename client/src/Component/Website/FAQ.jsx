@@ -23,8 +23,8 @@ const FAQ = () => {
     // Fetch all questions and answers using Axios
     const fetchQAFromDB = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/getAll/faq'); // Replace 'your_all_qa_api_endpoint' with your actual API endpoint
-        const data = response.data.faqs;
+        const response = await axios.get('http://localhost:3001/faqHome/'); // Replace 'your_all_qa_api_endpoint' with your actual API endpoint
+        const data = response.data;
         console.log(data);
 
         // Update state with questions and answers

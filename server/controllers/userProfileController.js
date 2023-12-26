@@ -105,8 +105,30 @@ const deleteOrder = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const {  currentPassword, newPassword } = req.body;
+    // Validate current password
+    const isPasswordValid = await UserModel.validatePassword(userId, currentPassword);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ error: 'Invalid current password' });
+    }
+
+    // Change password and store it hashed
+    await UserModel.changePassword(userId, newPassword);
+
+    res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 
   
-  module.exports = { updateUserProfile , getUserProfile,updateOrder , deleteOrder };
+  module.exports = { updateUserProfile , getUserProfile,updateOrder , deleteOrder , changePassword};
   

@@ -16,7 +16,7 @@ const saveFAQ = async (question, answer) => {
 };
 
 // Function to get all FAQs
-const getAllFAQs = async (pageSize , offset , searchTerm) => {
+const getAllFAQsDashboard = async (pageSize , offset , searchTerm) => {
   try {
     const result = await pool.query('SELECT *, COUNT (*) OVER () AS total_count FROM faq WHERE question ILIKE $3 ORDER BY faq_id LIMIT $1 OFFSET $2' , [pageSize , offset , `%${searchTerm}%`]);
 
@@ -26,7 +26,7 @@ const getAllFAQs = async (pageSize , offset , searchTerm) => {
     throw error;
   }
 };
-const getAllFAQsHome = async () => {
+const getAllFAQs = async () => {
   try {
     const result = await pool.query('SELECT * FROM faq WHERE isdeleted =false');
     return result.rows;
@@ -98,10 +98,10 @@ const undeleteFAQ = async (faqId) => {
 
 module.exports = {
   saveFAQ,
-  getAllFAQs,
+  getAllFAQsDashboard,
   getFAQById,
   updateFAQ,
   deleteFAQ,
-  getAllFAQsHome,
+  getAllFAQs,
   undeleteFAQ,
 };

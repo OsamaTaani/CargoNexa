@@ -11,11 +11,23 @@
 
   -[github for organization](https://github.com/CargoNexa/CargoNexa)
 
-  -[documentation]()
+  -[documentation](file:///C:/Users/Orange/Downloads/Project_Documentation_cargoNexa_-_Cargo_Shipping_Website%20(1).pdf)
 
-  -[presentation]()
+  -[presentation](https://www.canva.com/design/DAF2kBV1fqs/ujQ1RkEoehsJqcg2WIn5Bw/edit)
   
-  -[brief]()
+  -[brief](
+
+    -Welcome to cargonexa
+        Streamlined cargo shipping services in Jordan via our dedicated truck fleet. Get instant quotes, track your shipments, and experience reliable, local transport.
+
+
+    -About Us
+      Discover our story and commitment to excellence in cargo transportation. With a focus on trust and efficiency, we ensure seamless delivery across Jordan.
+     
+     
+    -Get a Quick Quote
+      Effortlessly plan your shipments with our easy quote form. Your cargo, our priority – delivering quality service tailored to your needs.
+)
 
   ## Technologies Used 
   - React 

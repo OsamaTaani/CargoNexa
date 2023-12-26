@@ -111,6 +111,7 @@ Welcome back! Log in to your account to track shipments, manage deliveries, and 
   </div>
 </div>
 {(error !== null && error.includes("password"))&& <p className='text-red-500'>"password shouldn't be empty"</p>}
+{(error !== null && error.includes("Password must be 8-16 characters long "))&& <p className='text-red-500'>"Password must be 8-16 characters long and include one number, and one special character."</p>}
 
 <div>       
      {(error !== null && error.includes("Invalid credentials"))&& <p className='text-red-500'>"email or password not correct "</p>}

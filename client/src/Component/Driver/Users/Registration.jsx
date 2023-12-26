@@ -95,7 +95,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("username\" is required"))&& <p className='text-red-500'>"username shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"driver_username\" is not allowed to be empty"))&& <p className='text-red-500'>"username shouldn't be empty"</p>}
     {(error !== null && error.includes("Username must not contain"))&& <p className='text-red-500'>"username shouldn't have any space"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Email</p>
@@ -125,7 +125,9 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("driver_license"))&& <p className='text-red-500'>"driver license shouldn't be empty"</p>}
+    {(error !== null && error.includes("\"driver_license\" is required"))&& <p className='text-red-500'>"driver license shouldn't be empty"</p>}
+    {(error !== null && error.includes("Driver license must be a number with 8 digits."))&& <p className='text-red-500'>"driver license should be 8 digits"</p>}
+    {(error !== null && error.includes("\"driver_license\" must be greater than or equal to 10000000"))&& <p className='text-red-500'>"driver license should be 8 digits"</p>}
 
     <p className="mb-1 font-medium text-gray-500">Truck Type</p>
     <div className="mb-2 flex flex-col">
@@ -139,8 +141,7 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("\"truck_type\" is required"))&& <p className='text-red-500'>"truck type shouldn't be empty"</p>}
-
+    {(error !== null && error.includes('"truck_type" is required'))&& <p className='text-red-500'>"truck type shouldn't be empty"</p>}
     <p className="mb-1 font-medium text-gray-500">Production Year</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -153,9 +154,8 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("\"production_year\" is required"))&& <p className='text-red-500'>"production year shouldn't be empty"</p>}
-    {(error !== null && error.includes('Production year must be a number greater than or equal to 2010.'))&& <p className='text-red-500'>"production_year" must be a number greater than or equal to 2010</p>}
-
+    {(error !== null && error.includes('"production_year" is required'))&& <p className='text-red-500'>"production year shouldn't be empty"</p>}
+    {(error !== null && error.includes('\"production_year\" must be greater than or equal to 2010'))&& <p className='text-red-500'>"production_year" must be a number greater than or equal to 2010</p>}
 
     <p className="mb-1 font-medium text-gray-500">Plate Number</p>
     <div className="mb-2 flex flex-col">
@@ -171,7 +171,7 @@ const handleSubmit = async (e) => {
     </div>
     {(error !== null && error.includes('"plate_number" is required'))&& <p className='text-red-500'>"plate number shouldn't be empty"</p>}
     {(error !== null && error.includes('"plate_number" must be a number'))&& <p className='text-red-500'>"plate number" must be a number</p>}
-
+    
     <p className="mb-1 font-medium text-gray-500">Truck Size</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -192,7 +192,7 @@ const handleSubmit = async (e) => {
       </div>
     </div>
     {(error !== null && error.includes("driver_size_type"))&& <p className='text-red-500'>"driver_size_type shouldn't be empty"</p>}
-
+   
     <p className="mb-1 font-medium text-gray-500">Password</p>
     <div className="mb-2 flex flex-col">
       <div className="focus-within:border-[#219C90] relative flex overflow-hidden rounded-md border-2 transition sm:w-80 lg:w-full">
@@ -205,13 +205,12 @@ const handleSubmit = async (e) => {
         />
       </div>
     </div>
-    {(error !== null && error.includes("\"driver_password\" is required"))&& <p className='text-red-500'>"password shouldn't be empty"</p>} 
+    {(error !== null && error.includes('\"driver_password\" is not allowed to be empty'))&& <p className='text-red-500'>"password shouldn't be empty"</p>} 
     {(error !== null && error.includes("Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character."))&& <p className='text-red-500'> password should have at least :
     <div> - 8 characters</div>
       <div>- 1 special symbol </div>
       <div>  - 1 num </div>
         </p>}
-
    
 
 

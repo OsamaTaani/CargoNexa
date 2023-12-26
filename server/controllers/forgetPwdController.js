@@ -15,7 +15,6 @@ const app = express();
 //   saveUninitialized: true,
 // }));
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // Create a Nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -24,6 +23,10 @@ const transporter = nodemailer.createTransport({
     user: 'cargonexa.main@gmail.com', // Replace with your Gmail email
     pass: 'ocek tdbr bcoj mqij', // Replace with your Gmail password
   },
+  tls: {
+    rejectUnauthorized: false
+}
+
 });
 
 const forgotPassword = async (req, res) => {

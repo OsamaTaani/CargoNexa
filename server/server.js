@@ -21,7 +21,7 @@ const forgetPwd = require('./routes/forgetPwdRouter');
 const app = express();
 const PORT = process.env.PORT || 3001;
 app.use(session({
-  secret: '065a06f702a2589d98d05d9e7650376371d84f5d3717ea8598293c85dfee85bc', // Replace with a strong secret key
+  secret: process.env.SECRET_KEY_PWD, // Replace with a strong secret key
   resave: false,
   saveUninitialized: true,
 }));

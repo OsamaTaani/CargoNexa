@@ -13,6 +13,7 @@ router.put('/update-user-profile', upload.single("image"), authMiddleware.author
 // router.get('/user-orders', authMiddleware.authorize([1]), userController.getUserOrders);
 router.put('/updateUserOrder/:orderId', authMiddleware.authorize([1]) ,userController.updateOrder);
 router.put('/deleteOrder/:orderId', authMiddleware.authorize([1]), userController.deleteOrder);
+router.put('/change-password', authMiddleware.authorize([1]), userController.changePassword);
 
 
 // router.put("/updatePlanById/:planId", upload.single("image"), verifyToken.authenticateToken, plansController.updatePlanById);

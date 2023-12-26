@@ -45,7 +45,7 @@ const handleSubmit = async (e) => {
       // Set the token in a cookie
       // setCookie('token', token, { path: '/' });\
       register(token)
-      navigate('/')
+      navigate('/login')
     } catch (error) {
       // Handle network or other errors
       console.error('Registration error:', error);

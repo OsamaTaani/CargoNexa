@@ -177,11 +177,11 @@ const NewOrders = () => {
                   scope="col"
                   className="text-sm font-medium text-gray-900 px-6 py-4"
                 >
-                  <button onClick={openEditForm}>
+                  {/* <button onClick={openEditForm}>
           <svg class="text-teal-600 w-7 h-7 "
         xmlns="http://www.w3.org/2000/svg" width="30"  height="30"   viewBox="0 0 24 24"  stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />  <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />  <line x1="16" y1="5" x2="19" y2="8" /></svg>
-            {/* ... SVG path for edit */}
-            </button>
+           
+            </button> */}
                 </th>
              
               </tr>
@@ -282,13 +282,13 @@ const NewOrders = () => {
         
       </div>
         {/* Edit Form Popup */}
-        {isEditFormOpen && (
+        {/* {isEditFormOpen && (
         <EditDriverForm
           driverInfo={driverInfo}
           onClose={() => setIsEditFormOpen(false)}
           onSubmit={handleEditFormSubmit}
         />
-      )}
+      )} */}
 
     {/* new order cards  */}
       <div className="md:col-span-2 max-w-[70rem] md:mx-auto sm:mx-10  mt-24 space-y-10   ">

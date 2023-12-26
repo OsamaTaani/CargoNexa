@@ -14,11 +14,11 @@ const saveFAQ = async (req, res) => {
 };
 
 // Controller function to get all FAQs
-const getAllFAQs = async (req, res) => {
+const getAllFAQsDashboard = async (req, res) => {
   try {
     const {page = 1 , pageSize = 5 , search} = req.query;
     const offset = (page - 1) * pageSize;
-    const faqs = await faqModel.getAllFAQs(pageSize , offset , search);
+    const faqs = await faqModel.getAllFAQsDashboard(pageSize , offset , search);
     res.status(200).json( faqs );
   } catch (error) {
     console.error('Error in getAllFAQs controller:', error);
@@ -26,9 +26,10 @@ const getAllFAQs = async (req, res) => {
   }
 };
 
-const getAllFAQsHome = async (req, res) => {
+
+const getAllFAQs = async (req, res) => {
   try {
-    const faqs = await faqModel.getAllFAQsHome();
+    const faqs = await faqModel.getAllFAQs();
     res.status(200).json(faqs);
   } catch (error) {
     console.error('Error in getAllFAQs controller:', error);
@@ -117,6 +118,8 @@ module.exports = {
   getFAQById,
   updateFAQ,
   deleteFAQ,
-  getAllFAQsHome,
+  getAllFAQs,
   undeleteFAQ,
+  getAllFAQsDashboard
+  
 };

@@ -5,7 +5,10 @@ const router = express.Router();
 
 router.post('/create/faq', authMiddleware.authorize([3]) ,faqController.saveFAQ);
 
-router.get('/getAll/faq', authMiddleware.authorize([3]) ,faqController.getAllFAQs);
+router.get('/getAll/faq', authMiddleware.authorize([3]) ,faqController.getAllFAQsDashboard);
+
+// router.get('/home/faq', faqController.getAllFAQs);
+
 
 router.get('/faq/:faqId', authMiddleware.authorize([3]) ,faqController.getFAQById);
 
@@ -15,6 +18,6 @@ router.put('/soft-delete/faq/:faqId', authMiddleware.authorize([3]) ,faqControll
 
 router.put('/undelete/faq/:faqId',authMiddleware.authorize([3]) , faqController.undeleteFAQ);
 
-router.get('/faqHome',faqController.getAllFAQsHome)
+router.get('/faqHome',faqController.getAllFAQs)
 
 module.exports = router;
