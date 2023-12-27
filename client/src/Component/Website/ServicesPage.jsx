@@ -3,7 +3,15 @@ import '../CSS/services.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import CreateOrder from './CreateOrder';
+import { useAuth } from './AuthContext';
+import Cookies from 'js-cookie';
+
 const ServicesPage = () => {
+
+
+  const {isUserRole} = useAuth()
+
+  const role = isUserRole() || Cookies.get('role')
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,8 +55,9 @@ const ServicesPage = () => {
           className="mx-auto my-4 flex flex-col overflow-hidden rounded-lg border border-gray-300 bg-white text-gray-900 transition hover:translate-y-2 hover:shadow-lg">
         {/* Render your card content based on the structure of your database data */}
   
- 
+        {role === 1 ?(
         <Link
+        
       to="/CreateOrder"
       state={{ title: service.services_title, description: service.services_description }}
     
@@ -77,6 +86,37 @@ const ServicesPage = () => {
 
 
 </Link> 
+):(   
+   <Link
+        
+  to="/login"
+  state={{ title: service.services_title, description: service.services_description }}
+
+>
+{/* <CreateOrder service={service.services_title}/> */}
+      <img
+        src={service.services_image}
+        className="h-56 w-full object-cover"
+        alt="Service image"
+      />
+   <div className="flex-auto px-6 py-5 text-center">
+{/* Render other card details dynamically */}
+<h3 className="block mt-4 mb-3 text-xl font-semibold xl:text-2xl mx-auto">
+{service.services_title}
+</h3>
+<span className="block mb-2 text-sm font-semibold mx-auto">
+{/* Render category dynamically */}
+{service.services_description}
+</span>
+
+{/* <button className="flex items-center mx-auto inline-block cursor-pointer select-none rounded-full border bg-my-green px-5 py-1 text-center align-middle text-sm font-semibold leading-normal text-white no-underline shadow-sm">
+Order
+</button> */}
+</div>
+
+
+
+</Link> )}
       </article>
     ))}
   </div>

@@ -2,12 +2,12 @@
 const { pool } = require('../db');
 const bcrypt = require('bcrypt');
 
-const createUser = async (user_username, user_password, user_email, user_phone_number) => {
+const createUser = async (user_username, user_password, user_email) => {
   const role_id = 1;
   const hashedPassword = await bcrypt.hash(user_password, 10); // Hash the password before storing
 
-  const query = 'INSERT INTO users (user_username, user_password, user_email, user_phone_number, role_id) VALUES ($1, $2, $3, $4,$5) RETURNING *';
-  const result = await pool.query(query, [user_username, hashedPassword, user_email, user_phone_number , role_id]);
+  const query = 'INSERT INTO users (user_username, user_password, user_email, role_id) VALUES ($1, $2, $3, $4) RETURNING *';
+  const result = await pool.query(query, [user_username, hashedPassword, user_email , role_id]);
   return result.rows[0];
 };
 
@@ -15,18 +15,15 @@ const googleAccount = async ({ user_username, user_email, picture }) => {
   const role_id = "1";
   // const created_at = new Date();
   const user_password = "No Access";
-  const user_phone_number = "00000000";
   const query = `
-  INSERT INTO users (user_username,user_email,user_password,user_phone_number,role_id,user_image) VALUES ($1, $2, $3, $4, $5, $6)
+  INSERT INTO users (user_username,user_email,user_password,role_id,user_image) VALUES ($1, $2, $3, $4, $5)
   RETURNING *`;
 
   const values = [
     user_username,
     user_email,
     user_password,
-    user_phone_number,
     role_id,
-    // created_at,
     picture,
   ];
   const user = await pool.query(query, values);

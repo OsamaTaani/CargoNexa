@@ -9,6 +9,7 @@ router.get('/users/:userId', authMiddleware.authorize([3]),userController.getUse
 router.put('/update-users/:userId', authMiddleware.authorize([3]),userController.updateUserById);
 router.put('/delete-users/:userId', authMiddleware.authorize([3]),userController.deleteUserById);
 router.put('/undelete-users/:userId',authMiddleware.authorize([3]), userController.undeleteUserById);
+router.get('/usersCount' , userController.getUsersCount);
 
 
 

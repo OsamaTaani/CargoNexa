@@ -610,6 +610,81 @@ const Dashboard = () => {
   //   fetchData(); 
   // }
 
+  const [totalUsers, setTotalUsers] = useState(null);
+
+  useEffect(() => {
+    // Replace 'your-api-url' with the actual URL of your API
+    const apiUrl = 'http://localhost:3001/usersCount';
+
+    // Make the GET request using Axios
+    axios.get(apiUrl)
+      .then(response => {
+        // Assuming your API returns the total users in the response data
+        const totalUsersFromApi = response.data;
+        setTotalUsers(totalUsersFromApi);
+      })
+      .catch(error => {
+        console.error('Error fetching total users:', error);
+      });
+  }, []); // Empty dependency array means this effect runs 
+
+
+  const [totalDrivers, setTotalDrivers] = useState(null);
+
+  useEffect(() => {
+    // Replace 'your-api-url' with the actual URL of your API for drivers
+    const apiUrl = 'http://localhost:3001/countDrivers';
+
+    // Make the GET request using Axios
+    axios.get(apiUrl)
+      .then(response => {
+        // Assuming your API returns the total drivers in the response data
+        const totalDriversFromApi = response.data;
+        setTotalDrivers(totalDriversFromApi);
+      })
+      .catch(error => {
+        console.error('Error fetching total drivers:', error);
+      });
+  }, []);
+
+
+  const [totalOrders, setTotalOrders] = useState(null);
+
+  useEffect(() => {
+    // Replace 'your-api-url' with the actual URL of your API for orders
+    const apiUrl = 'http://localhost:3001/ordersCount';
+
+    // Make the GET request using Axios
+    axios.get(apiUrl)
+      .then(response => {
+        // Assuming your API returns the total orders in the response data
+        const totalOrdersFromApi = response.data;
+        setTotalOrders(totalOrdersFromApi);
+      })
+      .catch(error => {
+        console.error('Error fetching total orders:', error);
+      });
+  }, []);
+
+
+  const [totalAmount, setTotalAmount] = useState(null);
+
+  useEffect(() => {
+    // Replace 'your-api-url' with the actual URL of your API for total amount
+    const apiUrl = 'http://localhost:3001/amount';
+
+    // Make the GET request using Axios
+    axios.get(apiUrl)
+      .then(response => {
+        // Assuming your API returns the total amount in the response data
+        const totalAmountFromApi = response.data;
+        setTotalAmount(totalAmountFromApi);
+      })
+      .catch(error => {
+        console.error('Error fetching total amount:', error);
+      });
+  }, []);
+
   return (
     <>
       {/* component */}
@@ -671,7 +746,7 @@ const Dashboard = () => {
                       <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
                     </svg>
                     <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                      dashboard
+                      Orders
                     </p>
                   </button>
                 </a>
@@ -700,7 +775,7 @@ const Dashboard = () => {
                       />
                     </svg>
                     <p className="block antialiased font-sans text-base leading-relaxed text-inherit font-medium capitalize">
-                      profile
+                      Admins
                     </p>
                   </button>
                 </a>
@@ -930,7 +1005,7 @@ const Dashboard = () => {
                             }
                           }}
                         >
-                          dashboard
+                          Dashboard
                         </button>
                       </p>
                     </li>
@@ -966,10 +1041,10 @@ const Dashboard = () => {
                 </div>
                 <div className="p-4 text-right">
                   <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                    Today's Money
+                    Total Money
                   </p>
                   <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                    $53k
+                    {totalAmount} JD
                   </h4>
                 </div>
               </div>
@@ -991,10 +1066,10 @@ const Dashboard = () => {
                 </div>
                 <div className="p-4 text-right">
                   <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                    Today's Users
+                    Total Users
                   </p>
                   <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                    2,300
+                          {totalUsers}
                   </h4>
                 </div>
               </div>
@@ -1012,10 +1087,10 @@ const Dashboard = () => {
                 </div>
                 <div className="p-4 text-right">
                   <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                    Today's Drivers
+                    Total Drivers
                   </p>
                   <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                    20
+                    {totalDrivers}
                   </h4>
                 </div>
               </div>
@@ -1033,10 +1108,10 @@ const Dashboard = () => {
                 </div>
                 <div className="p-4 text-right">
                   <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                    Orders
+                    Total Orders
                   </p>
                   <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                    $103,430
+                    {totalOrders}
                   </h4>
                 </div>
               </div>

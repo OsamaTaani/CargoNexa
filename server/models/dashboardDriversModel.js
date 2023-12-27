@@ -72,6 +72,18 @@ const getAllDrivers = async (pageSize , offset , searchTerm) => {
 };
   
 
+
+const getDriversCount = async () => {
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM drivers WHERE isdeleted = false');
+    const count = result.rows[0].count;
+    return count;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 const getDriverById = async (driverId) => {
   const driver = await pool.query('SELECT * FROM drivers WHERE driver_id = $1', [driverId]);
   console.log(driverId);
@@ -106,6 +118,7 @@ module.exports = {
   updateDriverById,
   deleteDriverById,
   addDriver,
-  undeleteDriverById
+  undeleteDriverById,
+  getDriversCount
 };
 

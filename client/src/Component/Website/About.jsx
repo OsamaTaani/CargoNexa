@@ -55,20 +55,27 @@ const About = () => {
                             Winding Mountain Road
                         </h2>
                         <p className="mt-4">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-                            minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                            aliquip ex ea commodo consequat.
+                        Welcome to cargonexa
+    Streamlined cargo shipping services in Jordan via our dedicated truck fleet. Get instant quotes, track your shipments, and experience reliable, local transport.
+
+
+
+  Discover our story and commitment to excellence in cargo transportation. With a focus on trust and efficiency, we ensure seamless delivery across Jordan.
+ 
+ 
+
+  Effortlessly plan your shipments with our easy quote form. Your cargo, our priority – delivering quality service tailored to your needs.
+
                         </p>
 
-                        <div className="mt-8">
+                        {/* <div className="mt-8">
                             <a
                                 href="#"
                                 className="inline-block w-full text-center text-lg font-medium text-gray-100 bg-[#219C90]  rounded-lg  py-4 px-10 hover:bg-blue-600 hover:shadow-md md:w-48"
                             >
                                 Read More
                             </a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
@@ -95,12 +102,12 @@ const About = () => {
                         <ul className="social">
 
                             <li>
-                                <a href="#" target="_blank">
+                                <a href="https://github.com/Malath-Yasin/" target="_blank">
                                     <FontAwesomeIcon icon={faGithub} />
                                 </a>
                             </li>
                             <li>
-                                <a href="#" target="_blank">
+                                <a href="https://www.linkedin.com/in/malath-yasin-611882263/" target="_blank">
                                     <FontAwesomeIcon icon={faLinkedin} />
                                 </a>
                             </li>
@@ -120,12 +127,12 @@ const About = () => {
                         <ul className="social">
 
                             <li>
-                                <a href="#" target="_blank">
+                                <a href="https://github.com/OsamaTaani/" target="_blank">
                                     <FontAwesomeIcon icon={faGithub} />
                                 </a>
                             </li>
                             <li>
-                                <a href="#" target="_blank">
+                                <a href="https://www.linkedin.com/in/osamataani/" target="_blank">
                                     <FontAwesomeIcon icon={faLinkedin} />
                                 </a>
                             </li>

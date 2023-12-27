@@ -17,4 +17,7 @@ router.put('/undelete-orders/:orderId', authMiddleware.authorize([3]), orderCont
 
 router.get('/user/order/:orderId', authMiddleware.authorize([1]), orderController.getOrderById);
 
+router.get('/ordersCount' , orderController.getOrdersCount);
+
+router.get('/amount' , orderController.getOrdersAmountSum);
 module.exports = router;

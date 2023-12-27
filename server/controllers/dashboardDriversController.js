@@ -86,6 +86,17 @@ const getAllDrivers = async (req, res) => {
   }
 };
 
+const getDriversCount = async (req, res) => {
+  try {
+    const count = await DriverModel.getDriversCount();
+    res.status(200).json( count );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 // Get Driver by ID
 const getDriverById = async (req, res) => {
   const driverId = req.params.driver_id;
@@ -168,4 +179,5 @@ module.exports = {
   deleteDriverById,
   addDriver,
   undeleteDriverById,
+  getDriversCount,
 };

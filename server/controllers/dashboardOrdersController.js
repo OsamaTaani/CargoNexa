@@ -34,8 +34,26 @@ const getAllOrdersWithPaginationAndSearch = async (req, res) => {
   }
 };
 
+const getOrdersCount = async (req, res) => {
+  try {
+    const count = await OrderModel.getOrdersCount();
+    res.status(200).json( count );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
-// Get Order by ID
+const getOrdersAmountSum = async (req, res) => {
+  try {
+    const sum = await OrderModel.getOrdersAmountSum();
+    res.status(200).json( sum );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const getOrderById = async (req, res) => {
   const orderId = req.params.orderId;
 
@@ -115,4 +133,6 @@ module.exports = {
   deleteOrderById,
   createOrderForUserController,
   undeleteOrderById,
+  getOrdersCount,
+  getOrdersAmountSum,
 };

@@ -174,7 +174,7 @@ const Footer = () => {
               </Link>
               <li className="mt-3">
                 <a className="text-white cursor-pointer hover:text-gray-900">
-                  +123-456-7890
+                  +962 77 99 22 77 8
                 </a>
               </li>
             </nav>
@@ -184,7 +184,7 @@ const Footer = () => {
       <div className="bg-my-green border">
         <div className="container px-5 py-4 mx-auto">
           <p className="text-sm text-white capitalize xl:text-center">
-            cargoNexa © 2020 All rights reserved{" "}
+            cargoNexa © 2023 All rights reserved{" "}
           </p>
         </div>
       </div>

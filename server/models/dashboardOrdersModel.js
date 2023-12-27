@@ -27,6 +27,31 @@ const getAllOrdersWithPaginationAndSearch = async (pageSize, offset, searchTerm)
 };
 
 
+// In your model file
+
+const getOrdersCount = async () => {
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM orders WHERE isdeleted = false');
+    const count = result.rows[0].count;
+    return count;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+const getOrdersAmountSum = async () => {
+  try {
+    const result = await pool.query('SELECT SUM(amount) FROM orders WHERE isdeleted = false');
+    const sum = result.rows[0].sum;
+    return sum;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 const getOrderById = async (orderId) => {
   const order = await pool.query('SELECT * FROM orders WHERE order_id = $1', [orderId]);
   return order.rows[0];
@@ -59,4 +84,6 @@ module.exports = {
   updateOrderById,
   deleteOrderById,
   undeleteOrderById,
+  getOrdersCount,
+  getOrdersAmountSum,
 };

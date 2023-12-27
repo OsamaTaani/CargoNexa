@@ -21,6 +21,18 @@ const getUserByEmail = async (user_email) => {
   }
 };
 
+// In your model file
+
+const getUsersCount = async () => {
+  try {
+    // Assuming pool is properly configured and imported
+    const result = await pool.query('SELECT COUNT(*) FROM users WHERE isdeleted = false');
+    const count = result.rows[0].count;
+    return count;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 const getAllUsers = async (pageSize , offset , searchTerm) => {
@@ -61,4 +73,5 @@ module.exports = {
   addUser,
   getUserByEmail,
   undeleteUserById,
+  getUsersCount,
 };

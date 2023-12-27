@@ -3,9 +3,16 @@ import heroImage from '../../Images/heroImage.jpg';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../AuthContext';
+import Cookies from 'js-cookie';
 
 
 const Services = () => {
+
+    const {isUserRole} = useAuth()
+
+    const role = isUserRole() || Cookies.get('role')
+  
     const { t } = useTranslation();
 
     const [servicesData, setServicesData] = useState([]);
@@ -52,7 +59,8 @@ const Services = () => {
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mx-20 ">
            
              {servicesData.slice(0,3).map((service, index) => (
-                
+              
+              
         <Link
         to="/CreateOrder"
         state={{ title: service.services_title, description: service.services_description }}

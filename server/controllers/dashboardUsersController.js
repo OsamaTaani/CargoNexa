@@ -63,6 +63,15 @@ const getAllUsers = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+const getUsersCount = async (req, res) => {
+  try {
+    const count = await UserModel.getUsersCount();
+    res.status(200).json( count );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
 // Get User by ID
 const getUserById = async (req, res) => {
@@ -147,4 +156,5 @@ module.exports = {
   deleteUserById,
   addUser,
   undeleteUserById,
+  getUsersCount
 };

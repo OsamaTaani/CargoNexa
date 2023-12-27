@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'CargoNexa-V25',
+  database: 'CargoNexa',
   password: '549667',
   port: 5432,
 });
