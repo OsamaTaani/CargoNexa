@@ -1,12 +1,10 @@
-// adminController.js
 const AdminModel = require("../models/adminModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
-require("dotenv").config(); // Load environment variables from .env
+require("dotenv").config(); 
 
 const loginAdmin = async (req, res) => {
-  // Validation check
   const validationSchema = Joi.object({
     admin_email: Joi.string().pattern(/.*@.*/).required().messages({
       'string.email': 'Email must be valid and contain @.',
@@ -28,17 +26,14 @@ const loginAdmin = async (req, res) => {
   const { admin_email, admin_password } = req.body;
 
   try {
-    // Verify admin credentials
     const admin = await AdminModel.verifyCredentials(
       admin_email,
       admin_password
     );
-    // console.log(admin);
     if (!admin) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // Generate JWT token
     const token = jwt.sign(
       {
         admin_id: admin.admin_id,
@@ -48,7 +43,6 @@ const loginAdmin = async (req, res) => {
       process.env.SECRET_KEY,
       { expiresIn: "24h" }
     );
-    console.log(token);
     res.status(200).json({ message: "Admin login successful", admin, token });
   } catch (error) {
     console.error(error);
@@ -56,9 +50,7 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-// Create a new admin
 const registerAdmin = async (req, res) => {
-  // Validation check
   const validationSchema = Joi.object({
     admin_username : Joi.string().pattern(/^[^\s]+$/).required().messages({
       'string.pattern.base': 'Username must not contain spaces.',
@@ -89,13 +81,11 @@ const registerAdmin = async (req, res) => {
     req.body;
 
   try {
-    // Check if the email is already taken
     const existingAdmin = await AdminModel.getAdminByEmail(admin_email);
     if (existingAdmin) {
       return res.status(409).json({ error: "Email is already registered" });
     }
 
-    // Create a new admin
     const newAdmin = await AdminModel.createAdmin(
       admin_username,
       admin_password,
@@ -103,7 +93,6 @@ const registerAdmin = async (req, res) => {
       admin_phone_number
     );
 
-    // Generate JWT token
     const token = jwt.sign(
       {
         adminId: newAdmin.admin_id,
@@ -120,8 +109,6 @@ const registerAdmin = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
-// Get all admins
 const getAllAdmins = async (req, res) => {
   try {
     const { page = 1, pageSize = 5 , search} = req.query;
@@ -135,7 +122,6 @@ const getAllAdmins = async (req, res) => {
   }
 };
 
-// Get admin by ID
 const getAdminById = async (req, res) => {
   const adminId = req.params.adminId;
 
@@ -153,10 +139,8 @@ const getAdminById = async (req, res) => {
   }
 };
 
-// Update admin by ID
 const updateAdminById = async (req, res) => {
   const adminId = req.params.adminId;
-  console.log(adminId);
   const { admin_username, admin_email, admin_phone_number, admin_password } =
     req.body;
 
@@ -181,10 +165,8 @@ const updateAdminById = async (req, res) => {
   }
 };
 
-//soft delete
 const deleteAdminById = async (req, res) => {
   const adminId = req.params.adminId;
-  console.log(adminId);
 
   try {
     const deletedAdmin = await AdminModel.deleteAdminById(adminId);
@@ -205,7 +187,6 @@ const deleteAdminById = async (req, res) => {
 
 const undeleteAdminById = async (req, res) => {
   const adminId = req.params.adminId;
-  console.log(adminId);
 
   try {
     const deletedAdmin = await AdminModel.undeleteAdminById(adminId);

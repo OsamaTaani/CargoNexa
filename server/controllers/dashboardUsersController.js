@@ -6,21 +6,20 @@ require('dotenv').config();
 const Joi = require('joi');
 
 const addUser = async (req, res) => {
-  // Validation check
   const validationSchema = Joi.object({
     user_username: Joi.string().pattern(/^[^\s]+$/).required().messages({
       'string.pattern.base': 'Username must not contain spaces.',
-    }), // No spaces allowed
+    }), 
     user_password: Joi.string()
     .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,16}$/)
     .required()
     .messages({
       'string.pattern.base':
         'Password must be 8-16 characters long and include at least one uppercase letter, one number, and one special character.',
-    }), // At least one uppercase, one digit, and one special character
+    }), 
     user_email: Joi.string().pattern(/.*@.*/).required().messages({
       'string.email': 'Email must be valid and contain @.',
-    }), // Must contain '@'
+    }),
     user_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
       'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
     }),
@@ -35,7 +34,6 @@ const addUser = async (req, res) => {
   const { user_username, user_password, user_email, user_phone_number } = req.body;
 
   try {
-    // Check if the email is already taken
     const existingUser = await UserModel.getUserByEmail(user_email);
     if (existingUser) {
       return res.status(409).json({ error: "Email is already registered" });
@@ -50,7 +48,6 @@ const addUser = async (req, res) => {
   }
 };
 
-// Get All Users
 const getAllUsers = async (req, res) => {
   try {
     const { page = 1, pageSize = 5 , search} = req.query;
@@ -73,10 +70,8 @@ const getUsersCount = async (req, res) => {
   }
 };
 
-// Get User by ID
 const getUserById = async (req, res) => {
   const userId = req.user.userId;
-  console.log(userId);
 
   try {
     const user = await UserModel.getUserById(userId);
@@ -93,7 +88,6 @@ const getUserById = async (req, res) => {
 };
 
 
-// Update User by ID
 const updateUserById = async (req, res) => {
   const userId = req.params.userId;
   const { username, password, email, phoneNumber } = req.body;
@@ -112,7 +106,6 @@ const updateUserById = async (req, res) => {
   }
 };
 
-// Delete User by ID
 const deleteUserById = async (req, res) => {
   const userId = req.params.userId;
 

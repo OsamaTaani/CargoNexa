@@ -2,7 +2,6 @@ const ServiceModel = require('../models/servicesModel');
 
 const Firebase = require('../middleware/firebaseMiddleware')
 
-// Get All Services
 const getAllServicesDashboard = async (req, res) => {
   try {
     const {page = 1 , pageSize = 5 , search } = req.query;
@@ -26,7 +25,6 @@ const getAllServices = async (req, res) => {
   }
 };
 
-// Get Service by ID
 const getServiceById = async (req, res) => {
   const serviceId = req.params.serviceId;
 
@@ -44,13 +42,11 @@ const getServiceById = async (req, res) => {
   }
 };
 
-// Create Service
 const createService = async (req, res) => {
 
   try {
 
     const file = req.file;
-    console.log("Image" , file);
 
             if (file) {
                 const fileName = `${Date.now()}_${file.originalname}`;
@@ -69,7 +65,6 @@ const createService = async (req, res) => {
   }
 };
 
-// Update Service by ID
 const updateServiceById = async (req, res) => {
 
   try {
@@ -79,7 +74,6 @@ const updateServiceById = async (req, res) => {
             if (file) {
                 const fileName = `${Date.now()}_${file.originalname}`;
                 const fileUrl = await Firebase.uploadFileToFirebase(file, fileName);
-                console.log(fileUrl);
                 req.body.services_image = fileUrl;
             }
             const serviceId = req.params.serviceId;
@@ -99,7 +93,6 @@ const updateServiceById = async (req, res) => {
   }
 };
 
-// Delete Service by ID
 const deleteServiceById = async (req, res) => {
   const serviceId = req.params.serviceId;
 
@@ -118,7 +111,6 @@ const deleteServiceById = async (req, res) => {
 };
 
 
-// unDelete Service by ID
 
 const undeleteServiceById = async (req, res) => {
   const serviceId = req.params.serviceId;

@@ -99,10 +99,8 @@ const loginDriver = async (req, res) => {
     const { driver_email, driver_password } = req.body;
   
     try {
-      console.log('Login attempt:', driver_email);
   
       const driver = await DriverModel.verifyDriverCredentials(driver_email, driver_password );
-      console.log('Driver found:', driver);
   
       if (!driver) {
         return res.status(401).json({ error: 'Invalid credentials' });
@@ -123,7 +121,6 @@ const loginDriver = async (req, res) => {
 
   const getDriverInfo = async (req, res) => {
     const driverId = req.user.driver_id;
-    console.log(driverId);
   
     try {
       const driver = await DriverModel.getDriverInfo(driverId);
@@ -141,7 +138,6 @@ const loginDriver = async (req, res) => {
   
   const updateDriver = async (req, res) => {
     const driverId = req.user.driver_id;
-    console.log(driverId);
     const { driver_username, driver_email, driver_password, status } = req.body;
   
     try {
@@ -160,7 +156,6 @@ const loginDriver = async (req, res) => {
 
   const getDriverOrders = async (req, res) => {
     const driver_id  = req.user.driver_id;
-    console.log(driver_id);
   
     try {
       const orders = await DriverModel.getDriverOrders(driver_id);
@@ -177,7 +172,6 @@ const loginDriver = async (req, res) => {
 
   const getDriverHistory = async (req, res) => {
     const  driverId  = req.user.driver_id
-    console.log(driverId);
   
     try {
         const orders = await DriverModel.getDriverHistory(driverId);

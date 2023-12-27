@@ -1,4 +1,3 @@
-// controllers/solutionController.js
 const solutionModel = require('../models/solutionModel');
 const Firebase = require('../middleware/firebaseMiddleware')
 
@@ -66,7 +65,6 @@ const createSolution = async (req, res) => {
 
 const updateSolution = async (req, res) => {
   const  solutionId  = req.params.solutionId;
-  console.log(solutionId);
 
   try {
 
@@ -96,7 +94,6 @@ const updateSolution = async (req, res) => {
 
 const softDeleteSolution = async (req, res) => {
   const solutionId  = req.params.solutionId;
-  console.log(solutionId);
 
   try {
     const deletedSolution = await solutionModel.softDeleteSolution(solutionId);

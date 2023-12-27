@@ -91,17 +91,17 @@ const getDriverByEmail = async (driver_email) => {
   const getDriverOrders = async (driver_id) => {
     try {
       const result = await pool.query(
-        'SELECT o.* FROM orders o JOIN order_driver_association a ON o.order_id = a.order_id WHERE a.driver_id = $1',
-        [driver_id]
+        'SELECT o.* FROM orders o JOIN order_driver_association a ON o.order_id = a.order_id WHERE a.driver_id = $1 AND o.status <> $2',
+        [driver_id, 'Delivered']
       );
-        console.log(result.rows);
+      console.log(result.rows);
       return result.rows;
     } catch (error) {
       console.error('Error in getDriverOrders:', error);
       throw error;
     }
   };
-
+  
   const getDriverHistory = async (driverId) => {
     try {
         const result = await pool.query('SELECT * FROM orders WHERE driver_id = $1 AND isdeleted = false', [driverId]);

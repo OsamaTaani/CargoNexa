@@ -1,6 +1,5 @@
 const faqModel = require('../models/faqModel');
 
-// Controller function to save a new FAQ
 const saveFAQ = async (req, res) => {
   const { question, answer } = req.body;
 
@@ -13,7 +12,6 @@ const saveFAQ = async (req, res) => {
   }
 };
 
-// Controller function to get all FAQs
 const getAllFAQsDashboard = async (req, res) => {
   try {
     const {page = 1 , pageSize = 5 , search} = req.query;
@@ -38,7 +36,6 @@ const getAllFAQs = async (req, res) => {
 };
 
 
-// Controller function to get a specific FAQ by ID
 const getFAQById = async (req, res) => {
   const { faqId } = req.params;
  
@@ -57,10 +54,8 @@ const getFAQById = async (req, res) => {
   }
 };
 
-// Controller function to update a FAQ
 const updateFAQ = async (req, res) => {
   const { faqId } = req.params;
-  console.log("faqId" ,faqId);
   const { question, answer } = req.body;
 
   try {
@@ -78,7 +73,6 @@ const updateFAQ = async (req, res) => {
   }
 };
 
-// Controller function to soft delete a FAQ
 const deleteFAQ = async (req, res) => {
   const { faqId } = req.params;
   try {

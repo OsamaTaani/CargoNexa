@@ -7,7 +7,6 @@ const createOrderForUserController = async (req, res) => {
       const { userId } = req.params;
       const orderData = req.body;
 
-      // Set createdByAdmin to true since it's an admin creating the order
       const createdByAdmin = true;
 
       const newOrder = await createOrderForUser(userId, orderData, createdByAdmin);
@@ -71,7 +70,6 @@ const getOrderById = async (req, res) => {
   }
 };
 
-// Update Order by ID
 const updateOrderById = async (req, res) => {
   const orderId = req.params.orderId;
   const { name, receiver_name, shipping_location, order_phone_number,receiver_phone_number  , receiving_location, shipping_timestamp, order_truck_size, message, status} = req.body;
@@ -90,7 +88,6 @@ const updateOrderById = async (req, res) => {
   }
 };
 
-// Delete Order by ID
 const deleteOrderById = async (req, res) => {
   const orderId = req.params.orderId;
 

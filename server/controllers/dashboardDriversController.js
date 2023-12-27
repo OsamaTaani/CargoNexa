@@ -27,9 +27,6 @@ const addDriver = async (req, res) => {
     }),
     plate_number: Joi.number().integer().required(),
     driver_size_type: Joi.string().required(),
-    // driver_phone_number: Joi.string().pattern(/^07\d{8}$/).required().messages({
-    //   'string.pattern.base': 'Phone number must start with 07 and contain a total of 10 digits.',
-    // }),
   });
     
   const { error } = driverValidationSchema.validate(req.body);
@@ -73,7 +70,6 @@ const addDriver = async (req, res) => {
   }
 };
 
-// Get All Drivers
 const getAllDrivers = async (req, res) => {
   try {
     const { page = 1, pageSize = 5 , search } = req.query;
@@ -97,10 +93,8 @@ const getDriversCount = async (req, res) => {
 };
 
 
-// Get Driver by ID
 const getDriverById = async (req, res) => {
   const driverId = req.params.driver_id;
-  console.log(driverId);
 
   try {
     const driver = await DriverModel.getDriverById(driverId);
@@ -116,10 +110,8 @@ const getDriverById = async (req, res) => {
   }
 };
 
-// Update Driver by ID
 const updateDriverById = async (req, res) => {
   const driverId = req.params.driver_id;
-  console.log(driverId);
   const { driver_username, driver_email,driver_license, truck_type,production_year,plate_number,driver_size_type,status } = req.body;
 
   try {
@@ -136,7 +128,6 @@ const updateDriverById = async (req, res) => {
   }
 };
 
-// Delete Driver by ID
 const deleteDriverById = async (req, res) => {
   const driverId = req.params.driverId;
 
